@@ -1,0 +1,68 @@
+<div [formGroup]="form" style="margin-bottom: 16px;">
+  @switch (field.type) {
+  @case ('text') {
+  <label>{{ field.label }}</label>
+  <input type="text" [formControlName]="field.key" />
+  }
+
+  @case ('number') {
+  <label>{{ field.label }}</label>
+  <input type="number" [formControlName]="field.key" />
+  }
+
+  @case ('dropdown') {
+  <label>{{ field.label }}</label>
+  <select [formControlName]="field.key">
+    <option [ngValue]="null">Select</option>
+    @for (option of getOptions(); track option.value) {
+    <option [ngValue]="option.value">{{ option.label }}</option>
+    }
+  </select>
+  }
+
+  @case ('radio') {
+  <label>{{ field.label }}</label>
+  @for (option of field.options ?? []; track option.value) {
+  <label>
+    <input type="radio" [formControlName]="field.key" [value]="option.value" />
+    {{ option.label }}
+  </label>
+  }
+  }
+
+  @case ('checkbox') {
+  <label>
+    <input type="checkbox" [formControlName]="field.key" />
+    {{ field.label }}
+  </label>
+  }
+
+  @case ('array') {
+  <fieldset>
+    <legend>{{ field.label }}</legend>
+
+    <button type="button" (click)="addArrayItem()">Add {{ field.label }}</button>
+
+    <div formArrayName="{{ field.key }}">
+      @for (item of arrayControl.controls; track $index) {
+      <div [formGroupName]="$index" style="border: 1px solid #ccc; padding: 12px; margin-top: 12px;">
+        @for (childField of field.itemSchema?.fields ?? []; track childField.key) {
+        @if (isVisibleInsideGroup(childField, item)) {
+        <app-field-renderer [field]="childField" [form]="item"></app-field-renderer>
+        }
+        }
+
+        <button type="button" (click)="removeArrayItem($index)">Remove</button>
+      </div>
+      }
+    </div>
+  </fieldset>
+  }
+  }
+
+  @if (form.get(field.key)?.touched && form.get(field.key)?.invalid) {
+  <div style="color: red;">
+    {{ getErrorMessage() }}
+  </div>
+  }
+</div>
