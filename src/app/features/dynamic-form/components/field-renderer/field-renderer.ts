@@ -88,6 +88,30 @@ export class FieldRenderer {
     return (this.field.options ?? []).filter(x => x.parentValue === parentValue);
   }
 
+  getDateMin(): string | null {
+    if (this.field.validations?.minDate) {
+      return this.field.validations.minDate;
+    }
+
+    if (this.field.validations?.minDateToday) {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    return null;
+  }
+
+  getDateMax(): string | null {
+    if (this.field.validations?.maxDate) {
+      return this.field.validations.maxDate;
+    }
+
+    if (this.field.validations?.maxDateToday) {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    return null;
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;

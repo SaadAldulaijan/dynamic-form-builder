@@ -24,9 +24,7 @@
   <label>{{ field.label }}</label>
   @for (option of field.options ?? []; track option.value) {
   <label>
-    <input
-      type="radio"
-      [checked]="form.get(field.key)?.value === option.value"
+    <input type="radio" [checked]="form.get(field.key)?.value === option.value"
       (change)="onRadioChange(option.value)" />
     {{ option.label }}
   </label>
@@ -35,28 +33,28 @@
 
   @case ('file') {
   <label>{{ field.label }}</label>
-<label>{{ field.label }}</label>
+  <label>{{ field.label }}</label>
 
-  <input
-    #fileInput
-    type="file"
-    [disabled]="form.get(field.key)?.disabled"
-    (change)="onFileSelected($event)" />
+  <input #fileInput type="file" [disabled]="form.get(field.key)?.disabled" (change)="onFileSelected($event)" />
 
   @if (form.get(field.key)?.value) {
-    <div style="margin-top: 8px;">
-      Selected file:
-      <strong>{{ form.get(field.key)?.value?.name }}</strong>
+  <div style="margin-top: 8px;">
+    Selected file:
+    <strong>{{ form.get(field.key)?.value?.name }}</strong>
 
-      <button
-        type="button"
-        (click)="removeFile(fileInput)"
-        [disabled]="form.get(field.key)?.disabled">
-        Remove
-      </button>
-    </div>
+    <button type="button" (click)="removeFile(fileInput)" [disabled]="form.get(field.key)?.disabled">
+      Remove
+    </button>
+  </div>
   }
-}
+  }
+
+  @case ('date') {
+  <label>{{ field.label }}</label>
+ 
+
+  <input type="date" [formControlName]="field.key" [attr.min]="getDateMin()" [attr.max]="getDateMax()" />
+  }
 
   @case ('checkbox') {
   <label>

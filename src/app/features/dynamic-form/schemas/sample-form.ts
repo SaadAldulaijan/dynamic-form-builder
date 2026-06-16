@@ -107,11 +107,17 @@ export const sampleFormSchema: FormSchema = {
           }
         },
         {
+          key: 'requestDate',
+          label: 'Request Date',
+          type: 'date',
+          defaultValue: 'today'
+        },
+        {
           key: 'supportingAttachment',
           label: 'Supporting Attachment',
           type: 'file',
           validations: {
-            required: true,
+            required: false,
             maxFileSizeMb: 5,
             allowedExtensions: ['pdf', 'docx']
           },
@@ -160,6 +166,47 @@ export const sampleFormSchema: FormSchema = {
             required: 'Previous request reason is required when you select Yes'
           }
         },
+        {
+          key: 'startDate',
+          label: 'Start Date',
+          type: 'date',
+          validations: {
+            required: true,
+            minDateToday: true
+          },
+          messages: {
+            required: 'Start date is required',
+            minDateToday: 'Start date cannot be in the past'
+          }
+        },
+        {
+          key: 'endDate',
+          label: 'End Date',
+          type: 'date',
+          validations: {
+            required: true,
+            dateGreaterThanOrEqualField: 'startDate'
+          },
+          messages: {
+            required: 'End date is required',
+            dateGreaterThanOrEqualField: 'End date must be after or equal to start date'
+          }
+        },
+        {
+          key: 'contractDate',
+          label: 'Contract Date',
+          type: 'date',
+          validations: {
+            required: true,
+            minDate: '2026-01-01',
+            maxDate: '2026-12-31'
+          },
+          messages: {
+            required: 'Contract date is required',
+            minDate: 'Contract date cannot be before 2026-01-01',
+            maxDate: 'Contract date cannot be after 2026-12-31'
+          }
+        }
       ]
     },
     {

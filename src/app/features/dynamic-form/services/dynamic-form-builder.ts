@@ -8,7 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { FieldSchema, FormSchema } from '../models/form-schema';
-import { allowedExtensionsValidator, exactLengthValidator, maxFileSizeValidator, startsWithValidator } from './custom-validators';
+import { allowedExtensionsValidator, dateGreaterThanFieldValidator, dateGreaterThanOrEqualFieldValidator, dateLessThanFieldValidator, dateLessThanOrEqualFieldValidator, exactLengthValidator, maxDateTodayValidator, maxDateValidator, maxFileSizeValidator, minDateTodayValidator, minDateValidator, startsWithValidator } from './custom-validators';
 
 
 
@@ -77,6 +77,48 @@ export class DynamicFormBuilderService {
     if (field.validations?.allowedExtensions?.length) {
       validators.push(
         allowedExtensionsValidator(field.validations.allowedExtensions)
+      );
+    }
+
+
+    if (field.validations?.minDate) {
+      validators.push(minDateValidator(field.validations.minDate));
+    }
+
+    if (field.validations?.maxDate) {
+      validators.push(maxDateValidator(field.validations.maxDate));
+    }
+
+    if (field.validations?.minDateToday) {
+      validators.push(minDateTodayValidator());
+    }
+
+    if (field.validations?.maxDateToday) {
+      validators.push(maxDateTodayValidator());
+    }
+
+
+    if (field.validations?.dateGreaterThanField) {
+      validators.push(
+        dateGreaterThanFieldValidator(field.validations.dateGreaterThanField)
+      );
+    }
+
+    if (field.validations?.dateGreaterThanOrEqualField) {
+      validators.push(
+        dateGreaterThanOrEqualFieldValidator(field.validations.dateGreaterThanOrEqualField)
+      );
+    }
+
+    if (field.validations?.dateLessThanField) {
+      validators.push(
+        dateLessThanFieldValidator(field.validations.dateLessThanField)
+      );
+    }
+
+    if (field.validations?.dateLessThanOrEqualField) {
+      validators.push(
+        dateLessThanOrEqualFieldValidator(field.validations.dateLessThanOrEqualField)
       );
     }
 

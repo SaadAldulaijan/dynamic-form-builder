@@ -5,7 +5,9 @@ export type FieldType =
   | 'checkbox'
   | 'radio'
   | 'array'
-  | 'file';
+  | 'file'
+  | 'date'
+  | 'dateRange';
 
 export interface FormSchema {
   title: string;
@@ -38,6 +40,7 @@ export interface FieldSchema {
   key: string;
   label: string;
   type: FieldType;
+  defaultValue?: string; 
   options?: FieldOption[];
   dependsOn?: string;
   validations?: {
@@ -52,6 +55,18 @@ export interface FieldSchema {
     email?: boolean;
     maxFileSizeMb?: number;
     allowedExtensions?: string[];
+
+    minDate?: string;
+    maxDate?: string;
+
+    minDateToday?: boolean;
+    maxDateToday?: boolean;
+
+    dateGreaterThanField?: string;
+    dateGreaterThanOrEqualField?: string;
+
+    dateLessThanField?: string;
+    dateLessThanOrEqualField?: string;
   };
   messages?: {
     [key: string]: string;

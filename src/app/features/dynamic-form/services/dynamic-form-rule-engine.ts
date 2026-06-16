@@ -15,6 +15,44 @@ export class DynamicFormRuleEngineService {
     this.setupConditionalDisabled(fields, form);
     this.setupClearHiddenValues(fields, form);
     this.setupDependencies(fields, form);
+    this.setupDateFieldRules(fields, form);
+  }
+
+  setupDateFieldRules(fields: FieldSchema[], form: FormGroup): void {
+    for (const field of fields) {
+      const validations = field.validations;
+
+      if (!validations) {
+        continue;
+      }
+
+      const targetControl = form.get(field.key);
+
+      if (!targetControl) {
+        continue;
+      }
+
+      const dependencyFields = [
+        validations.dateGreaterThanField,
+        validations.dateGreaterThanOrEqualField,
+        validations.dateLessThanField,
+        validations.dateLessThanOrEqualField
+      ].filter(Boolean) as string[];
+
+      for (const dependencyField of dependencyFields) {
+        const dependencyControl = form.get(dependencyField);
+
+        if (!dependencyControl) {
+          continue;
+        }
+
+        dependencyControl.valueChanges.subscribe(() => {
+          targetControl.updateValueAndValidity({
+            emitEvent: false
+          });
+        });
+      }
+    }
   }
 
   evaluateCondition(condition: FieldCondition, form: FormGroup): boolean {
