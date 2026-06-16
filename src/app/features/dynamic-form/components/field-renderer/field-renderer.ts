@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FieldSchema } from '../../models/form-schema';
-import { FormBuilderService } from '../../services/form-builder';
+import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 
 @Component({
   selector: 'app-field-renderer',
@@ -15,7 +15,7 @@ export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
 
-  constructor(private formBuilderService: FormBuilderService) { }
+  constructor(private dynamicFormBuilderService: DynamicFormBuilderService) { }
 
   get arrayControl(): FormArray {
     return this.form.get(this.field.key) as FormArray;
@@ -24,7 +24,7 @@ export class FieldRenderer {
   addArrayItem(): void {
     if (!this.field.itemSchema) return;
 
-    const group = this.formBuilderService.buildGroup(this.field.itemSchema.fields);
+    const group = this.dynamicFormBuilderService.buildGroup(this.field.itemSchema.fields);
     this.arrayControl.push(group);
   }
 

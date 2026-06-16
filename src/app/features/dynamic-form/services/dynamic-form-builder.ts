@@ -15,7 +15,7 @@ import { exactLengthValidator, startsWithValidator } from './custom-validators';
 @Injectable({
   providedIn: 'root',
 })
-export class FormBuilderService {
+export class DynamicFormBuilderService {
   buildForm(schema: FormSchema): FormGroup {
     const fields = this.getAllFields(schema);
 

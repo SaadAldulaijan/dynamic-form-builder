@@ -3,7 +3,7 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { sampleFormSchema } from '../../schemas/sample-form';
 import { FieldSchema } from '../../models/form-schema';
-import { FormBuilderService } from '../../services/form-builder';
+import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 
 
@@ -27,7 +27,7 @@ export class DynamicForm implements OnInit {
   activeSectionIndex = 0;
 
 
-  constructor(private formBuilderService: FormBuilderService) { }
+  constructor(private formBuilderService: DynamicFormBuilderService) { }
 
 
   ngOnInit(): void {
