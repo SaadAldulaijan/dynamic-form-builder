@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
+import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 
 @Component({
   selector: 'app-field-renderer',
@@ -15,7 +16,7 @@ export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
 
-  constructor(private dynamicFormBuilderService: DynamicFormBuilderService) { }
+  constructor(private dynamicFormBuilderService: DynamicFormBuilderService, private ruleEngine: DynamicFormRuleEngineService) { }
 
   get arrayControl(): FormArray {
     return this.form.get(this.field.key) as FormArray;
@@ -24,8 +25,15 @@ export class FieldRenderer {
   addArrayItem(): void {
     if (!this.field.itemSchema) return;
 
-    const group = this.dynamicFormBuilderService.buildGroup(this.field.itemSchema.fields);
+    const fields = this.field.itemSchema.fields;
+    const group = this.dynamicFormBuilderService.buildGroup(fields);
+
+    this.ruleEngine.setupRules(fields, group);
+
     this.arrayControl.push(group);
+
+    // const group = this.dynamicFormBuilderService.buildGroup(this.field.itemSchema.fields);
+    // this.arrayControl.push(group);
   }
 
   removeArrayItem(index: number): void {
@@ -35,17 +43,18 @@ export class FieldRenderer {
   isVisibleInsideGroup(field: FieldSchema, group: FormGroup | any): boolean {
     if (!field.visibleWhen) return true;
 
-    const actualValue = group.get(field.visibleWhen.field)?.value;
+    return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
+    // const actualValue = group.get(field.visibleWhen.field)?.value;
 
-    if (field.visibleWhen.operator === 'equals') {
-      return actualValue === field.visibleWhen.value;
-    }
+    // if (field.visibleWhen.operator === 'equals') {
+    //   return actualValue === field.visibleWhen.value;
+    // }
 
-    if (field.visibleWhen.operator === 'notEquals') {
-      return actualValue !== field.visibleWhen.value;
-    }
+    // if (field.visibleWhen.operator === 'notEquals') {
+    //   return actualValue !== field.visibleWhen.value;
+    // }
 
-    return true;
+    // return true;
   }
 
 

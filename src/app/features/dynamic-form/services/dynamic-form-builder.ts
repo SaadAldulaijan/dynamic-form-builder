@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { FieldCondition, FieldSchema, FormSchema } from '../models/form-schema';
+import { FieldSchema, FormSchema } from '../models/form-schema';
 import { exactLengthValidator, startsWithValidator } from './custom-validators';
 
 
@@ -16,24 +16,17 @@ import { exactLengthValidator, startsWithValidator } from './custom-validators';
   providedIn: 'root',
 })
 export class DynamicFormBuilderService {
+  
+  
   buildForm(schema: FormSchema): FormGroup {
     const fields = this.getAllFields(schema);
-
     const group: Record<string, AbstractControl> = {};
 
     for (const field of fields) {
       group[field.key] = this.buildControl(field);
     }
-    const form = new FormGroup(group);
 
-    this.setupConditionalRequired(fields, form);
-    this.setupConditionalDisabled(fields, form);
-    this.setupClearHiddenValues(fields, form);
-
-
-
-    return form;
-
+    return new FormGroup(group);
   }
 
   getAllFields(schema: FormSchema): FieldSchema[] {
@@ -44,13 +37,14 @@ export class DynamicFormBuilderService {
     return schema.fields ?? [];
   }
 
-  buildControl(field: FieldSchema): any {
+  buildControl(field: FieldSchema): AbstractControl {
     if (field.type === 'array') {
       return new FormArray([]);
     }
 
     return new FormControl(null, this.buildValidators(field));
   }
+
 
   buildGroup(fields: FieldSchema[]): FormGroup {
     const group: Record<string, AbstractControl> = {};
@@ -59,14 +53,7 @@ export class DynamicFormBuilderService {
       group[field.key] = this.buildControl(field);
     }
 
-    const formGroup = new FormGroup(group);
-
-    this.setupConditionalRequired(fields, formGroup);
-    this.setupConditionalDisabled(fields, formGroup);
-    this.setupClearHiddenValues(fields, formGroup);
-
-
-    return formGroup;
+    return new FormGroup(group);
   }
 
   buildValidators(field: FieldSchema, forceRequired = false): ValidatorFn[] {
@@ -88,135 +75,175 @@ export class DynamicFormBuilderService {
     return validators;
   }
 
-
-  setupConditionalRequired(fields: FieldSchema[], form: FormGroup): void {
-    for (const field of fields) {
-      if (!field.requiredWhen) {
-        continue;
-      }
-
-      const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.requiredWhen.field);
-
-      if (!targetControl || !sourceControl) {
-        continue;
-      }
-
-      const applyRequiredState = () => {
-        const shouldBeRequired = this.evaluateCondition(
-          field.requiredWhen!,
-          form
-        );
-
-        targetControl.setValidators(
-          this.buildValidators(field, shouldBeRequired)
-        );
-
-        targetControl.updateValueAndValidity({
-          emitEvent: false
-        });
-      };
-
-      applyRequiredState();
-
-      sourceControl.valueChanges.subscribe(() => {
-        applyRequiredState();
-      });
-    }
-  }
-
-  evaluateCondition(condition: FieldCondition, form: FormGroup): boolean {
-    const actualValue = form.get(condition.field)?.value;
-
-    switch (condition.operator) {
-      case 'equals':
-        return actualValue === condition.value;
-
-      case 'notEquals':
-        return actualValue !== condition.value;
-
-      default:
-        return false;
-    }
-  }
+  
 
 
-  setupConditionalDisabled(fields: FieldSchema[], form: FormGroup): void {
-    for (const field of fields) {
-      if (!field.disabledWhen) {
-        continue;
-      }
+  // buildForm(schema: FormSchema): FormGroup {
+  //   const fields = this.getAllFields(schema);
 
-      const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.disabledWhen.field);
+  //   const group: Record<string, AbstractControl> = {};
 
-      if (!targetControl || !sourceControl) {
-        continue;
-      }
+  //   for (const field of fields) {
+  //     group[field.key] = this.buildControl(field);
+  //   }
+  //   const form = new FormGroup(group);
 
-      const applyDisabledState = () => {
-        const shouldBeDisabled = this.evaluateCondition(
-          field.disabledWhen!,
-          form
-        );
-
-        if (shouldBeDisabled) {
-          targetControl.disable({
-            emitEvent: false
-          });
-        } else {
-          targetControl.enable({
-            emitEvent: false
-          });
-        }
-
-        targetControl.updateValueAndValidity({
-          emitEvent: false
-        });
-      };
-
-      applyDisabledState();
-
-      sourceControl.valueChanges.subscribe(() => {
-        applyDisabledState();
-      });
-    }
-  }
+  //   this.setupConditionalRequired(fields, form);
+  //   this.setupConditionalDisabled(fields, form);
+  //   this.setupClearHiddenValues(fields, form);
 
 
-  setupClearHiddenValues(fields: FieldSchema[], form: FormGroup): void {
-    for (const field of fields) {
-      if (!field.visibleWhen || !field.clearValueWhenHidden) {
-        continue;
-      }
 
-      const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.visibleWhen.field);
+  //   return form;
 
-      if (!targetControl || !sourceControl) {
-        continue;
-      }
+  // }
 
-      const clearIfHidden = () => {
-        const isVisible = this.evaluateCondition(field.visibleWhen!, form);
+  
+  // buildGroup(fields: FieldSchema[]): FormGroup {
+  //   const group: Record<string, AbstractControl> = {};
 
-        if (!isVisible) {
-          targetControl.reset(null, {
-            emitEvent: false
-          });
+  //   for (const field of fields) {
+  //     group[field.key] = this.buildControl(field);
+  //   }
 
-          targetControl.markAsUntouched();
-          targetControl.markAsPristine();
-        }
-      };
+  //   const formGroup = new FormGroup(group);
 
-      clearIfHidden();
+  //   this.setupConditionalRequired(fields, formGroup);
+  //   this.setupConditionalDisabled(fields, formGroup);
+  //   this.setupClearHiddenValues(fields, formGroup);
 
-      sourceControl.valueChanges.subscribe(() => {
-        clearIfHidden();
-      });
-    }
-  }
+
+  //   return formGroup;
+  // }
+
+  // setupConditionalRequired(fields: FieldSchema[], form: FormGroup): void {
+  //   for (const field of fields) {
+  //     if (!field.requiredWhen) {
+  //       continue;
+  //     }
+
+  //     const targetControl = form.get(field.key);
+  //     const sourceControl = form.get(field.requiredWhen.field);
+
+  //     if (!targetControl || !sourceControl) {
+  //       continue;
+  //     }
+
+  //     const applyRequiredState = () => {
+  //       const shouldBeRequired = this.evaluateCondition(
+  //         field.requiredWhen!,
+  //         form
+  //       );
+
+  //       targetControl.setValidators(
+  //         this.buildValidators(field, shouldBeRequired)
+  //       );
+
+  //       targetControl.updateValueAndValidity({
+  //         emitEvent: false
+  //       });
+  //     };
+
+  //     applyRequiredState();
+
+  //     sourceControl.valueChanges.subscribe(() => {
+  //       applyRequiredState();
+  //     });
+  //   }
+  // }
+
+  // evaluateCondition(condition: FieldCondition, form: FormGroup): boolean {
+  //   const actualValue = form.get(condition.field)?.value;
+
+  //   switch (condition.operator) {
+  //     case 'equals':
+  //       return actualValue === condition.value;
+
+  //     case 'notEquals':
+  //       return actualValue !== condition.value;
+
+  //     default:
+  //       return false;
+  //   }
+  // }
+
+
+  // setupConditionalDisabled(fields: FieldSchema[], form: FormGroup): void {
+  //   for (const field of fields) {
+  //     if (!field.disabledWhen) {
+  //       continue;
+  //     }
+
+  //     const targetControl = form.get(field.key);
+  //     const sourceControl = form.get(field.disabledWhen.field);
+
+  //     if (!targetControl || !sourceControl) {
+  //       continue;
+  //     }
+
+  //     const applyDisabledState = () => {
+  //       const shouldBeDisabled = this.evaluateCondition(
+  //         field.disabledWhen!,
+  //         form
+  //       );
+
+  //       if (shouldBeDisabled) {
+  //         targetControl.disable({
+  //           emitEvent: false
+  //         });
+  //       } else {
+  //         targetControl.enable({
+  //           emitEvent: false
+  //         });
+  //       }
+
+  //       targetControl.updateValueAndValidity({
+  //         emitEvent: false
+  //       });
+  //     };
+
+  //     applyDisabledState();
+
+  //     sourceControl.valueChanges.subscribe(() => {
+  //       applyDisabledState();
+  //     });
+  //   }
+  // }
+
+
+  // setupClearHiddenValues(fields: FieldSchema[], form: FormGroup): void {
+  //   for (const field of fields) {
+  //     if (!field.visibleWhen || !field.clearValueWhenHidden) {
+  //       continue;
+  //     }
+
+  //     const targetControl = form.get(field.key);
+  //     const sourceControl = form.get(field.visibleWhen.field);
+
+  //     if (!targetControl || !sourceControl) {
+  //       continue;
+  //     }
+
+  //     const clearIfHidden = () => {
+  //       const isVisible = this.evaluateCondition(field.visibleWhen!, form);
+
+  //       if (!isVisible) {
+  //         targetControl.reset(null, {
+  //           emitEvent: false
+  //         });
+
+  //         targetControl.markAsUntouched();
+  //         targetControl.markAsPristine();
+  //       }
+  //     };
+
+  //     clearIfHidden();
+
+  //     sourceControl.valueChanges.subscribe(() => {
+  //       clearIfHidden();
+  //     });
+  //   }
+  // }
 
 
 }

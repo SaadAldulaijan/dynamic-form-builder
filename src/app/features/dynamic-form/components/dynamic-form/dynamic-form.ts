@@ -5,6 +5,7 @@ import { sampleFormSchema } from '../../schemas/sample-form';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
+import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 
 
 
@@ -27,13 +28,13 @@ export class DynamicForm implements OnInit {
   activeSectionIndex = 0;
 
 
-  constructor(private formBuilderService: DynamicFormBuilderService) { }
+  constructor(private formBuilderService: DynamicFormBuilderService, private ruleEngine: DynamicFormRuleEngineService) { }
 
 
   ngOnInit(): void {
     this.form = this.formBuilderService.buildForm(this.schema);
 
-    this.setupDependencies();
+    this.ruleEngine.setupRules(this.getAllFields(), this.form);
   }
 
   get sections() {
@@ -121,83 +122,15 @@ export class DynamicForm implements OnInit {
     }
   }
 
-
-
-
-
-
-  // setupDependencies(): void {
-  //   for (const field of this.schema.fields) {
-  //     if (!field.dependsOn) continue;
-
-  //     this.form.get(field.dependsOn)?.valueChanges.subscribe(() => {
-  //       this.form.get(field.key)?.setValue(null);
-  //     });
-  //   }
-  // }
-
-
   getAllFields(): FieldSchema[] {
     return this.sections.flatMap(section => section.fields);
-  }
-
-  // setupDependencies(): void {
-  //   for (const field of this.getAllFields()) {
-  //     if (!field.dependsOn) continue;
-
-  //     this.form.get(field.dependsOn)?.valueChanges.subscribe(() => {
-  //       this.form.get(field.key)?.setValue(null);
-  //     });
-  //   }
-  // }
-
-  setupDependencies(): void {
-    for (const field of this.getAllFields()) {
-      if (!field.dependsOn) {
-        continue;
-      }
-
-      const parentControl = this.form.get(field.dependsOn);
-      const childControl = this.form.get(field.key);
-
-      if (!parentControl || !childControl) {
-        continue;
-      }
-
-      let previousValue = parentControl.value;
-
-      parentControl.valueChanges.subscribe(currentValue => {
-        if (currentValue === previousValue) {
-          return;
-        }
-
-        previousValue = currentValue;
-
-        childControl.setValue(null, {
-          emitEvent: false
-        });
-
-        childControl.markAsUntouched();
-        childControl.markAsPristine();
-      });
-    }
   }
 
 
   isVisible(field: FieldSchema): boolean {
     if (!field.visibleWhen) return true;
 
-    const actualValue = this.form.get(field.visibleWhen.field)?.value;
-
-    if (field.visibleWhen.operator === 'equals') {
-      return actualValue === field.visibleWhen.value;
-    }
-
-    if (field.visibleWhen.operator === 'notEquals') {
-      return actualValue !== field.visibleWhen.value;
-    }
-
-    return true;
+    return this.ruleEngine.evaluateCondition(field.visibleWhen, this.form);
   }
 
 
