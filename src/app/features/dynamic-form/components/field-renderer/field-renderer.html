@@ -24,7 +24,10 @@
   <label>{{ field.label }}</label>
   @for (option of field.options ?? []; track option.value) {
   <label>
-    <input type="radio" [formControlName]="field.key" [value]="option.value" />
+    <input
+      type="radio"
+      [checked]="form.get(field.key)?.value === option.value"
+      (change)="onRadioChange(option.value)" />
     {{ option.label }}
   </label>
   }

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FieldSchema } from '../form-schema';
-import { FormBuilderService } from '../form-builder';
+import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FieldSchema } from '../../models/form-schema';
+import { FormBuilderService } from '../../services/form-builder';
 
 @Component({
   selector: 'app-field-renderer',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss',
 })
@@ -48,6 +48,10 @@ export class FieldRenderer {
     return true;
   }
 
+
+  onRadioChange(value: any): void {
+    this.form.get(this.field.key)?.setValue(value);
+  }
 
 
   getErrorMessage(): string | null {
