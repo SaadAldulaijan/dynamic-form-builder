@@ -112,6 +112,59 @@ export class FieldRenderer {
     return null;
   }
 
+  getMultiselectValue(): any[] {
+    const value = this.form.get(this.field.key)?.value;
+
+    return Array.isArray(value) ? value : [];
+  }
+
+  isMultiSelected(value: any): boolean {
+    return this.getMultiselectValue().includes(value);
+  }
+
+  toggleMultiSelect(value: any, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const control = this.form.get(this.field.key);
+
+    if (!control || control.disabled) {
+      return;
+    }
+
+    const currentValue = this.getMultiselectValue();
+
+    let nextValue: any[];
+
+    if (input.checked) {
+      nextValue = [...currentValue, value];
+    } else {
+      nextValue = currentValue.filter(x => x !== value);
+    }
+
+    control.setValue(nextValue);
+    control.markAsTouched();
+    control.updateValueAndValidity();
+  }
+
+  isMultiselectOptionDisabled(value: any): boolean {
+    const control = this.form.get(this.field.key);
+
+    if (!control || control.disabled) {
+      return true;
+    }
+
+    if (this.isMultiSelected(value)) {
+      return false;
+    }
+
+    const maxSelected = this.field.validations?.maxSelected;
+
+    if (maxSelected === undefined) {
+      return false;
+    }
+
+    return this.getMultiselectValue().length >= maxSelected;
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;

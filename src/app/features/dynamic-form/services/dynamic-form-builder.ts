@@ -8,7 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { FieldSchema, FormSchema } from '../models/form-schema';
-import { allowedExtensionsValidator, dateGreaterThanFieldValidator, dateGreaterThanOrEqualFieldValidator, dateLessThanFieldValidator, dateLessThanOrEqualFieldValidator, exactLengthValidator, maxDateTodayValidator, maxDateValidator, maxFileSizeValidator, minDateTodayValidator, minDateValidator, startsWithValidator } from './custom-validators';
+import { allowedExtensionsValidator, dateGreaterThanFieldValidator, dateGreaterThanOrEqualFieldValidator, dateLessThanFieldValidator, dateLessThanOrEqualFieldValidator, exactLengthValidator, maxDateTodayValidator, maxDateValidator, maxFileSizeValidator, maxSelectedValidator, minDateTodayValidator, minDateValidator, minSelectedValidator, startsWithValidator } from './custom-validators';
 
 
 
@@ -40,6 +40,10 @@ export class DynamicFormBuilderService {
   buildControl(field: FieldSchema): AbstractControl {
     if (field.type === 'array') {
       return new FormArray([]);
+    }
+
+    if (field.type === 'multiselect') {
+      return new FormControl([], this.buildValidators(field));
     }
 
     return new FormControl(null, this.buildValidators(field));
@@ -120,6 +124,14 @@ export class DynamicFormBuilderService {
       validators.push(
         dateLessThanOrEqualFieldValidator(field.validations.dateLessThanOrEqualField)
       );
+    }
+
+    if (field.validations?.minSelected !== undefined) {
+      validators.push(minSelectedValidator(field.validations.minSelected));
+    }
+
+    if (field.validations?.maxSelected !== undefined) {
+      validators.push(maxSelectedValidator(field.validations.maxSelected));
     }
 
 

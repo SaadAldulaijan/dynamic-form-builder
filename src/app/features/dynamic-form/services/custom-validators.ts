@@ -209,3 +209,41 @@ export function dateLessThanOrEqualFieldValidator(fieldKey: string): ValidatorFn
     return current <= other ? null : { dateLessThanOrEqualField: true };
   };
 }
+
+
+export function minSelectedValidator(min: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+
+    const value = control.value as any[] | null;
+    const count = Array.isArray(value) ? value.length : 0;
+
+    return count >= min
+      ? null
+      : { minSelected: true };
+
+
+    // const value = control.value as any[] | null;
+
+    // if (!value || value.length === 0) {
+    //   return null;
+    // }
+
+    // return value.length >= min
+    //   ? null
+    //   : { minSelected: true };
+  };
+}
+
+export function maxSelectedValidator(max: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value as any[] | null;
+
+    if (!value || value.length === 0) {
+      return null;
+    }
+
+    return value.length <= max
+      ? null
+      : { maxSelected: true };
+  };
+}

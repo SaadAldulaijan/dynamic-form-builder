@@ -20,6 +20,32 @@
   </select>
   }
 
+  @case ('multiselect') {
+  <label>{{ field.label }}</label>
+
+  <div>
+    @for (option of field.options ?? []; track option.value) {
+      <label style="display: block;">
+        <input
+          type="checkbox"
+          [checked]="isMultiSelected(option.value)"
+          [disabled]="isMultiselectOptionDisabled(option.value)"
+          (change)="toggleMultiSelect(option.value, $event)" />
+
+        {{ option.label }}
+      </label>
+    }
+  </div>
+
+  <small>
+    Selected:
+    {{ getMultiselectValue().length }}
+    @if (field.validations?.maxSelected) {
+      / {{ field.validations?.maxSelected }}
+    }
+  </small>
+}
+
   @case ('radio') {
   <label>{{ field.label }}</label>
   @for (option of field.options ?? []; track option.value) {
