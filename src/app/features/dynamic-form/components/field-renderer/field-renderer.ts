@@ -103,4 +103,19 @@ export class FieldRenderer {
     control.updateValueAndValidity();
   }
 
+
+  removeFile(fileInput: HTMLInputElement): void {
+    const control = this.form.get(this.field.key);
+
+    if (!control) {
+      return;
+    }
+
+    control.setValue(null);
+    control.markAsTouched();
+    control.updateValueAndValidity();
+
+    fileInput.value = '';
+  }
+
 }

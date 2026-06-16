@@ -35,16 +35,25 @@
 
   @case ('file') {
   <label>{{ field.label }}</label>
+<label>{{ field.label }}</label>
 
   <input
+    #fileInput
     type="file"
     [disabled]="form.get(field.key)?.disabled"
     (change)="onFileSelected($event)" />
 
   @if (form.get(field.key)?.value) {
-    <div>
+    <div style="margin-top: 8px;">
       Selected file:
-      {{ form.get(field.key)?.value?.name }}
+      <strong>{{ form.get(field.key)?.value?.name }}</strong>
+
+      <button
+        type="button"
+        (click)="removeFile(fileInput)"
+        [disabled]="form.get(field.key)?.disabled">
+        Remove
+      </button>
     </div>
   }
 }
