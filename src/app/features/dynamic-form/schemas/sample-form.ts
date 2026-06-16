@@ -105,6 +105,21 @@ export const sampleFormSchema: FormSchema = {
           validations: {
             required: true
           }
+        },
+        {
+          key: 'supportingAttachment',
+          label: 'Supporting Attachment',
+          type: 'file',
+          validations: {
+            required: true,
+            maxFileSizeMb: 5,
+            allowedExtensions: ['pdf', 'docx']
+          },
+          messages: {
+            required: 'Attachment is required',
+            maxFileSize: 'File size must not exceed 5 MB',
+            allowedExtensions: 'Only PDF and DOCX files are allowed'
+          }
         }
       ]
     },
@@ -112,7 +127,7 @@ export const sampleFormSchema: FormSchema = {
       key: 'requestInfo',
       title: 'Request Information',
       fields: [
-                {
+        {
           key: 'hasPreviousRequest',
           label: 'Do you have a previous request?',
           type: 'radio',

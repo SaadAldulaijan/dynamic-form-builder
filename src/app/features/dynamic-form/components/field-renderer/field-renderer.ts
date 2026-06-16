@@ -44,17 +44,6 @@ export class FieldRenderer {
     if (!field.visibleWhen) return true;
 
     return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
-    // const actualValue = group.get(field.visibleWhen.field)?.value;
-
-    // if (field.visibleWhen.operator === 'equals') {
-    //   return actualValue === field.visibleWhen.value;
-    // }
-
-    // if (field.visibleWhen.operator === 'notEquals') {
-    //   return actualValue !== field.visibleWhen.value;
-    // }
-
-    // return true;
   }
 
 
@@ -97,6 +86,21 @@ export class FieldRenderer {
     }
 
     return (this.field.options ?? []).filter(x => x.parentValue === parentValue);
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    const control = this.form.get(this.field.key);
+
+    if (!control) {
+      return;
+    }
+
+    control.setValue(file);
+    control.markAsTouched();
+    control.updateValueAndValidity();
   }
 
 }

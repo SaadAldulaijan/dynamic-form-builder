@@ -138,7 +138,23 @@ export class DynamicForm implements OnInit {
     this.form.markAllAsTouched();
 
     if (this.form.invalid) return;
-    console.log(this.form.getRawValue());
+
+    const rawValue = this.form.getRawValue();
+
+    console.log(rawValue);
+    console.log(rawValue.supportingAttachment);
+
+
+    // const formData = new FormData();
+
+    // const rawValue = this.form.getRawValue();
+
+    // formData.append('data', JSON.stringify({
+    //   ...rawValue,
+    //   supportingAttachment: undefined
+    // }));
+
+    // formData.append('supportingAttachment', rawValue.supportingAttachment);
   }
 
 

@@ -8,7 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { FieldSchema, FormSchema } from '../models/form-schema';
-import { exactLengthValidator, startsWithValidator } from './custom-validators';
+import { allowedExtensionsValidator, exactLengthValidator, maxFileSizeValidator, startsWithValidator } from './custom-validators';
 
 
 
@@ -16,8 +16,8 @@ import { exactLengthValidator, startsWithValidator } from './custom-validators';
   providedIn: 'root',
 })
 export class DynamicFormBuilderService {
-  
-  
+
+
   buildForm(schema: FormSchema): FormGroup {
     const fields = this.getAllFields(schema);
     const group: Record<string, AbstractControl> = {};
@@ -70,12 +70,21 @@ export class DynamicFormBuilderService {
     if (field.validations?.exactLength) validators.push(exactLengthValidator(field.validations.exactLength));
 
 
+    if (field.validations?.maxFileSizeMb !== undefined) {
+      validators.push(maxFileSizeValidator(field.validations.maxFileSizeMb));
+    }
+
+    if (field.validations?.allowedExtensions?.length) {
+      validators.push(
+        allowedExtensionsValidator(field.validations.allowedExtensions)
+      );
+    }
 
 
     return validators;
   }
 
-  
+
 
 
   // buildForm(schema: FormSchema): FormGroup {
@@ -98,7 +107,7 @@ export class DynamicFormBuilderService {
 
   // }
 
-  
+
   // buildGroup(fields: FieldSchema[]): FormGroup {
   //   const group: Record<string, AbstractControl> = {};
 

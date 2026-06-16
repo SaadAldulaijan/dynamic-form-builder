@@ -4,7 +4,8 @@ export type FieldType =
   | 'dropdown'
   | 'checkbox'
   | 'radio'
-  | 'array';
+  | 'array'
+  | 'file';
 
 export interface FormSchema {
   title: string;
@@ -49,6 +50,8 @@ export interface FieldSchema {
     startsWith?: string;
     exactLength?: number;
     email?: boolean;
+    maxFileSizeMb?: number;
+    allowedExtensions?: string[];
   };
   messages?: {
     [key: string]: string;
