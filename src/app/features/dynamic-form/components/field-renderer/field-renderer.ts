@@ -36,12 +36,27 @@ export class FieldRenderer {
     // this.arrayControl.push(group);
   }
 
+
   removeArrayItem(index: number): void {
     this.arrayControl.removeAt(index);
   }
 
   isVisibleInsideGroup(field: FieldSchema, group: FormGroup | any): boolean {
     if (!field.visibleWhen) return true;
+
+    return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
+  }
+
+  getNestedGroup(): FormGroup {
+    return this.form.get(this.field.key) as FormGroup;
+  }
+
+  isVisibleInsideNestedGroup(field: FieldSchema): boolean {
+    const group = this.getNestedGroup();
+
+    if (!field.visibleWhen) {
+      return true;
+    }
 
     return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
   }

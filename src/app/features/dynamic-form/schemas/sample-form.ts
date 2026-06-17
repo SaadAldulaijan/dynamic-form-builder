@@ -43,6 +43,35 @@ export const sampleFormSchema: FormSchema = {
           }
         },
         {
+          key: 'quantity',
+          label: 'Quantity',
+          type: 'number',
+          validations: {
+            required: true,
+            min: 1
+          }
+        },
+        {
+          key: 'unitPrice',
+          label: 'Unit Price',
+          type: 'number',
+          validations: {
+            required: true,
+            min: 0
+          }
+        },
+        {
+          key: 'total',
+          label: 'Total',
+          type: 'number',
+          readonly: true,
+          calculatedFrom: {
+            fields: ['quantity', 'unitPrice'],
+            expression: 'quantity * unitPrice',
+            precision: 2
+          }
+        },
+        {
           key: 'pregnancyStatus',
           label: 'Pregnancy Status',
           type: 'radio',
@@ -62,50 +91,101 @@ export const sampleFormSchema: FormSchema = {
           },
           clearValueWhenHidden: true,
         },
-
         {
-          key: 'region',
-          label: 'Region',
-          type: 'dropdown',
-          options: [
-            { label: "Riyadh", value: "1" },
-            { label: "Makkah", value: "2" },
-            { label: "Madinah", value: "3" },
-            { label: "Qassim", value: "4" },
-          ],
-          validations: {
-            required: true
-          }
+          key: 'address',
+          label: 'Address',
+          type: 'group',
+          fields: [
+            {
+              key: 'region',
+              label: 'Region',
+              type: 'dropdown',
+              options: [
+                { label: 'Riyadh', value: '1' },
+                { label: 'Makkah', value: '2' }
+              ],
+              validations: {
+                required: true
+              },
+              messages: {
+                required: 'Region is required'
+              }
+            },
+            {
+              key: 'city',
+              label: 'City',
+              type: 'dropdown',
+              dependsOn: 'region',
+              options: [
+                { label: 'Riyadh', value: '3', parentValue: '1' },
+                { label: 'Al Majmaah', value: '24', parentValue: '1' },
+                { label: 'Makkah', value: '10', parentValue: '2' },
+                { label: 'Jeddah', value: '11', parentValue: '2' }
+              ],
+              validations: {
+                required: true
+              },
+              messages: {
+                required: 'City is required'
+              }
+            },
+            {
+              key: 'district',
+              label: 'District',
+              type: 'text',
+              validations: {
+                required: true
+              },
+              messages: {
+                required: 'District is required'
+              }
+            }
+          ]
         },
-        {
-          key: 'city',
-          label: 'City',
-          type: 'dropdown',
-          dependsOn: 'region',
-          options: [
-            { label: "Riyadh", value: "3", parentValue: "1" },
-            { label: "Al Majmaah", value: "24", parentValue: "1" },
-            { label: "Al Ardhiyah Al Janubiyah", value: "4576", parentValue: "2" },
-            { label: "Al Ardhiyat", value: "4577", parentValue: "2" },
-            { label: "Al Ardhiyah Al Shimaliyah", value: "4578", parentValue: "2" },
-            { label: "Batat", value: "4579", parentValue: "2" },
-            { label: "As Saddain", value: "3691", parentValue: "2" },
-            { label: "Madinah", value: "14", parentValue: "3" },
-            { label: "Dibdibbat Fudala", value: "190", parentValue: "3" },
-            { label: "Ardah", value: "76", parentValue: "3" },
-            { label: "Al Hamnah", value: "351", parentValue: "3" },
-            { label: "Umm Al Ghiran", value: "352", parentValue: "3" },
-            { label: "Al Mundassah", value: "353", parentValue: "3" },
-            { label: "Buqaya Al Janubiyah", value: "3119", parentValue: "4" },
-            { label: "Ar Rufayi Al Najh", value: "3120", parentValue: "4" },
-            { label: "Al Nashiriyah", value: "3707", parentValue: "4" },
-            { label: "Unayzah", value: "80", parentValue: "4" },
 
-          ],
-          validations: {
-            required: true
-          }
-        },
+        // {
+        //   key: 'region',
+        //   label: 'Region',
+        //   type: 'dropdown',
+        //   options: [
+        //     { label: "Riyadh", value: "1" },
+        //     { label: "Makkah", value: "2" },
+        //     { label: "Madinah", value: "3" },
+        //     { label: "Qassim", value: "4" },
+        //   ],
+        //   validations: {
+        //     required: true
+        //   }
+        // },
+        // {
+        //   key: 'city',
+        //   label: 'City',
+        //   type: 'dropdown',
+        //   dependsOn: 'region',
+        //   options: [
+        //     { label: "Riyadh", value: "3", parentValue: "1" },
+        //     { label: "Al Majmaah", value: "24", parentValue: "1" },
+        //     { label: "Al Ardhiyah Al Janubiyah", value: "4576", parentValue: "2" },
+        //     { label: "Al Ardhiyat", value: "4577", parentValue: "2" },
+        //     { label: "Al Ardhiyah Al Shimaliyah", value: "4578", parentValue: "2" },
+        //     { label: "Batat", value: "4579", parentValue: "2" },
+        //     { label: "As Saddain", value: "3691", parentValue: "2" },
+        //     { label: "Madinah", value: "14", parentValue: "3" },
+        //     { label: "Dibdibbat Fudala", value: "190", parentValue: "3" },
+        //     { label: "Ardah", value: "76", parentValue: "3" },
+        //     { label: "Al Hamnah", value: "351", parentValue: "3" },
+        //     { label: "Umm Al Ghiran", value: "352", parentValue: "3" },
+        //     { label: "Al Mundassah", value: "353", parentValue: "3" },
+        //     { label: "Buqaya Al Janubiyah", value: "3119", parentValue: "4" },
+        //     { label: "Ar Rufayi Al Najh", value: "3120", parentValue: "4" },
+        //     { label: "Al Nashiriyah", value: "3707", parentValue: "4" },
+        //     { label: "Unayzah", value: "80", parentValue: "4" },
+
+        //   ],
+        //   validations: {
+        //     required: true
+        //   }
+        // },
         {
           key: 'requestDate',
           label: 'Request Date',

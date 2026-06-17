@@ -8,7 +8,8 @@ export type FieldType =
   | 'file'
   | 'date'
   | 'dateRange'
-  | 'multiselect';
+  | 'multiselect'
+  | 'group';
 
 export interface FormSchema {
   title: string;
@@ -44,6 +45,13 @@ export interface FieldSchema {
   defaultValue?: string;
   options?: FieldOption[];
   dependsOn?: string;
+  readonly?: boolean;
+  fields?: FieldSchema[];
+  calculatedFrom?: {
+    fields: string[];
+    expression: string;
+    precision?: number;
+  };
   validations?: {
     required?: boolean;
     min?: number;

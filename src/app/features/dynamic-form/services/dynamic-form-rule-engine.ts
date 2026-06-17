@@ -11,11 +11,140 @@ export class DynamicFormRuleEngineService {
   constructor(private formBuilderService: DynamicFormBuilderService) { }
 
   setupRules(fields: FieldSchema[], form: FormGroup): void {
+    this.setupRulesForCurrentLevel(fields, form);
+
+    for (const field of fields) {
+      if (field.type !== 'group') {
+        continue;
+      }
+
+      const group = form.get(field.key) as FormGroup | null;
+
+      if (!group) continue;
+
+      this.setupRules(field.fields ?? [], group);
+    }
+  }
+
+
+  private setupRulesForCurrentLevel(fields: FieldSchema[], form: FormGroup): void {
     this.setupConditionalRequired(fields, form);
     this.setupConditionalDisabled(fields, form);
     this.setupClearHiddenValues(fields, form);
     this.setupDependencies(fields, form);
     this.setupDateFieldRules(fields, form);
+    this.setupCalculatedFields(fields, form);
+  }
+
+  setupCalculatedFields(fields: FieldSchema[], form: FormGroup): void {
+    for (const field of fields) {
+      if (!field.calculatedFrom) {
+        continue;
+      }
+
+      const targetControl = form.get(field.key);
+
+      if (!targetControl) {
+        continue;
+      }
+
+      targetControl.disable({
+        emitEvent: false
+      });
+
+      const calculate = () => {
+        const result = this.evaluateCalculation(
+          field.calculatedFrom!.expression,
+          field.calculatedFrom!.fields,
+          form
+        );
+
+        const precision = field.calculatedFrom?.precision;
+
+        const finalValue =
+          result === null
+            ? null
+            : precision !== undefined
+              ? Number(result.toFixed(precision))
+              : result;
+
+        targetControl.setValue(finalValue, {
+          emitEvent: false
+        });
+
+        targetControl.updateValueAndValidity({
+          emitEvent: false
+        });
+      };
+
+      calculate();
+
+      for (const dependencyField of field.calculatedFrom.fields) {
+        const dependencyControl = form.get(dependencyField);
+
+        if (!dependencyControl) {
+          continue;
+        }
+
+        dependencyControl.valueChanges.subscribe(() => {
+          calculate();
+        });
+      }
+    }
+  }
+
+  evaluateCalculation(
+    expression: string,
+    dependencyFields: string[],
+    form: FormGroup
+  ): number | null {
+    const values: Record<string, number> = {};
+
+    for (const fieldKey of dependencyFields) {
+      const rawValue = form.get(fieldKey)?.value;
+
+      if (rawValue === null || rawValue === undefined || rawValue === '') {
+        return null;
+      }
+
+      const numericValue = Number(rawValue);
+
+      if (Number.isNaN(numericValue)) {
+        return null;
+      }
+
+      values[fieldKey] = numericValue;
+    }
+
+    const normalizedExpression = expression.replace(/\s+/g, '');
+
+    if (!this.isSafeMathExpression(normalizedExpression, dependencyFields)) {
+      console.error(`Unsafe calculated field expression: ${expression}`);
+      return null;
+    }
+
+    const expressionWithValues = normalizedExpression.replace(
+      /[a-zA-Z_][a-zA-Z0-9_]*/g,
+      match => values[match].toString()
+    );
+
+    try {
+      return Function(`"use strict"; return (${expressionWithValues});`)();
+    } catch {
+      return null;
+    }
+  }
+
+  isSafeMathExpression(expression: string, allowedFields: string[]): boolean {
+    const allowedCharactersRegex = /^[a-zA-Z0-9_+\-*/().]+$/;
+
+    if (!allowedCharactersRegex.test(expression)) {
+      return false;
+    }
+
+    const tokens = expression.match(/[a-zA-Z_][a-zA-Z0-9_]*/g) ?? [];
+
+    return tokens.every(token => allowedFields.includes(token));
   }
 
   setupDateFieldRules(fields: FieldSchema[], form: FormGroup): void {

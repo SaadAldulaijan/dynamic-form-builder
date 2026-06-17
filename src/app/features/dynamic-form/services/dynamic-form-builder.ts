@@ -42,6 +42,10 @@ export class DynamicFormBuilderService {
       return new FormArray([]);
     }
 
+    if (field.type === 'group') {
+      return this.buildGroup(field.fields ?? []);
+    }
+
     if (field.type === 'multiselect') {
       return new FormControl([], this.buildValidators(field));
     }

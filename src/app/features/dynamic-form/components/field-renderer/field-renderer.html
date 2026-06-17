@@ -7,7 +7,7 @@
 
   @case ('number') {
   <label>{{ field.label }}</label>
-  <input type="number" [formControlName]="field.key" />
+  <input type="number" [formControlName]="field.key" [readonly]="field.readonly" />
   }
 
   @case ('dropdown') {
@@ -19,6 +19,24 @@
     }
   </select>
   }
+
+  @case ('group') {
+  <fieldset
+    [formGroupName]="field.key"
+    style="border: 1px solid #ddd; padding: 12px; margin-bottom: 16px;">
+
+    <legend>{{ field.label }}</legend>
+
+    @for (childField of field.fields ?? []; track childField.key) {
+      @if (isVisibleInsideNestedGroup(childField)) {
+        <app-field-renderer
+          [field]="childField"
+          [form]="getNestedGroup()">
+        </app-field-renderer>
+      }
+    }
+  </fieldset>
+}
 
   @case ('multiselect') {
   <label>{{ field.label }}</label>
