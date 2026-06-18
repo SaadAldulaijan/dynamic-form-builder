@@ -142,50 +142,6 @@ export const sampleFormSchema: FormSchema = {
             }
           ]
         },
-
-        // {
-        //   key: 'region',
-        //   label: 'Region',
-        //   type: 'dropdown',
-        //   options: [
-        //     { label: "Riyadh", value: "1" },
-        //     { label: "Makkah", value: "2" },
-        //     { label: "Madinah", value: "3" },
-        //     { label: "Qassim", value: "4" },
-        //   ],
-        //   validations: {
-        //     required: true
-        //   }
-        // },
-        // {
-        //   key: 'city',
-        //   label: 'City',
-        //   type: 'dropdown',
-        //   dependsOn: 'region',
-        //   options: [
-        //     { label: "Riyadh", value: "3", parentValue: "1" },
-        //     { label: "Al Majmaah", value: "24", parentValue: "1" },
-        //     { label: "Al Ardhiyah Al Janubiyah", value: "4576", parentValue: "2" },
-        //     { label: "Al Ardhiyat", value: "4577", parentValue: "2" },
-        //     { label: "Al Ardhiyah Al Shimaliyah", value: "4578", parentValue: "2" },
-        //     { label: "Batat", value: "4579", parentValue: "2" },
-        //     { label: "As Saddain", value: "3691", parentValue: "2" },
-        //     { label: "Madinah", value: "14", parentValue: "3" },
-        //     { label: "Dibdibbat Fudala", value: "190", parentValue: "3" },
-        //     { label: "Ardah", value: "76", parentValue: "3" },
-        //     { label: "Al Hamnah", value: "351", parentValue: "3" },
-        //     { label: "Umm Al Ghiran", value: "352", parentValue: "3" },
-        //     { label: "Al Mundassah", value: "353", parentValue: "3" },
-        //     { label: "Buqaya Al Janubiyah", value: "3119", parentValue: "4" },
-        //     { label: "Ar Rufayi Al Najh", value: "3120", parentValue: "4" },
-        //     { label: "Al Nashiriyah", value: "3707", parentValue: "4" },
-        //     { label: "Unayzah", value: "80", parentValue: "4" },
-
-        //   ],
-        //   validations: {
-        //     required: true
-        //   }
-        // },
         {
           key: 'requestDate',
           label: 'Request Date',
@@ -350,7 +306,6 @@ export const sampleFormSchema: FormSchema = {
                       validations: {
                         required: true,
                         email: true,
-                        //pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{1,3}$'
                       },
                       messages: {
                         required: 'Email is required',
@@ -365,7 +320,6 @@ export const sampleFormSchema: FormSchema = {
                         required: true,
                         startsWith: '05',
                         exactLength: 10,
-                        // pattern: '^05[0-9]{8}$'
                       },
                       messages: {
                         startsWith: 'Phone number must start with 05',
@@ -381,5 +335,4 @@ export const sampleFormSchema: FormSchema = {
       ]
     }
   ],
-
 };

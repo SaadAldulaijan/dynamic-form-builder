@@ -23,6 +23,9 @@ export class FieldRenderer {
   }
 
   addArrayItem(): void {
+
+    if (this.field.type !== 'array') return;
+
     if (!this.field.itemSchema) return;
 
     const fields = this.field.itemSchema.fields;
@@ -31,9 +34,6 @@ export class FieldRenderer {
     this.ruleEngine.setupRules(fields, group);
 
     this.arrayControl.push(group);
-
-    // const group = this.dynamicFormBuilderService.buildGroup(this.field.itemSchema.fields);
-    // this.arrayControl.push(group);
   }
 
 
@@ -62,34 +62,67 @@ export class FieldRenderer {
   }
 
 
+  getRadioName(): string {
+    return `${this.field.key}_${this.form}`;
+  }
+
+  setRadioValue(value: any): void {
+    const control = this.form.get(this.field.key);
+
+    if (!control || control.disabled) {
+      return;
+    }
+
+    control.setValue(value);
+    control.markAsTouched();
+    control.updateValueAndValidity();
+  }
+
   onRadioChange(value: any): void {
     this.form.get(this.field.key)?.setValue(value);
   }
 
 
   getErrorMessage(): string | null {
-
     const control = this.form.get(this.field.key);
 
     if (!control?.errors) {
       return null;
     }
 
-    const errors = Object.keys(control.errors);
+    const firstError = Object.keys(control.errors)[0];
 
-    if (errors.length === 0) {
-      return null;
-    }
-
-    const firstError = errors[0];
-
-    return (
-      this.field.messages?.[firstError] ??
-      `${this.field.label} is invalid`
-    );
+    return this.field.messages?.[firstError] ?? `${this.field.label} is invalid`;
   }
+  // getErrorMessage(): string | null {
+
+  //   const control = this.form.get(this.field.key);
+
+  //   if (!control?.errors) {
+  //     return null;
+  //   }
+
+  //   const errors = Object.keys(control.errors);
+
+  //   if (errors.length === 0) {
+  //     return null;
+  //   }
+
+  //   const firstError = errors[0];
+
+  //   return (
+  //     this.field.messages?.[firstError] ??
+  //     `${this.field.label} is invalid`
+  //   );
+  // }
 
   getOptions() {
+
+    if (this.field.type !== 'dropdown') {
+      return [];
+    }
+
+
     if (!this.field.dependsOn) {
       return this.field.options ?? [];
     }
@@ -104,6 +137,12 @@ export class FieldRenderer {
   }
 
   getDateMin(): string | null {
+
+    if (this.field.type !== 'date') {
+      return null;
+    }
+
+
     if (this.field.validations?.minDate) {
       return this.field.validations.minDate;
     }
@@ -116,6 +155,11 @@ export class FieldRenderer {
   }
 
   getDateMax(): string | null {
+
+    if (this.field.type !== 'date') {
+      return null;
+    }
+
     if (this.field.validations?.maxDate) {
       return this.field.validations.maxDate;
     }
@@ -138,6 +182,10 @@ export class FieldRenderer {
   }
 
   toggleMultiSelect(value: any, event: Event): void {
+    if (this.field.type !== 'multiselect') {
+      return;
+    }
+
     const input = event.target as HTMLInputElement;
     const control = this.form.get(this.field.key);
 
@@ -161,6 +209,10 @@ export class FieldRenderer {
   }
 
   isMultiselectOptionDisabled(value: any): boolean {
+    if (this.field.type !== 'multiselect') {
+      return true;
+    }
+
     const control = this.form.get(this.field.key);
 
     if (!control || control.disabled) {
@@ -181,6 +233,11 @@ export class FieldRenderer {
   }
 
   onFileSelected(event: Event): void {
+
+    if (this.field.type !== 'file') {
+      return;
+    }
+
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
 
@@ -197,6 +254,11 @@ export class FieldRenderer {
 
 
   removeFile(fileInput: HTMLInputElement): void {
+
+    if (this.field.type !== 'file') {
+      return;
+    }
+
     const control = this.form.get(this.field.key);
 
     if (!control) {

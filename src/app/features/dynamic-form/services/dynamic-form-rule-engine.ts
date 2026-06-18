@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { DynamicFormBuilderService } from "./dynamic-form-builder";
-import { FieldCondition, FieldSchema } from "../models/form-schema";
 import { FormGroup } from "@angular/forms";
-
+import { FieldSchema, FormSchema } from '../models/form-schema';
+import { FieldOption } from "../models/field-options";
+import { FieldCondition } from "../models/field-conditions";
 
 @Injectable({
   providedIn: 'root'
@@ -38,19 +39,16 @@ export class DynamicFormRuleEngineService {
 
   setupCalculatedFields(fields: FieldSchema[], form: FormGroup): void {
     for (const field of fields) {
-      if (!field.calculatedFrom) {
-        continue;
-      }
+
+      if (!field.calculatedFrom) continue;
+
 
       const targetControl = form.get(field.key);
 
-      if (!targetControl) {
-        continue;
-      }
+      if (!targetControl) continue;
 
-      targetControl.disable({
-        emitEvent: false
-      });
+
+      targetControl.disable({ emitEvent: false });
 
       const calculate = () => {
         const result = this.evaluateCalculation(
@@ -149,17 +147,18 @@ export class DynamicFormRuleEngineService {
 
   setupDateFieldRules(fields: FieldSchema[], form: FormGroup): void {
     for (const field of fields) {
+
+      if (field.type !== 'date') continue;
+
       const validations = field.validations;
 
-      if (!validations) {
-        continue;
-      }
+      if (!validations) continue;
+
 
       const targetControl = form.get(field.key);
 
-      if (!targetControl) {
-        continue;
-      }
+      if (!targetControl) continue;
+
 
       const dependencyFields = [
         validations.dateGreaterThanField,
@@ -171,9 +170,8 @@ export class DynamicFormRuleEngineService {
       for (const dependencyField of dependencyFields) {
         const dependencyControl = form.get(dependencyField);
 
-        if (!dependencyControl) {
-          continue;
-        }
+        if (!dependencyControl) continue;
+
 
         dependencyControl.valueChanges.subscribe(() => {
           targetControl.updateValueAndValidity({
@@ -242,6 +240,10 @@ export class DynamicFormRuleEngineService {
           targetControl.disable({ emitEvent: false });
         } else {
           targetControl.enable({ emitEvent: false });
+
+          const shouldBeRequired = field.requiredWhen ? this.evaluateCondition(field.requiredWhen, form) : false;
+
+          targetControl.setValidators(this.formBuilderService.buildValidators(field, shouldBeRequired));
         }
 
         targetControl.updateValueAndValidity({ emitEvent: false });
@@ -284,14 +286,13 @@ export class DynamicFormRuleEngineService {
 
   setupDependencies(fields: FieldSchema[], form: FormGroup): void {
     for (const field of fields) {
+
+      if (field.type !== 'dropdown') continue;
+
       if (!field.dependsOn) continue;
 
       const parentControl = form.get(field.dependsOn);
       const childControl = form.get(field.key);
-
-      if (!parentControl || !childControl) {
-        continue;
-      }
 
       if (!parentControl || !childControl) continue;
 
