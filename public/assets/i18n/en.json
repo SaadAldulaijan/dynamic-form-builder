@@ -47,5 +47,26 @@
       "CITY_REQUIRED": "City is required",
       "DISTRICT_REQUIRED": "District is required"
     }
+  },
+  "TAKHSEES_FORM": {
+    "TITLE": "New Takhsees Request",
+    "SECTIONS": {
+      "ENTITY_PRIMARY_INFO": "Entity Primary Information",
+      "ENTITY_CONTACT": "Entity Contact"
+    },
+    "FIELDS": {
+      "ENTITY_TYPE": "Entity Type",
+      "OWNERS": "Company Owners Information",
+      "OWNER_NAME": "Owner Name",
+      "OWNER_NATIONALITY": "Owner Nationality",
+      "OWNER_PERCENTAGE": "Owner Percentage"
+    },
+    "OPTIONS": {
+      "EGYPTIAN": "Egyptian",
+      "SAUDI": "Saudi",
+      "UAE": "UAE",
+      "PRIVATE": "Private Entity",
+      "GOVERNMENT": "Government Entity"
+    }
   }
 }

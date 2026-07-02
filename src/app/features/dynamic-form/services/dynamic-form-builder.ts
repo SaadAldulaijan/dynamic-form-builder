@@ -81,6 +81,7 @@ export class DynamicFormBuilderService {
 
     switch (field.type) {
       case 'text':
+      case 'textarea':
         if (field.validations?.minLength !== undefined) {
           validators.push(Validators.minLength(field.validations.minLength));
         }

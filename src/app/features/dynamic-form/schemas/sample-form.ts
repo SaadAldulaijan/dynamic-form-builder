@@ -303,6 +303,7 @@ export const sampleFormSchema: FormSchema = {
           key: 'projects',
           labelKey: 'DYNAMIC_FORM.FIELDS.PROJECTS',
           type: 'array',
+          arrayDisplayMode: 'modal-list',
           layout: {
             wrapperClass: 'col-12',
             containerClass: 'border rounded p-3',

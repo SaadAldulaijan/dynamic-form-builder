@@ -8,6 +8,7 @@ import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { takhseesFormSchema } from '../../schemas/takhsees-form';
 
 
 
@@ -26,7 +27,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class DynamicForm implements OnInit {
 
-  schema = sampleFormSchema;
+  // schema = sampleFormSchema;
+  schema = takhseesFormSchema;
   form!: FormGroup;
   activeSectionIndex = 0;
 
@@ -82,9 +84,53 @@ export class DynamicForm implements OnInit {
       return;
     }
 
+    this.restoreArrays(this.getAllFields(), this.form, draft);
+
     this.form.patchValue(draft, {
       emitEvent: false
     });
+  }
+
+  restoreArrays(fields: FieldSchema[], form: FormGroup, value: any): void {
+    for (const field of fields) {
+      if (field.type === 'array') {
+        this.restoreArrayField(field, form, value);
+      }
+
+      if (field.type === 'group') {
+        const group = form.get(field.key) as FormGroup | null;
+        const groupValue = value?.[field.key];
+
+        if (group && groupValue) {
+          this.restoreArrays(field.fields, group, groupValue);
+        }
+      }
+    }
+  }
+
+  restoreArrayField(field: FieldSchema, form: FormGroup, value: any): void {
+    if (field.type !== 'array') {
+      return;
+    }
+
+    const array = form.get(field.key) as FormArray | null;
+    const arrayValue = value?.[field.key];
+
+    if (!array || !Array.isArray(arrayValue)) {
+      return;
+    }
+
+    array.clear();
+
+    for (const itemValue of arrayValue) {
+      const itemGroup = this.formBuilderService.buildGroup(field.itemSchema.fields);
+
+      this.ruleEngine.setupRules(field.itemSchema.fields, itemGroup);
+
+      this.restoreArrays(field.itemSchema.fields, itemGroup, itemValue);
+
+      array.push(itemGroup);
+    }
   }
 
   clearDraft(): void {
