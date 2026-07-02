@@ -21,7 +21,8 @@
 
   <div style="display: flex; gap: 8px; margin-bottom: 16px;">
     @for (section of sections; track section.key; let i = $index) {
-    <button type="button" (click)="goToSection(i)" [disabled]="!canGoToSection(i)" [style.font-weight]="activeSectionIndex === i ? 'bold' : 'normal'">
+    <button type="button" (click)="goToSection(i)" [disabled]="!canGoToSection(i)"
+      [style.font-weight]="activeSectionIndex === i ? 'bold' : 'normal'">
       {{ section.title }}
     </button>
     }
@@ -53,6 +54,14 @@
 
     <button type="button" (click)="nextSection()" [disabled]="activeSectionIndex === sections.length - 1">
       Next
+    </button>
+
+    <button type="button" (click)="saveDraft()">
+      Save Draft
+    </button>
+
+    <button type="button" (click)="clearDraft()">
+      Clear Draft
     </button>
 
     @if (activeSectionIndex === sections.length - 1) {

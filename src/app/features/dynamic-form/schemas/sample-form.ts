@@ -4,6 +4,7 @@ import { FormSchema } from "../models/form-schema";
 
 // ==================== SAMPLE DATA ====================
 export const sampleFormSchema: FormSchema = {
+  key: 'sample-request-form',
   title: 'Dynamic Request Form',
   sections: [
     {

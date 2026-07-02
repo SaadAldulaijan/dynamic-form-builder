@@ -11,6 +11,7 @@ import { GroupFieldSchema } from './fields/group-field.schema';
 
 
 export interface FormSchema {
+  key: string;
   title: string;
   fields?: FieldSchema[];
   sections?: FormSectionSchema[];

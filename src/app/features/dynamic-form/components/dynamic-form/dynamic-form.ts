@@ -6,6 +6,7 @@ import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
+import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 
 
 
@@ -28,13 +29,47 @@ export class DynamicForm implements OnInit {
   activeSectionIndex = 0;
 
 
-  constructor(private formBuilderService: DynamicFormBuilderService, private ruleEngine: DynamicFormRuleEngineService) { }
+  constructor(
+    private formBuilderService: DynamicFormBuilderService,
+    private ruleEngine: DynamicFormRuleEngineService,
+    private draftService: DynamicFormDraftService) { }
 
 
   ngOnInit(): void {
     this.form = this.formBuilderService.buildForm(this.schema);
 
     this.ruleEngine.setupRules(this.getAllFields(), this.form);
+
+    this.loadDraft();
+  }
+
+  saveDraft(): void {
+    this.draftService.saveDraft(
+      this.schema.key,
+      this.form.getRawValue()
+    );
+
+    alert('Draft saved successfully');
+  }
+
+  loadDraft(): void {
+    const draft = this.draftService.loadDraft<any>(this.schema.key);
+
+    if (!draft) {
+      return;
+    }
+
+    this.form.patchValue(draft, {
+      emitEvent: false
+    });
+  }
+
+  clearDraft(): void {
+    this.draftService.clearDraft(this.schema.key);
+
+    this.form.reset();
+
+    alert('Draft cleared');
   }
 
   get sections() {
