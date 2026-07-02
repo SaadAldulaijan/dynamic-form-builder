@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { sampleFormSchema } from '../../schemas/sample-form';
@@ -33,12 +33,10 @@ export class DynamicForm implements OnInit {
   activeSectionIndex = 0;
 
 
-  constructor(
-    private formBuilderService: DynamicFormBuilderService,
-    private ruleEngine: DynamicFormRuleEngineService,
-    private draftService: DynamicFormDraftService,
-    private translate: TranslateService) { }
-
+  private formBuilderService = inject(DynamicFormBuilderService);
+  private ruleEngine = inject(DynamicFormRuleEngineService);
+  private draftService = inject(DynamicFormDraftService);
+  private translate = inject(TranslateService);
 
   ngOnInit(): void {
     this.form = this.formBuilderService.buildForm(this.schema);

@@ -217,18 +217,6 @@ export class FieldRenderer {
     );
   }
 
-  // getErrorMessage(): string | null {
-  //   const control = this.form.get(this.field.key);
-
-  //   if (!control?.errors) {
-  //     return null;
-  //   }
-
-  //   const firstError = Object.keys(control.errors)[0];
-
-  //   return this.field.messages?.[firstError] ?? `${this.field.label} is invalid`;
-  // }
-
 
   getOptions() {
 

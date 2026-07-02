@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { DynamicFormBuilderService } from "./dynamic-form-builder";
 import { FormGroup } from "@angular/forms";
 import { FieldSchema, FormSchema } from '../models/form-schema';
@@ -9,7 +9,8 @@ import { FieldCondition } from "../models/field-conditions";
   providedIn: 'root'
 })
 export class DynamicFormRuleEngineService {
-  constructor(private formBuilderService: DynamicFormBuilderService) { }
+
+  private formBuilderService = inject(DynamicFormBuilderService);
 
   setupRules(fields: FieldSchema[], form: FormGroup): void {
     this.setupRulesForCurrentLevel(fields, form);
@@ -309,39 +310,5 @@ export class DynamicFormRuleEngineService {
       });
     }
   }
-
-
-
-  // setupDependencies(): void {
-  //   for (const field of this.getAllFields()) {
-  //     if (!field.dependsOn) {
-  //       continue;
-  //     }
-
-  //     const parentControl = this.form.get(field.dependsOn);
-  //     const childControl = this.form.get(field.key);
-
-  //     if (!parentControl || !childControl) {
-  //       continue;
-  //     }
-
-  //     let previousValue = parentControl.value;
-
-  //     parentControl.valueChanges.subscribe(currentValue => {
-  //       if (currentValue === previousValue) {
-  //         return;
-  //       }
-
-  //       previousValue = currentValue;
-
-  //       childControl.setValue(null, {
-  //         emitEvent: false
-  //       });
-
-  //       childControl.markAsUntouched();
-  //       childControl.markAsPristine();
-  //     });
-  //   }
-  // }
 
 }

@@ -9,7 +9,9 @@
     "SELECT": "Select",
     "SELECTED": "Selected",
     "SELECTED_FILE": "Selected file",
-    "ADD": "Add"
+    "ADD": "Add",
+    "EDIT": "Edit",
+    "CANCEL": "Cancel"
   },
   "DYNAMIC_FORM": {
     "TITLE": "Dynamic Request Form",

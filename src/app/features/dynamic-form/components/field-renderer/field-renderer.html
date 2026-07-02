@@ -146,7 +146,7 @@
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-sm btn-outline-secondary"
             (click)="openArrayItemModal(arrayItemModal, $index)">
-            Edit
+            {{'COMMON.EDIT' | translate }}
           </button>
 
           <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeArrayItem($index)">
@@ -167,7 +167,7 @@
     <ng-template #arrayItemModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title">
-          {{ editingArrayIndex === null ? ('COMMON.ADD' | translate) : 'Edit' }}
+          {{ editingArrayIndex === null ? ('COMMON.ADD' | translate) : ('COMMON.EDIT' | translate) }}
           {{ getFieldLabel() }}
         </h4>
 
