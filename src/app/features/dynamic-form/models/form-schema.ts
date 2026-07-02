@@ -9,7 +9,7 @@ import { MultiselectFieldSchema } from './fields/multiselect-field.schema';
 import { ArrayFieldSchema } from './fields/array-field.schema';
 import { GroupFieldSchema } from './fields/group-field.schema';
 import { FormLayoutSchema, SectionLayoutSchema } from './layout/form-layout';
-
+import { TextareaFieldSchema } from './fields/textarea-field.schema';
 
 export interface FormSchema {
   key: string;
@@ -33,6 +33,7 @@ export interface FormSectionSchema {
 
 export type FieldSchema =
   | TextFieldSchema
+  | TextareaFieldSchema
   | NumberFieldSchema
   | DropdownFieldSchema
   | CheckboxFieldSchema

@@ -1,72 +1,5 @@
-<!-- <div style="margin-bottom: 16px;">
-  <button type="button" (click)="changeLanguage('en')">English</button>
-  <button type="button" (click)="changeLanguage('ar')">العربية</button>
-</div>
-
-<h2>{{ getFormTitle() }}</h2>
-
-<form [formGroup]="form" (ngSubmit)="submit()">
-
-  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-    @for (section of sections; track section.key; let i = $index) {
-    <button type="button" (click)="goToSection(i)" [disabled]="!canGoToSection(i)"
-      [style.font-weight]="activeSectionIndex === i ? 'bold' : 'normal'">
-      {{ getSectionTitle(section) }}
-    </button>
-    }
-  </div>
-
-  @for (section of sections; track section.key; let i = $index) {
-  @if (activeSectionIndex === i) {
-  <fieldset style="padding: 16px; border: 1px solid #ccc;">
-    <legend>{{ getSectionTitle(section) }}</legend>
-
-    @if (getSectionDescription(section)) {
-    <p>{{ getSectionDescription(section) }}</p>
-    }
-
-    @for (field of section.fields; track field.key) {
-    @if (isVisible(field)) {
-    <app-field-renderer [field]="field" [form]="form">
-    </app-field-renderer>
-    }
-    }
-  </fieldset>
-  }
-  }
-
-  <div style="margin-top: 16px; display: flex; gap: 8px;">
-    <button type="button" (click)="previousSection()" [disabled]="activeSectionIndex === 0" class="btn btn-secondary">
-      {{'COMMON.PREVIOUS' | translate}}
-    </button>
-
-    <button type="button" (click)="nextSection()" [disabled]="activeSectionIndex === sections.length - 1" class="btn btn-primary">
-      {{'COMMON.NEXT' | translate}}
-    </button>
-
-    <button type="button" (click)="saveDraft()" class="btn btn-outline-primary">
-      {{'COMMON.SAVE_DRAFT' | translate}}
-    </button>
-
-    <button type="button" (click)="clearDraft()" class="btn btn-outline-secondary">
-      {{'COMMON.CLEAR_DRAFT' | translate}}
-    </button>
-
-    @if (activeSectionIndex === sections.length - 1) {
-    <button type="submit" class="btn btn-success">
-      {{'COMMON.SUBMIT' | translate}}
-    </button>
-    }
-  </div>
-</form>
-
-<pre>{{ form.getRawValue() | json }}</pre> -->
-
-
-<div [class]="schema.layout?.containerClass ?? 'container py-4'">
-  <h2>{{ getFormTitle() }}</h2>
-
-  <div style="margin-bottom: 16px;">
+<div class="d-flex justify-content-end">
+  <div class="mb-3">
     <button type="button" class="btn btn-outline-primary btn-sm me-2" (click)="changeLanguage('en')">
       English
     </button>
@@ -75,6 +8,11 @@
       العربية
     </button>
   </div>
+</div>
+
+<div [class]="schema.layout?.containerClass ?? 'container py-4'">
+  <h2>{{ getFormTitle() }}</h2>
+
 
   <form [formGroup]="form" (ngSubmit)="submit()">
 

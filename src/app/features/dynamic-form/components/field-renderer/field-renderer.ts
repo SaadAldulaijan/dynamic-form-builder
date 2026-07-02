@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Inject, Input } from '@angular/core';
 import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-field-renderer',
@@ -17,9 +18,88 @@ export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
 
-  constructor(private dynamicFormBuilderService: DynamicFormBuilderService,
-    private ruleEngine: DynamicFormRuleEngineService,
-    private translate: TranslateService) { }
+  private modalService = inject(NgbModal);
+  private dynamicFormBuilderService = inject(DynamicFormBuilderService);
+  private ruleEngine = inject(DynamicFormRuleEngineService);
+  private translate = inject(TranslateService);
+
+  currentArrayItemForm?: FormGroup;
+  editingArrayIndex: number | null = null;
+  openArrayItemModal(content: any, index?: number): void {
+    if (this.field.type !== 'array') {
+      return;
+    }
+
+    const fields = this.field.itemSchema.fields;
+
+    this.currentArrayItemForm = this.dynamicFormBuilderService.buildGroup(fields);
+    this.ruleEngine.setupRules(fields, this.currentArrayItemForm);
+
+    if (index !== undefined) {
+      this.editingArrayIndex = index;
+
+      const existingValue = this.arrayControl.at(index).getRawValue();
+
+      this.currentArrayItemForm.patchValue(existingValue, {
+        emitEvent: false
+      });
+    } else {
+      this.editingArrayIndex = null;
+    }
+
+    this.modalService.open(content, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static'
+    });
+  }
+
+  saveArrayItem(modal: any): void {
+    if (this.field.type !== 'array') {
+      return;
+    }
+
+    if (!this.currentArrayItemForm) {
+      return;
+    }
+
+    this.currentArrayItemForm.markAllAsTouched();
+
+    if (this.currentArrayItemForm.invalid) {
+      return;
+    }
+
+    if (this.editingArrayIndex !== null) {
+      const existingGroup = this.arrayControl.at(this.editingArrayIndex) as FormGroup;
+
+      existingGroup.patchValue(this.currentArrayItemForm.getRawValue(), {
+        emitEvent: false
+      });
+    } else {
+      this.arrayControl.push(this.currentArrayItemForm);
+    }
+
+    this.arrayControl.markAsTouched();
+    this.arrayControl.updateValueAndValidity();
+
+    modal.close();
+    this.currentArrayItemForm = undefined;
+    this.editingArrayIndex = null;
+  }
+
+  getArrayItemTitle(index: number): string {
+    if (this.field.type !== 'array') {
+      return `Item ${index + 1}`;
+    }
+
+    const value = this.arrayControl.at(index)?.value;
+
+    if (!this.field.itemTitleField) {
+      return `Item ${index + 1}`;
+    }
+
+    return value?.[this.field.itemTitleField] || `Item ${index + 1}`;
+  }
 
   get arrayControl(): FormArray {
     return this.form.get(this.field.key) as FormArray;
