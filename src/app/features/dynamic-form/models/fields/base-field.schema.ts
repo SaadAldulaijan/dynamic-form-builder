@@ -3,13 +3,15 @@ import { FieldType } from "../field-types";
 
 export interface BaseFieldSchema {
   key: string;
-  label: string;
+  label?: string;
+  labelKey?: string;
   type: FieldType;
   
   defaultValue?: unknown;
   readonly?: boolean;
 
   messages?: Record<string, string>;
+  messageKeys?: Record<string, string>;
 
   visibleWhen?: FieldCondition;
   requiredWhen?: FieldCondition;

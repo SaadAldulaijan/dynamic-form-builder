@@ -4,25 +4,29 @@ import { FormSchema } from "../models/form-schema";
 
 // ==================== SAMPLE DATA ====================
 export const sampleFormSchema: FormSchema = {
-  title: 'Dynamic Request Form',
+  key: 'sample-request-form',
+  titleKey: 'DYNAMIC_FORM.TITLE',
   sections: [
     {
       key: 'personalInfo',
-      title: 'Personal Information',
-      description: 'Basic applicant information',
+      titleKey: 'DYNAMIC_FORM.SECTIONS.PERSONAL_INFO',
+      descriptionKey: 'DYNAMIC_FORM.SECTIONS.PERSONAL_INFO_DESC',
       fields: [
         {
           key: 'name',
-          label: 'Name',
+          labelKey: 'DYNAMIC_FORM.FIELDS.NAME',
           type: 'text',
           validations: {
             required: true,
             maxLength: 50
+          },
+          messageKeys: {
+            required: 'DYNAMIC_FORM.VALIDATION.NAME_REQUIRED'
           }
         },
         {
           key: 'age',
-          label: 'Age',
+          labelKey: 'DYNAMIC_FORM.FIELDS.AGE',
           type: 'number',
           validations: {
             required: true,
@@ -32,11 +36,11 @@ export const sampleFormSchema: FormSchema = {
         },
         {
           key: 'gender',
-          label: 'Gender',
+          labelKey: 'DYNAMIC_FORM.FIELDS.GENDER',
           type: 'dropdown',
           options: [
-            { label: 'Male', value: 'male' },
-            { label: 'Female', value: 'female' }
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.MALE', value: 'male' },
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.FEMALE', value: 'female' }
           ],
           validations: {
             required: true
@@ -73,11 +77,11 @@ export const sampleFormSchema: FormSchema = {
         },
         {
           key: 'pregnancyStatus',
-          label: 'Pregnancy Status',
+          labelKey: 'DYNAMIC_FORM.FIELDS.PREGNANCY_STATUS',
           type: 'radio',
           options: [
-            { label: 'Yes', value: 'true' },
-            { label: 'No', value: 'false' }
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.YES', value: 'true' },
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.NO', value: 'false' }
           ],
           visibleWhen: {
             field: 'gender',
@@ -98,7 +102,7 @@ export const sampleFormSchema: FormSchema = {
           fields: [
             {
               key: 'region',
-              label: 'Region',
+              labelKey: 'DYNAMIC_FORM.FIELDS.REGION',
               type: 'dropdown',
               options: [
                 { label: 'Riyadh', value: '1' },
@@ -107,13 +111,13 @@ export const sampleFormSchema: FormSchema = {
               validations: {
                 required: true
               },
-              messages: {
-                required: 'Region is required'
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.REGION_REQUIRED'
               }
             },
             {
               key: 'city',
-              label: 'City',
+              labelKey: 'DYNAMIC_FORM.FIELDS.CITY',
               type: 'dropdown',
               dependsOn: 'region',
               options: [
@@ -125,19 +129,19 @@ export const sampleFormSchema: FormSchema = {
               validations: {
                 required: true
               },
-              messages: {
-                required: 'City is required'
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED'
               }
             },
             {
               key: 'district',
-              label: 'District',
+              labelKey: 'DYNAMIC_FORM.FIELDS.DISTRICT',
               type: 'text',
               validations: {
                 required: true
               },
-              messages: {
-                required: 'District is required'
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.DISTRICT_REQUIRED'
               }
             }
           ]
