@@ -7,6 +7,7 @@ import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 
 
@@ -17,7 +18,8 @@ import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    FieldRenderer
+    FieldRenderer,
+    TranslatePipe
   ],
   templateUrl: './dynamic-form.html',
   styleUrl: './dynamic-form.scss',
@@ -32,7 +34,8 @@ export class DynamicForm implements OnInit {
   constructor(
     private formBuilderService: DynamicFormBuilderService,
     private ruleEngine: DynamicFormRuleEngineService,
-    private draftService: DynamicFormDraftService) { }
+    private draftService: DynamicFormDraftService,
+    private translate: TranslateService) { }
 
 
   ngOnInit(): void {
@@ -41,6 +44,26 @@ export class DynamicForm implements OnInit {
     this.ruleEngine.setupRules(this.getAllFields(), this.form);
 
     this.loadDraft();
+  }
+
+  changeLanguage(lang: 'en' | 'ar'): void {
+    this.translate.use(lang);
+  }
+
+  text(value?: string, key?: string): string {
+    return key ? this.translate.instant(key) : value ?? '';
+  }
+
+  getFormTitle(): string {
+    return this.text(this.schema.title, this.schema.titleKey);
+  }
+
+  getSectionTitle(section: any): string {
+    return this.text(section.title, section.titleKey);
+  }
+
+  getSectionDescription(section: any): string {
+    return this.text(section.description, section.descriptionKey);
   }
 
   saveDraft(): void {

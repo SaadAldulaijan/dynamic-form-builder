@@ -4,10 +4,11 @@ import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-field-renderer',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss',
 })
@@ -16,10 +17,24 @@ export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
 
-  constructor(private dynamicFormBuilderService: DynamicFormBuilderService, private ruleEngine: DynamicFormRuleEngineService) { }
+  constructor(private dynamicFormBuilderService: DynamicFormBuilderService,
+    private ruleEngine: DynamicFormRuleEngineService,
+    private translate: TranslateService) { }
 
   get arrayControl(): FormArray {
     return this.form.get(this.field.key) as FormArray;
+  }
+
+  text(label?: string, labelKey?: string): string {
+    return labelKey ? this.translate.instant(labelKey) : label ?? '';
+  }
+
+  getFieldLabel(): string {
+    return this.text(this.field.label, this.field.labelKey);
+  }
+
+  getOptionLabel(option: any): string {
+    return this.text(option.label, option.labelKey);
   }
 
   addArrayItem(): void {
@@ -92,29 +107,30 @@ export class FieldRenderer {
 
     const firstError = Object.keys(control.errors)[0];
 
-    return this.field.messages?.[firstError] ?? `${this.field.label} is invalid`;
-  }
-  // getErrorMessage(): string | null {
+    const messageKey = this.field.messageKeys?.[firstError];
 
+    if (messageKey) {
+      return this.translate.instant(messageKey);
+    }
+
+    return (
+      this.field.messages?.[firstError] ??
+      `${this.getFieldLabel()} is invalid`
+    );
+  }
+
+  // getErrorMessage(): string | null {
   //   const control = this.form.get(this.field.key);
 
   //   if (!control?.errors) {
   //     return null;
   //   }
 
-  //   const errors = Object.keys(control.errors);
+  //   const firstError = Object.keys(control.errors)[0];
 
-  //   if (errors.length === 0) {
-  //     return null;
-  //   }
-
-  //   const firstError = errors[0];
-
-  //   return (
-  //     this.field.messages?.[firstError] ??
-  //     `${this.field.label} is invalid`
-  //   );
+  //   return this.field.messages?.[firstError] ?? `${this.field.label} is invalid`;
   // }
+
 
   getOptions() {
 

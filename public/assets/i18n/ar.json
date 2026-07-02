@@ -1,0 +1,43 @@
+{
+  "COMMON": {
+    "NEXT": "التالي",
+    "PREVIOUS": "السابق",
+    "SUBMIT": "إرسال",
+    "SAVE_DRAFT": "حفظ كمسودة",
+    "CLEAR_DRAFT": "مسح المسودة",
+    "REMOVE": "حذف",
+    "SELECT": "اختر",
+    "SELECTED": "المحدد",
+    "SELECTED_FILE": "الملف المحدد",
+    "ADD": "إضافة"
+  },
+  "DYNAMIC_FORM": {
+    "TITLE": "نموذج طلب ديناميكي",
+    "SECTIONS": {
+      "PERSONAL_INFO": "المعلومات الشخصية",
+      "PERSONAL_INFO_DESC": "معلومات مقدم الطلب الأساسية"
+    },
+    "FIELDS": {
+      "NAME": "الاسم",
+      "AGE": "العمر",
+      "GENDER": "الجنس",
+      "PREGNANCY_STATUS": "حالة الحمل",
+      "REGION": "المنطقة",
+      "CITY": "المدينة"
+    },
+    "OPTIONS": {
+      "MALE": "ذكر",
+      "FEMALE": "أنثى",
+      "YES": "نعم",
+      "NO": "لا"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "الاسم مطلوب",
+      "AGE_REQUIRED": "العمر مطلوب",
+      "GENDER_REQUIRED": "الجنس مطلوب",
+      "PREGNANCY_STATUS_REQUIRED": "حالة الحمل مطلوبة",
+      "REGION_REQUIRED": "المنطقة مطلوبة",
+      "CITY_REQUIRED": "المدينة مطلوبة"
+    }
+  }
+}

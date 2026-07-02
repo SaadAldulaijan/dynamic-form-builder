@@ -1,5 +1,6 @@
 export interface FieldOption {
-  label: string;
+  label?: string;
+  labelKey?: string;
   value: any;
   parentValue?: any;
 }

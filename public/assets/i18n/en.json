@@ -1,0 +1,45 @@
+{
+  "COMMON": {
+    "NEXT": "Next",
+    "PREVIOUS": "Previous",
+    "SUBMIT": "Submit",
+    "SAVE_DRAFT": "Save Draft",
+    "CLEAR_DRAFT": "Clear Draft",
+    "REMOVE": "Remove",
+    "SELECT": "Select",
+    "SELECTED": "Selected",
+    "SELECTED_FILE": "Selected file",
+    "ADD": "Add"
+  },
+  "DYNAMIC_FORM": {
+    "TITLE": "Dynamic Request Form",
+    "SECTIONS": {
+      "PERSONAL_INFO": "Personal Information",
+      "PERSONAL_INFO_DESC": "Basic applicant information"
+    },
+    "FIELDS": {
+      "NAME": "Name",
+      "AGE": "Age",
+      "GENDER": "Gender",
+      "PREGNANCY_STATUS": "Pregnancy Status",
+      "REGION": "Region",
+      "CITY": "City",
+      "DISTRICT": "District"
+    },
+    "OPTIONS": {
+      "MALE": "Male",
+      "FEMALE": "Female",
+      "YES": "Yes",
+      "NO": "No"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Name is required",
+      "AGE_REQUIRED": "Age is required",
+      "GENDER_REQUIRED": "Gender is required",
+      "PREGNANCY_STATUS_REQUIRED": "Pregnancy status is required",
+      "REGION_REQUIRED": "Region is required",
+      "CITY_REQUIRED": "City is required",
+      "DISTRICT_REQUIRED": "District is required"
+    }
+  }
+}

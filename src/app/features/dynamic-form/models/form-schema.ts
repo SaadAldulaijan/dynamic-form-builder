@@ -12,15 +12,18 @@ import { GroupFieldSchema } from './fields/group-field.schema';
 
 export interface FormSchema {
   key: string;
-  title: string;
+  title?: string;
+  titleKey?: string;
   fields?: FieldSchema[];
   sections?: FormSectionSchema[];
 }
 
 export interface FormSectionSchema {
   key: string;
-  title: string;
+  title?: string;
+  titleKey?: string;
   description?: string;
+  descriptionKey?: string;
   fields: FieldSchema[];
 }
 

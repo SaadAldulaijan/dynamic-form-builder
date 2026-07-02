@@ -1,21 +1,9 @@
-<!-- <h2>{{ schema.title }}</h2>
+<div style="margin-bottom: 16px;">
+  <button type="button" (click)="changeLanguage('en')">English</button>
+  <button type="button" (click)="changeLanguage('ar')">العربية</button>
+</div>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-  @for (field of schema.fields; track field.key) {
-    @if (isVisible(field)) {
-      <app-field-renderer
-        [field]="field"
-        [form]="form">
-      </app-field-renderer>
-    }
-  }
-
-  <button type="submit">Submit</button>
-</form>
-
-<pre>{{ form.value | json }}</pre> -->
-
-<h2>{{ schema.title }}</h2>
+<h2>{{ getFormTitle() }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
 
@@ -23,7 +11,7 @@
     @for (section of sections; track section.key; let i = $index) {
     <button type="button" (click)="goToSection(i)" [disabled]="!canGoToSection(i)"
       [style.font-weight]="activeSectionIndex === i ? 'bold' : 'normal'">
-      {{ section.title }}
+      {{ getSectionTitle(section) }}
     </button>
     }
   </div>
@@ -31,10 +19,10 @@
   @for (section of sections; track section.key; let i = $index) {
   @if (activeSectionIndex === i) {
   <fieldset style="padding: 16px; border: 1px solid #ccc;">
-    <legend>{{ section.title }}</legend>
+    <legend>{{ getSectionTitle(section) }}</legend>
 
-    @if (section.description) {
-    <p>{{ section.description }}</p>
+    @if (getSectionDescription(section)) {
+    <p>{{ getSectionDescription(section) }}</p>
     }
 
     @for (field of section.fields; track field.key) {
@@ -49,24 +37,24 @@
 
   <div style="margin-top: 16px; display: flex; gap: 8px;">
     <button type="button" (click)="previousSection()" [disabled]="activeSectionIndex === 0">
-      Previous
+      {{'COMMON.PREVIOUS' | translate}}
     </button>
 
     <button type="button" (click)="nextSection()" [disabled]="activeSectionIndex === sections.length - 1">
-      Next
+      {{'COMMON.NEXT' | translate}}
     </button>
 
     <button type="button" (click)="saveDraft()">
-      Save Draft
+      {{'COMMON.SAVE_DRAFT' | translate}}
     </button>
 
     <button type="button" (click)="clearDraft()">
-      Clear Draft
+      {{'COMMON.CLEAR_DRAFT' | translate}}
     </button>
 
     @if (activeSectionIndex === sections.length - 1) {
     <button type="submit">
-      Submit
+      {{'COMMON.SUBMIT' | translate}}
     </button>
     }
   </div>
