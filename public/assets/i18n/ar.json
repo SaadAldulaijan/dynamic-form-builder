@@ -23,7 +23,14 @@
       "GENDER": "الجنس",
       "PREGNANCY_STATUS": "حالة الحمل",
       "REGION": "المنطقة",
-      "CITY": "المدينة"
+      "CITY": "المدينة",
+      "DISTRICT": "الحي",
+      "PROJECTS": "المشاريع",
+      "PROJECT_NAME": "اسم المشروع",
+      "STAKEHOLDERS": "أصحاب المصلحة",
+      "STAKEHOLDER_NAME": "اسم صاحب المصلحة",
+      "STAKEHOLDER_EMAIL": "بريد صاحب المصلحة الإلكتروني",
+      "STAKEHOLDER_PHONE": "رقم هاتف صاحب المصلحة"
     },
     "OPTIONS": {
       "MALE": "ذكر",

@@ -1,5 +1,6 @@
 import { FieldCondition } from "../field-conditions";
 import { FieldType } from "../field-types";
+import { FieldLayoutSchema } from "../layout/form-layout";
 
 export interface BaseFieldSchema {
   key: string;
@@ -20,6 +21,8 @@ export interface BaseFieldSchema {
   clearValueWhenHidden?: boolean;
 
   calculatedFrom?: CalculatedFieldSchema;
+
+  layout?: FieldLayoutSchema;
 
 }
 

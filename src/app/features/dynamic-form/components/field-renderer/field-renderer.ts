@@ -25,6 +25,24 @@ export class FieldRenderer {
     return this.form.get(this.field.key) as FormArray;
   }
 
+
+  getFieldWrapperClass(): string {
+    return this.field.layout?.wrapperClass ?? 'col-12';
+  }
+
+  getLabelClass(extendedClass?: string): string {
+    return this.field.layout?.labelClass ?? extendedClass ?? 'form-label';
+  }
+
+  getControlClass(defaultClass: string): string {
+    return this.field.layout?.controlClass ?? defaultClass;
+  }
+
+  getErrorClass(): string {
+    return this.field.layout?.errorClass ?? 'text-danger small mt-1';
+  }
+
+
   text(label?: string, labelKey?: string): string {
     return labelKey ? this.translate.instant(labelKey) : label ?? '';
   }

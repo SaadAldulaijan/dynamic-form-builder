@@ -11,11 +11,20 @@ export const sampleFormSchema: FormSchema = {
       key: 'personalInfo',
       titleKey: 'DYNAMIC_FORM.SECTIONS.PERSONAL_INFO',
       descriptionKey: 'DYNAMIC_FORM.SECTIONS.PERSONAL_INFO_DESC',
+      layout: {
+        containerClass: 'card card-body mb-3',
+        titleClass: 'h5 mb-2',
+        descriptionClass: 'text-muted mb-3',
+        fieldsWrapperClass: 'row g-3'
+      },
       fields: [
         {
           key: 'name',
           labelKey: 'DYNAMIC_FORM.FIELDS.NAME',
           type: 'text',
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
           validations: {
             required: true,
             maxLength: 50
@@ -28,6 +37,9 @@ export const sampleFormSchema: FormSchema = {
           key: 'age',
           labelKey: 'DYNAMIC_FORM.FIELDS.AGE',
           type: 'number',
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
           validations: {
             required: true,
             min: 18,
@@ -99,11 +111,20 @@ export const sampleFormSchema: FormSchema = {
           key: 'address',
           label: 'Address',
           type: 'group',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            fieldsWrapperClass: 'row g-3'
+          },
           fields: [
             {
               key: 'region',
               labelKey: 'DYNAMIC_FORM.FIELDS.REGION',
               type: 'dropdown',
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
               options: [
                 { label: 'Riyadh', value: '1' },
                 { label: 'Makkah', value: '2' }
@@ -120,6 +141,9 @@ export const sampleFormSchema: FormSchema = {
               labelKey: 'DYNAMIC_FORM.FIELDS.CITY',
               type: 'dropdown',
               dependsOn: 'region',
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
               options: [
                 { label: 'Riyadh', value: '3', parentValue: '1' },
                 { label: 'Al Majmaah', value: '24', parentValue: '1' },
@@ -277,27 +301,38 @@ export const sampleFormSchema: FormSchema = {
       fields: [
         {
           key: 'projects',
-          label: 'Projects',
+          labelKey: 'DYNAMIC_FORM.FIELDS.PROJECTS',
           type: 'array',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            actionsClass: 'mb-3',
+            itemClass: 'border rounded p-3 mb-3 bg-light',
+            fieldsWrapperClass: 'row g-3'
+          },
           itemSchema: {
             fields: [
               {
                 key: 'projectName',
-                label: 'Project Name',
+                labelKey: 'DYNAMIC_FORM.FIELDS.PROJECT_NAME',
                 type: 'text',
+                layout: {
+                  wrapperClass: 'col-md-6'
+                },
                 validations: {
                   required: true
                 }
               },
               {
                 key: 'stakeholders',
-                label: 'Stakeholders',
+                labelKey: 'DYNAMIC_FORM.FIELDS.STAKEHOLDERS',
                 type: 'array',
                 itemSchema: {
                   fields: [
                     {
                       key: 'name',
-                      label: 'Name',
+                      labelKey: 'DYNAMIC_FORM.FIELDS.STAKEHOLDER_NAME',
                       type: 'text',
                       validations: {
                         required: true
@@ -305,7 +340,7 @@ export const sampleFormSchema: FormSchema = {
                     },
                     {
                       key: 'email',
-                      label: 'Email',
+                      labelKey: 'DYNAMIC_FORM.FIELDS.STAKEHOLDER_EMAIL',
                       type: 'text',
                       validations: {
                         required: true,
@@ -318,7 +353,7 @@ export const sampleFormSchema: FormSchema = {
                     },
                     {
                       key: 'phoneNumber',
-                      label: 'Phone Number',
+                      labelKey: 'DYNAMIC_FORM.FIELDS.STAKEHOLDER_PHONE',
                       type: 'text',
                       validations: {
                         required: true,

@@ -8,12 +8,14 @@ import { DateFieldSchema } from './fields/date-field.schema';
 import { MultiselectFieldSchema } from './fields/multiselect-field.schema';
 import { ArrayFieldSchema } from './fields/array-field.schema';
 import { GroupFieldSchema } from './fields/group-field.schema';
+import { FormLayoutSchema, SectionLayoutSchema } from './layout/form-layout';
 
 
 export interface FormSchema {
   key: string;
   title?: string;
   titleKey?: string;
+  layout?: FormLayoutSchema;
   fields?: FieldSchema[];
   sections?: FormSectionSchema[];
 }
@@ -24,6 +26,7 @@ export interface FormSectionSchema {
   titleKey?: string;
   description?: string;
   descriptionKey?: string;
+  layout?: SectionLayoutSchema;
   fields: FieldSchema[];
 }
 
