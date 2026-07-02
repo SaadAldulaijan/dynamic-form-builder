@@ -24,7 +24,13 @@
       "PREGNANCY_STATUS": "Pregnancy Status",
       "REGION": "Region",
       "CITY": "City",
-      "DISTRICT": "District"
+      "DISTRICT": "District",
+      "PROJECTS": "Projects",
+      "PROJECT_NAME": "Project Name",
+      "STAKEHOLDERS": "Stakeholders",
+      "STAKEHOLDER_NAME": "Stakeholder Name",
+      "STAKEHOLDER_EMAIL": "Stakeholder Email",
+      "STAKEHOLDER_PHONE": "Stakeholder Phone"
     },
     "OPTIONS": {
       "MALE": "Male",
