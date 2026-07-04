@@ -21,8 +21,31 @@
 
   @case ('number') {
   <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
-  <input type="number" [formControlName]="field.key" [readonly]="field.readonly"
-    [class]="getControlClass('form-control')" />
+  <!-- <input type="number" [formControlName]="field.key" [readonly]="field.readonly"
+    [class]="getControlClass('form-control')" /> -->
+
+    <div class="input-group">
+    @if (field.display?.prefixKey) {
+      <span class="input-group-text">
+        {{ field.display!.prefixKey | translate }}
+      </span>
+    }
+
+    <input
+      type="text"
+      [value]="getNumberDisplayValue()"
+      [readonly]="field.readonly"
+      [placeholder]="(field.display?.placeholderKey ?? '') | translate"
+      [class]="getControlClass('form-control')"
+      (input)="onNumberInput($event)"
+      (blur)="formatNumberInput($event)" />
+
+    @if (field.display?.suffixKey) {
+      <span class="input-group-text">
+        {{ field.display!.suffixKey | translate }}
+      </span>
+    }
+  </div>
   }
 
   @case ('dropdown') {

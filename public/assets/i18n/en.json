@@ -70,5 +70,48 @@
       "PRIVATE": "Private Entity",
       "GOVERNMENT": "Government Entity"
     }
+  },
+  "NEW_TAKHSEES_FORM": {
+    "TITLE": "New Allocation Request",
+    "SECTIONS": {
+      "FIELD_AND_SECTOR": "Field and Sector",
+      "GENERAL_PROJECT_INFO": "General Project Information"
+    },
+    "FIELDS": {
+      "FIELD": "Field",
+      "SECTOR": "Sector",
+      "MAXIMUM_ELECTRICITY_DEMAND": "Maximum Electricity Demand (kW)"
+    },
+    "SUFFIX": {
+      "KW": "kW"
+    },
+    "PLACEHOLDER": {
+      "MAXIMUM_ELECTRICITY_DEMAND": "Enter maximum electricity demand"
+    },
+    "OPTIONS": {
+      "INDUSTRIAL": "Industrial",
+      "UTILITY": "Utility",
+      "NON_INDUSTRIAL": "Non-Industrial",
+      "PETROCHEMICAL_AND_REFINARIES": "Petrochemical and Refineries",
+      "MINING_AND_MINERALS": "Mining and Minerals",
+      "MEDIUM_AND_LIGHT_INDUSTRIES": "Medium and Light Industries",
+      "POWER_PLANTS": "Power Plants",
+      "COGENERATION": "Cogeneration",
+      "WATER_DESALINATION": "Water Desalination",
+      "WATER_TREATMENT": "Water Treatment",
+      "POWER_GENERATION_UNITS": "Power Generation Units",
+      "ELECTRICITY_ALLOCATION": "Electricity Allocation",
+      "GAS_STATIONS": "Gas Stations",
+      "CONTRACTING": "Contracting",
+      "QUARRIES_AND_MINES": "Quarries and Mines",
+      "TRANSPORT": "Transport",
+      "LAUNDRIES": "Laundries",
+      "FOOD_AND_BEVERAGES": "Food and Beverages",
+      "PETROLEUM_PRODUCTS_DISTRIBUTORS": "Petroleum Products Distributors",
+      "FARMERS": "Farmers",
+      "MARINE_SERVICES": "Marine Services",
+      "FLIGHT": "Flight",
+      "OTHER": "Other"
+    }
   }
 }
