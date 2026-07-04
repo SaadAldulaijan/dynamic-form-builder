@@ -2,30 +2,23 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function startsWithValidator(prefix: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-
     if (!control.value) {
       return null;
     }
 
-    return control.value.startsWith(prefix)
-      ? null
-      : { startsWith: true };
+    return control.value.startsWith(prefix) ? null : { startsWith: true };
   };
 }
 
 export function exactLengthValidator(length: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-
     if (!control.value) {
       return null;
     }
 
-    return control.value.length === length
-      ? null
-      : { exactLength: true };
+    return control.value.length === length ? null : { exactLength: true };
   };
 }
-
 
 export function maxFileSizeValidator(maxSizeMb: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -37,9 +30,7 @@ export function maxFileSizeValidator(maxSizeMb: number): ValidatorFn {
 
     const maxSizeBytes = maxSizeMb * 1024 * 1024;
 
-    return file.size <= maxSizeBytes
-      ? null
-      : { maxFileSize: true };
+    return file.size <= maxSizeBytes ? null : { maxFileSize: true };
   };
 }
 
@@ -53,16 +44,13 @@ export function allowedExtensionsValidator(extensions: string[]): ValidatorFn {
 
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
-    const normalizedExtensions = extensions.map(x =>
-      x.replace('.', '').toLowerCase()
-    );
+    const normalizedExtensions = extensions.map((x) => x.replace('.', '').toLowerCase());
 
     return fileExtension && normalizedExtensions.includes(fileExtension)
       ? null
       : { allowedExtensions: true };
   };
 }
-
 
 function toDateOnly(value: any): Date | null {
   if (!value) {
@@ -132,7 +120,6 @@ export function maxDateTodayValidator(): ValidatorFn {
     return value <= todayDateOnly() ? null : { maxDateToday: true };
   };
 }
-
 
 export function dateGreaterThanFieldValidator(fieldKey: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -210,17 +197,12 @@ export function dateLessThanOrEqualFieldValidator(fieldKey: string): ValidatorFn
   };
 }
 
-
 export function minSelectedValidator(min: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-
     const value = control.value as any[] | null;
     const count = Array.isArray(value) ? value.length : 0;
 
-    return count >= min
-      ? null
-      : { minSelected: true };
-
+    return count >= min ? null : { minSelected: true };
 
     // const value = control.value as any[] | null;
 
@@ -242,8 +224,38 @@ export function maxSelectedValidator(max: number): ValidatorFn {
       return null;
     }
 
-    return value.length <= max
-      ? null
-      : { maxSelected: true };
+    return value.length <= max ? null : { maxSelected: true };
+  };
+}
+
+export function integerOnlyValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    return Number.isInteger(Number(value)) ? null : { integerOnly: true };
+  };
+}
+
+export function decimalPrecisionValidator(precision: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const valueAsString = String(value);
+
+    if (!valueAsString.includes('.')) {
+      return null;
+    }
+
+    const decimalPart = valueAsString.split('.')[1];
+
+    return decimalPart.length <= precision ? null : { decimalPrecision: true };
   };
 }

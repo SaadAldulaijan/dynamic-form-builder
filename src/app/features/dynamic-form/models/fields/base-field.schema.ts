@@ -1,6 +1,7 @@
 import { FieldCondition } from "../field-conditions";
 import { FieldType } from "../field-types";
 import { FieldLayoutSchema } from "../layout/form-layout";
+import { FieldDisplaySchema } from '../display/field-display';
 
 export interface BaseFieldSchema {
   key: string;
@@ -10,6 +11,7 @@ export interface BaseFieldSchema {
   
   defaultValue?: unknown;
   readonly?: boolean;
+  display?: FieldDisplaySchema;
 
   messages?: Record<string, string>;
   messageKeys?: Record<string, string>;

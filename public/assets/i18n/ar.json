@@ -46,5 +46,41 @@
       "REGION_REQUIRED": "المنطقة مطلوبة",
       "CITY_REQUIRED": "المدينة مطلوبة"
     }
+  },
+  "NEW_TAKHSEES_FORM": {
+    "TITLE": "طلب تخصيص جديد",
+    "SECTIONS": {
+      "FIELD_AND_SECTOR": "المجال والقطاع",
+      "GENERAL_PROJECT_INFO": "معلومات عامة عن المشروع"
+    },
+    "FIELDS": {
+      "FIELD": "المجال",
+      "SECTOR": "القطاع"
+    },
+    "OPTIONS": {
+      "INDUSTRIAL": "صناعي",
+      "UTILITY": "المنافع",
+      "NON_INDUSTRIAL": "غير صناعي",
+      "PETROCHEMICAL_AND_REFINARIES": "البتروكيماويات والمصافي",
+      "MINING_AND_MINERALS": "التعدين والمعادن",
+      "MEDIUM_AND_LIGHT_INDUSTRIES": "الصناعات المتوسطة والخفيفة",
+      "POWER_PLANTS": "محطات توليد كهرباء",
+      "COGENERATION": "إنتاج مزدوج",
+      "WATER_DESALINATION": "تحلية مياه",
+      "WATER_TREATMENT": "معالجة المياه",
+      "POWER_GENERATION_UNITS": "وحدات توليد كهرباء",
+      "ELECTRICITY_ALLOCATION": "تخصيص الكهرباء",
+      "GAS_STATIONS": "محطات الوقود",
+      "CONTRACTING": "المقاولات (الإنشاءات والطرق)",
+      "QUARRIES_AND_MINES": "المحاجر والمناجم",
+      "TRANSPORT": "النقل",
+      "LAUNDRIES": "مغاسل الملابس",
+      "FOOD_AND_BEVERAGES": "الأغذية والمشروبات (تجاري)",
+      "PETROLEUM_PRODUCTS_DISTRIBUTORS": "الموزعين أو الناقلين للمنتجات البترولية",
+      "FARMERS": "المزارع",
+      "MARINE_SERVICES": "الخدمات البحرية",
+      "FLIGHT": "الطيران",
+      "OTHER": "أخرى"
+    }
   }
 }

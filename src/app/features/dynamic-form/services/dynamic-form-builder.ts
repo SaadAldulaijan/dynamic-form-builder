@@ -5,19 +5,32 @@ import {
   FormControl,
   FormGroup,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { FieldSchema, FormSchema } from '../models/form-schema';
-import { allowedExtensionsValidator, dateGreaterThanFieldValidator, dateGreaterThanOrEqualFieldValidator, dateLessThanFieldValidator, dateLessThanOrEqualFieldValidator, exactLengthValidator, maxDateTodayValidator, maxDateValidator, maxFileSizeValidator, maxSelectedValidator, minDateTodayValidator, minDateValidator, minSelectedValidator, startsWithValidator } from './custom-validators';
-
-
+import {
+  allowedExtensionsValidator,
+  dateGreaterThanFieldValidator,
+  dateGreaterThanOrEqualFieldValidator,
+  dateLessThanFieldValidator,
+  dateLessThanOrEqualFieldValidator,
+  decimalPrecisionValidator,
+  exactLengthValidator,
+  integerOnlyValidator,
+  maxDateTodayValidator,
+  maxDateValidator,
+  maxFileSizeValidator,
+  maxSelectedValidator,
+  minDateTodayValidator,
+  minDateValidator,
+  minSelectedValidator,
+  startsWithValidator,
+} from './custom-validators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DynamicFormBuilderService {
-
-
   buildForm(schema: FormSchema): FormGroup {
     const fields = this.getAllFields(schema);
     const group: Record<string, AbstractControl> = {};
@@ -54,23 +67,13 @@ export class DynamicFormBuilderService {
         return new FormControl(false, this.buildValidators(field));
 
       default:
-        return new FormControl(
-          field.defaultValue ?? null,
-          this.buildValidators(field)
-        );
+        return new FormControl(field.defaultValue ?? null, this.buildValidators(field));
     }
   }
 
-
-
   private hasRequiredValidation(field: FieldSchema): boolean {
-    return (
-      field.type !== 'array' &&
-      field.type !== 'group' &&
-      field.validations?.required === true
-    );
+    return field.type !== 'array' && field.type !== 'group' && field.validations?.required === true;
   }
-
 
   buildValidators(field: FieldSchema, forceRequired = false): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
@@ -117,6 +120,17 @@ export class DynamicFormBuilderService {
           validators.push(Validators.max(field.validations.max));
         }
 
+        if (field.validations?.allowDecimal === false) {
+          validators.push(integerOnlyValidator());
+        }
+
+        if (
+          field.validations?.allowDecimal === true &&
+          field.validations?.decimalPrecision !== undefined
+        ) {
+          validators.push(decimalPrecisionValidator(field.validations.decimalPrecision));
+        }
+
         break;
 
       case 'file':
@@ -125,9 +139,7 @@ export class DynamicFormBuilderService {
         }
 
         if (field.validations?.allowedExtensions?.length) {
-          validators.push(
-            allowedExtensionsValidator(field.validations.allowedExtensions)
-          );
+          validators.push(allowedExtensionsValidator(field.validations.allowedExtensions));
         }
 
         break;
@@ -150,32 +162,22 @@ export class DynamicFormBuilderService {
         }
 
         if (field.validations?.dateGreaterThanField) {
-          validators.push(
-            dateGreaterThanFieldValidator(
-              field.validations.dateGreaterThanField
-            )
-          );
+          validators.push(dateGreaterThanFieldValidator(field.validations.dateGreaterThanField));
         }
 
         if (field.validations?.dateGreaterThanOrEqualField) {
           validators.push(
-            dateGreaterThanOrEqualFieldValidator(
-              field.validations.dateGreaterThanOrEqualField
-            )
+            dateGreaterThanOrEqualFieldValidator(field.validations.dateGreaterThanOrEqualField),
           );
         }
 
         if (field.validations?.dateLessThanField) {
-          validators.push(
-            dateLessThanFieldValidator(field.validations.dateLessThanField)
-          );
+          validators.push(dateLessThanFieldValidator(field.validations.dateLessThanField));
         }
 
         if (field.validations?.dateLessThanOrEqualField) {
           validators.push(
-            dateLessThanOrEqualFieldValidator(
-              field.validations.dateLessThanOrEqualField
-            )
+            dateLessThanOrEqualFieldValidator(field.validations.dateLessThanOrEqualField),
           );
         }
 
@@ -203,7 +205,6 @@ export class DynamicFormBuilderService {
     return validators;
   }
 
-
   // buildValidators(field: FieldSchema, forceRequired = false): ValidatorFn[] {
   //   const validators: ValidatorFn[] = [];
 
@@ -217,7 +218,6 @@ export class DynamicFormBuilderService {
   //   if (field.validations?.startsWith) validators.push(startsWithValidator(field.validations.startsWith));
   //   if (field.validations?.exactLength) validators.push(exactLengthValidator(field.validations.exactLength));
 
-
   //   if (field.validations?.maxFileSizeMb !== undefined) {
   //     validators.push(maxFileSizeValidator(field.validations.maxFileSizeMb));
   //   }
@@ -227,7 +227,6 @@ export class DynamicFormBuilderService {
   //       allowedExtensionsValidator(field.validations.allowedExtensions)
   //     );
   //   }
-
 
   //   if (field.validations?.minDate) {
   //     validators.push(minDateValidator(field.validations.minDate));
@@ -244,7 +243,6 @@ export class DynamicFormBuilderService {
   //   if (field.validations?.maxDateToday) {
   //     validators.push(maxDateTodayValidator());
   //   }
-
 
   //   if (field.validations?.dateGreaterThanField) {
   //     validators.push(
@@ -278,19 +276,14 @@ export class DynamicFormBuilderService {
   //     validators.push(maxSelectedValidator(field.validations.maxSelected));
   //   }
 
-
   //   return validators;
   // }
 
   getAllFields(schema: FormSchema): FieldSchema[] {
     if (schema.sections?.length) {
-      return schema.sections.flatMap(section => section.fields);
+      return schema.sections.flatMap((section) => section.fields);
     }
 
     return schema.fields ?? [];
   }
-
-
-
-
 }

@@ -14,7 +14,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './field-renderer.scss',
 })
 export class FieldRenderer {
-
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
 
@@ -41,7 +40,7 @@ export class FieldRenderer {
       const existingValue = this.arrayControl.at(index).getRawValue();
 
       this.currentArrayItemForm.patchValue(existingValue, {
-        emitEvent: false
+        emitEvent: false,
       });
     } else {
       this.editingArrayIndex = null;
@@ -50,7 +49,7 @@ export class FieldRenderer {
     this.modalService.open(content, {
       size: 'lg',
       centered: true,
-      backdrop: 'static'
+      backdrop: 'static',
     });
   }
 
@@ -73,7 +72,7 @@ export class FieldRenderer {
       const existingGroup = this.arrayControl.at(this.editingArrayIndex) as FormGroup;
 
       existingGroup.patchValue(this.currentArrayItemForm.getRawValue(), {
-        emitEvent: false
+        emitEvent: false,
       });
     } else {
       this.arrayControl.push(this.currentArrayItemForm);
@@ -105,7 +104,6 @@ export class FieldRenderer {
     return this.form.get(this.field.key) as FormArray;
   }
 
-
   getFieldWrapperClass(): string {
     return this.field.layout?.wrapperClass ?? 'col-12';
   }
@@ -122,9 +120,8 @@ export class FieldRenderer {
     return this.field.layout?.errorClass ?? 'text-danger small mt-1';
   }
 
-
   text(label?: string, labelKey?: string): string {
-    return labelKey ? this.translate.instant(labelKey) : label ?? '';
+    return labelKey ? this.translate.instant(labelKey) : (label ?? '');
   }
 
   getFieldLabel(): string {
@@ -136,7 +133,6 @@ export class FieldRenderer {
   }
 
   addArrayItem(): void {
-
     if (this.field.type !== 'array') return;
 
     if (!this.field.itemSchema) return;
@@ -148,7 +144,6 @@ export class FieldRenderer {
 
     this.arrayControl.push(group);
   }
-
 
   removeArrayItem(index: number): void {
     this.arrayControl.removeAt(index);
@@ -174,7 +169,6 @@ export class FieldRenderer {
     return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
   }
 
-
   getRadioName(): string {
     return `${this.field.key}_${this.form}`;
   }
@@ -195,7 +189,6 @@ export class FieldRenderer {
     this.form.get(this.field.key)?.setValue(value);
   }
 
-
   getErrorMessage(): string | null {
     const control = this.form.get(this.field.key);
 
@@ -211,19 +204,13 @@ export class FieldRenderer {
       return this.translate.instant(messageKey);
     }
 
-    return (
-      this.field.messages?.[firstError] ??
-      `${this.getFieldLabel()} is invalid`
-    );
+    return this.field.messages?.[firstError] ?? `${this.getFieldLabel()} is invalid`;
   }
 
-
   getOptions() {
-
     if (this.field.type !== 'dropdown') {
       return [];
     }
-
 
     if (!this.field.dependsOn) {
       return this.field.options ?? [];
@@ -235,15 +222,13 @@ export class FieldRenderer {
       return [];
     }
 
-    return (this.field.options ?? []).filter(x => x.parentValue === parentValue);
+    return (this.field.options ?? []).filter((x) => x.parentValue === parentValue);
   }
 
   getDateMin(): string | null {
-
     if (this.field.type !== 'date') {
       return null;
     }
-
 
     if (this.field.validations?.minDate) {
       return this.field.validations.minDate;
@@ -257,7 +242,6 @@ export class FieldRenderer {
   }
 
   getDateMax(): string | null {
-
     if (this.field.type !== 'date') {
       return null;
     }
@@ -302,7 +286,7 @@ export class FieldRenderer {
     if (input.checked) {
       nextValue = [...currentValue, value];
     } else {
-      nextValue = currentValue.filter(x => x !== value);
+      nextValue = currentValue.filter((x) => x !== value);
     }
 
     control.setValue(nextValue);
@@ -335,7 +319,6 @@ export class FieldRenderer {
   }
 
   onFileSelected(event: Event): void {
-
     if (this.field.type !== 'file') {
       return;
     }
@@ -354,9 +337,7 @@ export class FieldRenderer {
     control.updateValueAndValidity();
   }
 
-
   removeFile(fileInput: HTMLInputElement): void {
-
     if (this.field.type !== 'file') {
       return;
     }
@@ -374,4 +355,84 @@ export class FieldRenderer {
     fileInput.value = '';
   }
 
+  getNumberDisplayValue(): string {
+    if (this.field.type !== 'number') {
+      return '';
+    }
+
+    const value = this.form.get(this.field.key)?.value;
+
+    if (value === null || value === undefined || value === '') {
+      return '';
+    }
+
+    if (!this.field.display?.useThousandsSeparator) {
+      return String(value);
+    }
+
+    return this.formatNumberWithCommas(value);
+  }
+
+  onNumberInput(event: Event): void {
+    if (this.field.type !== 'number') {
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const control = this.form.get(this.field.key);
+
+    if (!control) {
+      return;
+    }
+
+    let rawValue = input.value.replace(/,/g, '');
+
+    const allowDecimal = this.field.validations?.allowDecimal === true;
+
+    rawValue = allowDecimal ? rawValue.replace(/[^\d.-]/g, '') : rawValue.replace(/[^\d-]/g, '');
+
+    if (rawValue === '') {
+      control.setValue(null);
+    } else {
+      const numericValue = Number(rawValue);
+
+      control.setValue(Number.isNaN(numericValue) ? rawValue : numericValue);
+    }
+
+    control.markAsTouched();
+    control.updateValueAndValidity();
+  }
+
+  formatNumberInput(event: Event): void {
+    if (this.field.type !== 'number') {
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const control = this.form.get(this.field.key);
+
+    if (!control) {
+      return;
+    }
+
+    const value = control.value;
+
+    if (value === null || value === undefined || value === '') {
+      input.value = '';
+      return;
+    }
+
+    if (this.field.display?.useThousandsSeparator) {
+      input.value = this.formatNumberWithCommas(value);
+    }
+  }
+
+  formatNumberWithCommas(value: any): string {
+    const valueAsString = String(value);
+    const [integerPart, decimalPart] = valueAsString.split('.');
+
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    return decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+  }
 }

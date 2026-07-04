@@ -9,6 +9,7 @@ import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-e
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takhseesFormSchema } from '../../schemas/takhsees-form';
+import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
 
 
 
@@ -28,7 +29,7 @@ import { takhseesFormSchema } from '../../schemas/takhsees-form';
 export class DynamicForm implements OnInit {
 
   // schema = sampleFormSchema;
-  schema = takhseesFormSchema;
+  schema = newTakhseesFormSchema;
   form!: FormGroup;
   activeSectionIndex = 0;
 
