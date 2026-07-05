@@ -118,6 +118,17 @@ const SECTORS_OPTIONS = [
   },
 ];
 
+const PHONE_COUNTRY_CODES_OPTIONS = [
+  {
+    value: '+966',
+    label: '+966',
+  },
+  {
+    value: '+971',
+    label: '+971',
+  }
+];
+
 export const newTakhseesFormSchema: FormSchema = {
   key: 'newTakhseesForm',
   titleKey: 'NEW_TAKHSEES_FORM.TITLE',
@@ -189,6 +200,65 @@ export const newTakhseesFormSchema: FormSchema = {
             decimalPrecision: 'Maximum 4 digits are allowed after the decimal point',
           },
         },
+        {
+          key: 'requestRepresentative',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REQUEST_REPRESENTATIVE',
+          type: 'group',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            fieldsWrapperClass: 'row g-3'
+          },
+          fields: [
+            {
+              key: 'representativeName',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_NAME',
+              type: 'text',
+              validations: {
+                required: true,
+              },
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
+            },
+            {
+              key: 'representativePhoneCountryCode',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE_COUNTRY_CODE',
+              type: 'dropdown',
+              options: PHONE_COUNTRY_CODES_OPTIONS,
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
+            },
+            {
+              key: 'representativePhone',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE',
+              type: 'text',
+              validations: {
+                required: true,
+                minLength: 9,
+                maxLength: 9,
+                pattern: '^[0-9]*$',
+              },
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
+            },
+            {
+              key: 'representativeEmail',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_EMAIL',
+              type: 'text',
+              validations: {
+                required: true,
+                email: true,
+              },
+              layout: {
+                wrapperClass: 'col-md-6'
+              },
+            }
+          ]
+        }
       ],
     },
   ],
