@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Inject, Input } from '@angular/core';
-import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
@@ -24,6 +24,19 @@ export class FieldRenderer {
 
   currentArrayItemForm?: FormGroup;
   editingArrayIndex: number | null = null;
+
+
+  isRequired(): boolean {
+    const control = this.form.get(this.field.key);
+
+    if (!control) {
+      return false;
+    }
+
+    return control.hasValidator(Validators.required);
+  }
+
+
   openArrayItemModal(content: any, index?: number): void {
     if (this.field.type !== 'array') {
       return;
