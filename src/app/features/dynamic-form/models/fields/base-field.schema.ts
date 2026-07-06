@@ -2,6 +2,7 @@ import { FieldCondition } from "../field-conditions";
 import { FieldType } from "../field-types";
 import { FieldLayoutSchema } from "../layout/form-layout";
 import { FieldDisplaySchema } from '../display/field-display';
+import { FieldActionSchema } from "../actions/field-action";
 
 export interface BaseFieldSchema {
   key: string;
@@ -25,6 +26,7 @@ export interface BaseFieldSchema {
   calculatedFrom?: CalculatedFieldSchema;
 
   layout?: FieldLayoutSchema;
+  actions?: FieldActionSchema[];
 
 }
 

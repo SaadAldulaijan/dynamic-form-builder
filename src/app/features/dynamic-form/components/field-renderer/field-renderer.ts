@@ -1,17 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Inject, Input } from '@angular/core';
-import { FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, Inject, Input } from '@angular/core';
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DynamicFormIntegrationService } from '../../services/dynamic-form-integration';
+import { FieldActionSchema } from '../../models/actions/field-action';
+import { ChangeDetectorRef } from '@angular/core';
+import { signal } from '@angular/core';
+
 
 @Component({
   selector: 'app-field-renderer',
   imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe],
   templateUrl: './field-renderer.html',
-  styleUrl: './field-renderer.scss',
+  styleUrl: './field-renderer.scss'
 })
 export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
@@ -21,10 +26,140 @@ export class FieldRenderer {
   private dynamicFormBuilderService = inject(DynamicFormBuilderService);
   private ruleEngine = inject(DynamicFormRuleEngineService);
   private translate = inject(TranslateService);
+  private integrationService = inject(DynamicFormIntegrationService);
+  private cdr = inject(ChangeDetectorRef);
 
   currentArrayItemForm?: FormGroup;
   editingArrayIndex: number | null = null;
 
+
+  lookupLoading = signal<Record<string, boolean>>({});
+  lookupErrors = signal<Record<string, string | null>>({});
+  lookupResults = signal<Record<string, any>>({});
+
+
+  setLookupLoading(actionKey: string, value: boolean): void {
+    this.lookupLoading.update(current => ({
+      ...current,
+      [actionKey]: value
+    }));
+  }
+
+  setLookupError(actionKey: string, value: string | null): void {
+    this.lookupErrors.update(current => ({
+      ...current,
+      [actionKey]: value
+    }));
+  }
+
+  setLookupResult(fieldKey: string, value: any): void {
+    this.lookupResults.update(current => ({
+      ...current,
+      [fieldKey]: value
+    }));
+  }
+
+
+  getActionLabel(action: FieldActionSchema): string {
+    if (action.labelKey) {
+      return this.translate.instant(action.labelKey);
+    }
+
+    return action.label ?? action.key;
+  }
+
+  executeAction(action: FieldActionSchema): void {
+    if (action.type !== 'apiLookup') {
+      return;
+    }
+    
+    const sourceControl = this.form.get(this.field.key);
+    sourceControl?.markAsTouched();
+    sourceControl?.updateValueAndValidity({
+      emitEvent: true,
+    });
+
+    if (sourceControl?.invalid) {
+      return;
+    }
+    
+    const payload = this.buildActionPayload(action);
+
+    this.setLookupLoading(action.key, true);
+    this.setLookupError(action.key, null);
+
+    this.integrationService.execute(action.endpointKey, payload).subscribe(response => {
+      // const targetControl = this.form.get(action.targetField) as FormControl;
+
+      // if (targetControl) {
+      //   targetControl.setValue(response, {
+      //     emitEvent: false,
+      //   });
+      //   targetControl.markAsTouched();
+      //   targetControl.updateValueAndValidity({
+      //     emitEvent: false,
+      //   });
+      // }
+
+      this.setLookupResult(action.targetField, response);
+      this.setLookupLoading(action.key, false);
+    })
+
+    // this.integrationService.execute(action.endpointKey, payload).subscribe({
+    //   next: response => {
+    //     const targetControl = this.form.get(action.targetField);
+
+    //     if (targetControl) {
+    //       targetControl.setValue(response, {
+    //         emitEvent: true,
+    //       });
+    //       targetControl.markAsTouched();
+    //       targetControl.updateValueAndValidity({
+    //         emitEvent: true,
+    //       });
+    //     }
+
+    //     this.setLookupResult(action.targetField, response);
+    //     this.setLookupLoading(action.key, false);
+
+    //   },
+    //   error: error => {
+    //     this.setLookupError(action.key, error?.message ?? 'Lookup failed');
+    //     this.setLookupLoading(action.key, false);
+    //   }
+    // });
+  }
+
+  buildActionPayload(action: FieldActionSchema): any {
+    const payload: Record<string, any> = {};
+
+    for (const [requestKey, formFieldKey] of Object.entries(action.requestMapping)) {
+      payload[requestKey] = this.form.get(formFieldKey)?.value;
+    }
+
+    return payload;
+  }
+
+  isActionLoading(action: FieldActionSchema): boolean {
+    return this.lookupLoading()[action.key] === true;
+  }
+
+  getActionError(action: FieldActionSchema): string | null {
+    return this.lookupErrors()[action.key] ?? null;
+  }
+
+  getJsonViewerValue(): any {
+    if (this.field.type !== 'jsonViewer') {
+      return null;
+    }
+
+    const jsonValue = (
+      this.lookupResults()[this.field.key] ??
+      this.form.get(this.field.key)?.value
+    );
+
+    return jsonValue;
+  }
 
   isRequired(): boolean {
     const control = this.form.get(this.field.key);
@@ -37,6 +172,7 @@ export class FieldRenderer {
   }
 
 
+  //#region  Arrays
   openArrayItemModal(content: any, index?: number): void {
     if (this.field.type !== 'array') {
       return;
@@ -117,6 +253,28 @@ export class FieldRenderer {
     return this.form.get(this.field.key) as FormArray;
   }
 
+  addArrayItem(): void {
+    if (this.field.type !== 'array') return;
+
+    if (!this.field.itemSchema) return;
+
+    const fields = this.field.itemSchema.fields;
+    const group = this.dynamicFormBuilderService.buildGroup(fields);
+
+    this.ruleEngine.setupRules(fields, group);
+
+    this.arrayControl.push(group);
+  }
+
+  removeArrayItem(index: number): void {
+    this.arrayControl.removeAt(index);
+  }
+
+  //#endregion
+
+
+  //#region  Layout and Classes
+
   getFieldWrapperClass(): string {
     return this.field.layout?.wrapperClass ?? 'col-12';
   }
@@ -145,22 +303,34 @@ export class FieldRenderer {
     return this.text(option.label, option.labelKey);
   }
 
-  addArrayItem(): void {
-    if (this.field.type !== 'array') return;
+  //#endregion
 
-    if (!this.field.itemSchema) return;
 
-    const fields = this.field.itemSchema.fields;
-    const group = this.dynamicFormBuilderService.buildGroup(fields);
 
-    this.ruleEngine.setupRules(fields, group);
+  //#region Dropdown Options
+  getOptions() {
+    if (this.field.type !== 'dropdown') {
+      return [];
+    }
 
-    this.arrayControl.push(group);
+    if (!this.field.dependsOn) {
+      return this.field.options ?? [];
+    }
+
+    const parentValue = this.form.get(this.field.dependsOn)?.value;
+
+    if (!parentValue) {
+      return [];
+    }
+
+    return (this.field.options ?? []).filter((x) => x.parentValue === parentValue);
   }
 
-  removeArrayItem(index: number): void {
-    this.arrayControl.removeAt(index);
-  }
+
+  //#endregion
+
+
+  //#region Nested Groups
 
   isVisibleInsideGroup(field: FieldSchema, group: FormGroup | any): boolean {
     if (!field.visibleWhen) return true;
@@ -182,6 +352,11 @@ export class FieldRenderer {
     return this.ruleEngine.evaluateCondition(field.visibleWhen, group);
   }
 
+
+  //#endregion
+
+  //#region   Radio Buttons
+
   getRadioName(): string {
     return `${this.field.key}_${this.form}`;
   }
@@ -202,6 +377,9 @@ export class FieldRenderer {
     this.form.get(this.field.key)?.setValue(value);
   }
 
+  //#endregion
+
+
   getErrorMessage(): string | null {
     const control = this.form.get(this.field.key);
 
@@ -220,23 +398,9 @@ export class FieldRenderer {
     return this.field.messages?.[firstError] ?? `${this.getFieldLabel()} is invalid`;
   }
 
-  getOptions() {
-    if (this.field.type !== 'dropdown') {
-      return [];
-    }
 
-    if (!this.field.dependsOn) {
-      return this.field.options ?? [];
-    }
 
-    const parentValue = this.form.get(this.field.dependsOn)?.value;
-
-    if (!parentValue) {
-      return [];
-    }
-
-    return (this.field.options ?? []).filter((x) => x.parentValue === parentValue);
-  }
+  //#region Date Field
 
   getDateMin(): string | null {
     if (this.field.type !== 'date') {
@@ -270,6 +434,11 @@ export class FieldRenderer {
     return null;
   }
 
+
+  //#endregion
+
+
+  //#region  Multiselect
   getMultiselectValue(): any[] {
     const value = this.form.get(this.field.key)?.value;
 
@@ -331,6 +500,10 @@ export class FieldRenderer {
     return this.getMultiselectValue().length >= maxSelected;
   }
 
+  //#endregion
+
+
+  //#region  File Field
   onFileSelected(event: Event): void {
     if (this.field.type !== 'file') {
       return;
@@ -368,6 +541,10 @@ export class FieldRenderer {
     fileInput.value = '';
   }
 
+  //#endregion
+
+
+  //#region  Number Field
   getNumberDisplayValue(): string {
     if (this.field.type !== 'number') {
       return '';
@@ -448,4 +625,6 @@ export class FieldRenderer {
 
     return decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
   }
+
+  //#endregion
 }

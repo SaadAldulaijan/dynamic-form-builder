@@ -73,7 +73,7 @@
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -97,7 +97,7 @@
     <label class="form-check-label">
       {{ getFieldLabel() }}
       @if(isRequired()) {
-        <span class="text-danger">*</span>
+      <span class="text-danger">*</span>
       }
     </label>
   </div>
@@ -106,7 +106,7 @@
   @case ('file') {
   <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -131,7 +131,7 @@
   @case ('date') {
   <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -143,7 +143,7 @@
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -306,6 +306,44 @@
       }
     </div>
   </fieldset>
+  }
+
+  @case ('jsonViewer') {
+  <label [class]="getLabelClass()">
+    {{ getFieldLabel() }}
+  </label>
+
+  @if (getJsonViewerValue()) {
+  <pre class="bg-light border rounded p-3 mb-0">{{ getJsonViewerValue()  | json }}</pre>
+  } @else {
+  <div class="text-muted small">No data retrieved yet.</div>
+  }
+  }
+  }
+
+
+
+
+  @if (field.actions?.length) {
+  <div class="mt-2 d-flex gap-2">
+    @for (action of field.actions; track action.key) {
+    <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isActionLoading(action)"
+      (click)="executeAction(action)">
+      @if (isActionLoading(action)) {
+      <span class="spinner-border spinner-border-sm me-1"></span>
+      }
+
+      {{ getActionLabel(action) }}
+    </button>
+    }
+  </div>
+
+  @for (action of field.actions; track action.key) {
+  @if (getActionError(action)) {
+  <div class="text-danger small mt-1">
+    {{ getActionError(action) }}
+  </div>
+  }
   }
   }
 
