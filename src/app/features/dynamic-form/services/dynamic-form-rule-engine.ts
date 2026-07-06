@@ -192,6 +192,15 @@ export class DynamicFormRuleEngineService {
 
       case 'notEquals':
         return actualValue !== condition.value;
+      
+      
+      case 'in':
+        return Array.isArray(condition.value) 
+        && condition.value.includes(actualValue);
+
+      case 'notIn':
+        return Array.isArray(condition.value) 
+        && !condition.value.includes(actualValue);
 
       default:
         return false;

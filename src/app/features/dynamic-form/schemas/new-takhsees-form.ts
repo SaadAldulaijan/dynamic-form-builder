@@ -129,6 +129,118 @@ const PHONE_COUNTRY_CODES_OPTIONS = [
   }
 ];
 
+const OWNER_LEGAL_STATUS_OPTIONS = [
+  {
+    value: 'commercialEntity',
+    labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.COMMERCIAL_ENTITY',
+  },
+  {
+    value: 'militaryEntity',
+    labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.MILITARY_ENTITY',
+  },
+  {
+    key: 'civilEntity',
+    labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.CIVIL_ENTITY',
+  },
+  {
+    key: 'foreignEntity',
+    labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.FOREIGN_ENTITY',
+  }
+]
+
+
+const project_details = {
+  key: 'projectDetails',
+  titleKey: 'NEW_TAKHSEES_FORM.SECTIONS.GENERAL_PROJECT_INFO',
+  fields: [
+    {
+      key: 'maximumElectricityDemand',
+      labelKey: 'NEW_TAKHSEES_FORM.FIELDS.MAXIMUM_ELECTRICITY_DEMAND',
+      type: 'number',
+      layout: {
+        wrapperClass: 'col-md-6',
+      },
+      validations: {
+        required: true,
+        min: 1,
+        max: 99999999999999,
+        allowDecimal: true,
+        decimalPrecision: 4,
+      },
+      display: {
+        useThousandsSeparator: true,
+        suffixKey: 'NEW_TAKHSEES_FORM.SUFFIX.KW',
+        placeholderKey: 'NEW_TAKHSEES_FORM.PLACEHOLDER.MAXIMUM_ELECTRICITY_DEMAND',
+      },
+      messages: {
+        required: 'Maximum electricity demand is required',
+        min: 'Minimum value is 1',
+        max: 'Maximum value is 99,999,999,999,999',
+        decimalPrecision: 'Maximum 4 digits are allowed after the decimal point',
+      },
+    },
+    {
+      key: 'requestRepresentative',
+      labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REQUEST_REPRESENTATIVE',
+      type: 'group',
+      layout: {
+        wrapperClass: 'col-12',
+        containerClass: 'border rounded p-3',
+        titleClass: 'float-none w-auto px-2 h6',
+        fieldsWrapperClass: 'row g-3'
+      },
+      fields: [
+        {
+          key: 'representativeName',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_NAME',
+          type: 'text',
+          validations: {
+            required: true,
+          },
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
+        },
+        {
+          key: 'representativePhoneCountryCode',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE_COUNTRY_CODE',
+          type: 'dropdown',
+          options: PHONE_COUNTRY_CODES_OPTIONS,
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
+        },
+        {
+          key: 'representativePhone',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE',
+          type: 'text',
+          validations: {
+            required: true,
+            minLength: 9,
+            maxLength: 9,
+            pattern: '^[0-9]*$',
+          },
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
+        },
+        {
+          key: 'representativeEmail',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_EMAIL',
+          type: 'text',
+          validations: {
+            required: true,
+            email: true,
+          },
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
+        }
+      ]
+    }
+  ],
+};
+
 export const newTakhseesFormSchema: FormSchema = {
   key: 'newTakhseesForm',
   titleKey: 'NEW_TAKHSEES_FORM.TITLE',
@@ -171,15 +283,82 @@ export const newTakhseesFormSchema: FormSchema = {
       ],
     },
     {
-      key: 'projectDetails',
+      key: 'projectInfo',
       titleKey: 'NEW_TAKHSEES_FORM.SECTIONS.GENERAL_PROJECT_INFO',
+      layout: {
+        containerClass: 'card card-body mb-3',
+        titleClass: 'h5 mb-2',
+        descriptionClass: 'text-muted mb-3',
+        fieldsWrapperClass: 'row g-3'
+      },
       fields: [
+        {
+          key: 'projectName',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_NAME',
+          type: 'text',
+          validations: {
+            required: true,
+            maxLength: 200,
+            minLength: 1,
+          },
+          layout: {
+            wrapperClass: 'col-md-6',
+          },
+          display: {
+            placeholderKey: 'NEW_TAKHSEES_FORM.PLACEHOLDER.PROJECT_NAME',
+          },
+        },
+        {
+          key: 'projectOperatingDate',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_OPERATING_DATE',
+          type: 'date',
+          validations: {
+            required: true
+          },
+          layout: {
+            wrapperClass: 'col-md-6',
+          },
+          display: {
+            placeholderKey: 'NEW_TAKHSEES_FORM.PLACEHOLDER.PROJECT_OPERATING_DATE',
+          },
+        },
+        {
+          key: 'projectDescription',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_DESCRIPTION',
+          type: 'textarea',
+          validations: {
+            required: true,
+            maxLength: 5000,
+            minLength: 1,
+          },
+          layout: {
+            wrapperClass: 'col-md-12',
+          },
+          display: {
+            placeholderKey: 'NEW_TAKHSEES_FORM.PLACEHOLDER.PROJECT_DESCRIPTION',
+          },
+        },
+        {
+          key: 'projectStatus',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_STATUS',
+          type: 'radio',
+          options: [
+            { labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.EXISTING_FACILITY', value: 'existingFacility' },
+            { labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.UNDER_CONSTRUCTION', value: 'underConstruction' }
+          ],
+          validations: {
+            required: true,
+          },
+          layout: {
+            wrapperClass: 'col-md-12',
+          }
+        },
         {
           key: 'maximumElectricityDemand',
           labelKey: 'NEW_TAKHSEES_FORM.FIELDS.MAXIMUM_ELECTRICITY_DEMAND',
           type: 'number',
           layout: {
-            wrapperClass: 'col-md-6',
+            wrapperClass: 'col-md-12',
           },
           validations: {
             required: true,
@@ -190,7 +369,7 @@ export const newTakhseesFormSchema: FormSchema = {
           },
           display: {
             useThousandsSeparator: true,
-            suffixKey: 'NEW_TAKHSEES_FORM.SUFFIX.KW',
+            suffixKey: 'NEW_TAKHSEES_FORM.SUFFIX.MW',
             placeholderKey: 'NEW_TAKHSEES_FORM.PLACEHOLDER.MAXIMUM_ELECTRICITY_DEMAND',
           },
           messages: {
@@ -201,8 +380,8 @@ export const newTakhseesFormSchema: FormSchema = {
           },
         },
         {
-          key: 'requestRepresentative',
-          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REQUEST_REPRESENTATIVE',
+          key: 'projectManager',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_MANAGER',
           type: 'group',
           layout: {
             wrapperClass: 'col-12',
@@ -212,42 +391,43 @@ export const newTakhseesFormSchema: FormSchema = {
           },
           fields: [
             {
-              key: 'representativeName',
-              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_NAME',
+              key: 'projectManagerName',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_MANAGER_NAME',
               type: 'text',
               validations: {
                 required: true,
               },
               layout: {
                 wrapperClass: 'col-md-6'
-              },
+              }
             },
             {
-              key: 'representativePhoneCountryCode',
-              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE_COUNTRY_CODE',
+              key: 'projectManagerPhoneCountryCode',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_MANAGER_PHONE_COUNTRY_CODE',
               type: 'dropdown',
               options: PHONE_COUNTRY_CODES_OPTIONS,
+              defaultValue: '+966',
               layout: {
                 wrapperClass: 'col-md-6'
-              },
+              }
             },
             {
-              key: 'representativePhone',
-              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_PHONE',
+              key: 'projectManagerPhone',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_MANAGER_PHONE',
               type: 'text',
               validations: {
                 required: true,
                 minLength: 9,
+                startsWith: '5',
                 maxLength: 9,
-                pattern: '^[0-9]*$',
               },
               layout: {
                 wrapperClass: 'col-md-6'
-              },
+              }
             },
             {
-              key: 'representativeEmail',
-              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.REPRESENTATIVE_EMAIL',
+              key: 'projectManagerEmail',
+              labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_MANAGER_EMAIL',
               type: 'text',
               validations: {
                 required: true,
@@ -255,11 +435,164 @@ export const newTakhseesFormSchema: FormSchema = {
               },
               layout: {
                 wrapperClass: 'col-md-6'
-              },
+              }
             }
           ]
         }
-      ],
+      ]
     },
+    {
+      key: 'projectOwnerInformation',
+      titleKey: 'NEW_TAKHSEES_FORM.SECTIONS.PROJECT_OWNER_INFORMATION',
+      fields: [
+        {
+          key: 'areThereAnyProjectPartners',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.ARE_THERE_ANY_PROJECT_PARTNERS',
+          type: 'radio',
+          options: [
+            { labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.YES', value: 'yes' },
+            { labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.NO', value: 'no' }
+          ],
+          validations: {
+            required: true,
+          },
+        },
+        {
+          key: 'majorShareholdersNo',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.MAJOR_SHAREHOLDERS_NO',
+          type: 'number',
+          validations: {
+            required: true,
+            min: 0,
+            max: 999,
+            allowDecimal: false,
+          },
+          layout: {
+            wrapperClass: 'col-md-6',
+          }
+        },
+        {
+          key: 'foreignShareholdersNo',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.FOREIGN_SHAREHOLDERS_NO',
+          type: 'number',
+          validations: {
+            required: true,
+            min: 0,
+            max: 999,
+            allowDecimal: false,
+          },
+          layout: {
+            wrapperClass: 'col-md-6',
+          }
+        },
+        {
+          key: 'projectOwners',
+          labelKey: 'NEW_TAKHSEES_FORM.FIELDS.PROJECT_OWNERS',
+          type: 'array',
+          arrayDisplayMode: 'modal-list',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            actionsClass: 'mb-3',
+            itemClass: 'border rounded p-3 mb-3 bg-light',
+            fieldsWrapperClass: 'row g-3'
+          },
+          itemSchema: {
+            fields: [
+              {
+                key: 'name',
+                labelKey: 'NEW_TAKHSEES_FORM.FIELDS.OWNER_NAME',
+                type: 'text',
+                validations: {
+                  required: true,
+                  maxLength: 200
+                }
+              },
+              {
+                key: 'legalStatus',
+                labelKey: 'NEW_TAKHSEES_FORM.FIELDS.OWNER_LEGAL_STATUS',
+                type: 'dropdown',
+                options: [
+                  { value: 'commercialEntity', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.COMMERCIAL_ENTITY' },
+                  { value: 'militaryEntity', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.MILITARY_ENTITY' },
+                  { value: 'civilEntity', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.CIVIL_ENTITY' },
+                  { value: 'foreignEntity', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.FOREIGN_ENTITY' },
+                ],
+                validations: {
+                  required: true,
+                },
+              },
+              {
+                key: 'ownershipPercentage',
+                labelKey: 'NEW_TAKHSEES_FORM.FIELDS.OWNER_PERCENTAGE',
+                type: 'number',
+                validations: {
+                  required: true,
+                  min: 5,
+                  max: 100,
+                  allowDecimal: true,
+                  decimalPrecision: 4,
+                },
+                display: {
+                  useThousandsSeparator: false,
+                  suffixKey: '%',
+                  placeholderKey: '15',
+                },
+                messages: {
+                  required: 'Maximum electricity demand is required',
+                  min: 'Minimum value is 5',
+                  max: 'Maximum value is 100',
+                  decimalPrecision: 'Maximum 4 digits are allowed after the decimal point',
+                },
+              },
+              {
+                key: 'entityUnifiedNumber',
+                labelKey: 'NEW_TAKHSEES_FORM.FIELDS.OWNER_ENTITY_UNIFIED_NUMBER',
+                type: 'text',
+                validations: {
+                  minLength: 10,
+                  maxLength: 10,
+                  pattern: '^[0-9]*$',
+                },
+                visibleWhen: {
+                  field: 'legalStatus',
+                  operator: 'in',
+                  value: ['militaryEntity', 'civilEntity']
+                },
+                requiredWhen: {
+                  field: 'legalStatus',
+                  operator: 'in',
+                  value: ['militaryEntity', 'civilEntity']
+                },
+                clearValueWhenHidden: true,
+              },
+              {
+                key: 'nationality',
+                labelKey: 'NEW_TAKHSEES_FORM.FIELDS.OWNER_NATIONALITY',
+                type: 'dropdown',
+                options: [
+                  { value: 'china', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.CHINA' },
+                  { value: 'india', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.INDIA' },
+                  { value: 'usa', labelKey: 'NEW_TAKHSEES_FORM.OPTIONS.USA' },
+                ],
+                visibleWhen: {
+                  field: 'legalStatus',
+                  operator: 'equals',
+                  value:  'foreignEntity'
+                },
+                requiredWhen: {
+                  field: 'legalStatus',
+                  operator: 'equals',
+                  value:  'foreignEntity'
+                },
+                clearValueWhenHidden: true,
+              }
+            ]
+          }
+        }
+      ],
+    }
+
   ],
 };

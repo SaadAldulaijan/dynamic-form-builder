@@ -1,55 +1,59 @@
 <div [formGroup]="form">
   @switch (field.type) {
   @case ('text') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
+  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+    @if(isRequired()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
   <input type="text" [formControlName]="field.key" [readonly]="field.readonly"
     [class]="getControlClass('form-control')" />
   }
-  
+
   @case ('textarea') {
   <label [class]="field.layout?.labelClass ?? 'form-label'">
     {{ getFieldLabel() }}
+    @if(isRequired()) {
+    <span class="text-danger">*</span>
+    }
   </label>
 
-  <textarea
-    [formControlName]="field.key"
-    [readonly]="field.readonly"
-    [rows]="field.rows ?? 3"
+  <textarea [formControlName]="field.key" [readonly]="field.readonly" [rows]="field.rows ?? 3"
     [class]="field.layout?.controlClass ?? 'form-control'">
   </textarea>
-}
+  }
 
   @case ('number') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
-  <!-- <input type="number" [formControlName]="field.key" [readonly]="field.readonly"
-    [class]="getControlClass('form-control')" /> -->
-
-    <div class="input-group">
+  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+    @if(isRequired()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
+  <div class="input-group">
     @if (field.display?.prefixKey) {
-      <span class="input-group-text">
-        {{ field.display!.prefixKey | translate }}
-      </span>
+    <span class="input-group-text">
+      {{ field.display!.prefixKey | translate }}
+    </span>
     }
 
-    <input
-      type="text"
-      [value]="getNumberDisplayValue()"
-      [readonly]="field.readonly"
-      [placeholder]="(field.display?.placeholderKey ?? '') | translate"
-      [class]="getControlClass('form-control')"
-      (input)="onNumberInput($event)"
-      (blur)="formatNumberInput($event)" />
+    <input type="text" [value]="getNumberDisplayValue()" [readonly]="field.readonly"
+      [placeholder]="(field.display?.placeholderKey ?? '') | translate" [class]="getControlClass('form-control')"
+      (input)="onNumberInput($event)" (blur)="formatNumberInput($event)" />
 
     @if (field.display?.suffixKey) {
-      <span class="input-group-text">
-        {{ field.display!.suffixKey | translate }}
-      </span>
+    <span class="input-group-text">
+      {{ field.display!.suffixKey | translate }}
+    </span>
     }
   </div>
   }
 
   @case ('dropdown') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
+  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+    @if(isRequired()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
 
   <select [formControlName]="field.key" [class]="getControlClass('form-select')">
 
@@ -68,6 +72,9 @@
   @case ('radio') {
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
+    @if(isRequired()) {
+      <span class="text-danger">*</span>
+    }
   </label>
 
   @for (option of field.options; track option.value) {
@@ -89,12 +96,19 @@
 
     <label class="form-check-label">
       {{ getFieldLabel() }}
+      @if(isRequired()) {
+        <span class="text-danger">*</span>
+      }
     </label>
   </div>
   }
 
   @case ('file') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
+  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+    @if(isRequired()) {
+      <span class="text-danger">*</span>
+    }
+  </label>
 
   <input #fileInput type="file" [disabled]="form.get(field.key)?.disabled" (change)="onFileSelected($event)"
     [class]="getControlClass('form-control')" />
@@ -115,7 +129,11 @@
   }
 
   @case ('date') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}</label>
+  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+    @if(isRequired()) {
+      <span class="text-danger">*</span>
+    }
+  </label>
 
   <input type="date" [formControlName]="field.key" [readonly]="field.readonly" [attr.min]="getDateMin()"
     [attr.max]="getDateMax()" [class]="getControlClass('form-control')" />
@@ -124,6 +142,9 @@
   @case ('multiselect') {
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
+    @if(isRequired()) {
+      <span class="text-danger">*</span>
+    }
   </label>
 
   <div>
@@ -277,7 +298,7 @@
     <div [class]="field.layout?.fieldsWrapperClass ?? 'row g-3'">
       @for (childField of field.fields; track childField.key) {
       @if (isVisibleInsideNestedGroup(childField)) {
-      <div [class]="getFieldWrapperClass()">
+      <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
         <app-field-renderer [field]="childField" [form]="getNestedGroup()">
         </app-field-renderer>
       </div>
