@@ -1,6 +1,8 @@
 export type FieldConditionOperator =
   | 'equals'
-  | 'notEquals';
+  | 'notEquals'
+  | 'in'
+  | 'notIn';
 
 export interface FieldCondition {
   field: string;

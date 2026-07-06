@@ -50,43 +50,50 @@
       "DISTRICT_REQUIRED": "District is required"
     }
   },
-  "TAKHSEES_FORM": {
-    "TITLE": "New Takhsees Request",
-    "SECTIONS": {
-      "ENTITY_PRIMARY_INFO": "Entity Primary Information",
-      "ENTITY_CONTACT": "Entity Contact"
-    },
-    "FIELDS": {
-      "ENTITY_TYPE": "Entity Type",
-      "OWNERS": "Company Owners Information",
-      "OWNER_NAME": "Owner Name",
-      "OWNER_NATIONALITY": "Owner Nationality",
-      "OWNER_PERCENTAGE": "Owner Percentage"
-    },
-    "OPTIONS": {
-      "EGYPTIAN": "Egyptian",
-      "SAUDI": "Saudi",
-      "UAE": "UAE",
-      "PRIVATE": "Private Entity",
-      "GOVERNMENT": "Government Entity"
-    }
-  },
   "NEW_TAKHSEES_FORM": {
     "TITLE": "New Allocation Request",
     "SECTIONS": {
       "FIELD_AND_SECTOR": "Field and Sector",
-      "GENERAL_PROJECT_INFO": "General Project Information"
+      "GENERAL_PROJECT_INFO": "General Project Information",
+      "PROJECT_OWNER_INFORMATION": "Project Owner Information"
     },
     "FIELDS": {
       "FIELD": "Field",
       "SECTOR": "Sector",
-      "MAXIMUM_ELECTRICITY_DEMAND": "Maximum Electricity Demand (kW)"
+      "MAXIMUM_ELECTRICITY_DEMAND": "Maximum Electricity Demand",
+      "REQUEST_REPRESENTATIVE": "Request Representative",
+      "REPRESENTATIVE_NAME": "Representative Name",
+      "REPRESENTATIVE_PHONE_COUNTRY_CODE": "Phone Country Code",
+      "REPRESENTATIVE_PHONE": "Phone Number",
+      "REPRESENTATIVE_EMAIL": "Email Address",
+      "PROJECT_NAME": "Project Name",
+      "PROJECT_OPERATING_DATE": "Project Operating Date",
+      "PROJECT_DESCRIPTION": "Project Description",
+      "PROJECT_STATUS": "Project Status",
+      "PROJECT_MANAGER": "Project Manager",
+      "PROJECT_MANAGER_NAME": "Project Manager Name",
+      "PROJECT_MANAGER_PHONE_COUNTRY_CODE": "Project Manager Phone Country Code",
+      "PROJECT_MANAGER_PHONE": "Project Manager Phone",
+      "PROJECT_MANAGER_EMAIL": "Project Manager Email",
+      "ARE_THERE_ANY_PROJECT_PARTNERS": "Are There Any Project Partners?",
+      "MAJOR_SHAREHOLDERS_NO": "Major Shareholders Number",
+      "FOREIGN_SHAREHOLDERS_NO": "Foreign Shareholders Number",
+      "PROJECT_OWNERS": "Project Owners",
+      "OWNER_NAME": "Owner Name",
+      "OWNER_LEGAL_STATUS": "Legal Status",
+      "OWNER_PERCENTAGE": "Ownership Percentage",
+      "OWNER_ENTITY_UNIFIED_NUMBER": "Entity Unified Number",
+      "OWNER_NATIONALITY": "Nationality"
     },
     "SUFFIX": {
-      "KW": "kW"
+      "KW": "kW",
+      "MW": "MW"
     },
     "PLACEHOLDER": {
-      "MAXIMUM_ELECTRICITY_DEMAND": "Enter maximum electricity demand"
+      "MAXIMUM_ELECTRICITY_DEMAND": "Enter maximum electricity demand",
+      "PROJECT_NAME": "Enter project name",
+      "PROJECT_OPERATING_DATE": "Select operating date",
+      "PROJECT_DESCRIPTION": "Enter project description"
     },
     "OPTIONS": {
       "INDUSTRIAL": "Industrial",
@@ -111,7 +118,18 @@
       "FARMERS": "Farmers",
       "MARINE_SERVICES": "Marine Services",
       "FLIGHT": "Flight",
-      "OTHER": "Other"
+      "OTHER": "Other",
+      "EXISTING_FACILITY": "Existing Facility",
+      "UNDER_CONSTRUCTION": "Under Construction",
+      "YES": "Yes",
+      "NO": "No",
+      "COMMERCIAL_ENTITY": "Commercial Entity",
+      "MILITARY_ENTITY": "Military Entity",
+      "CIVIL_ENTITY": "Civil Entity",
+      "FOREIGN_ENTITY": "Foreign Entity",
+      "CHINA": "China",
+      "INDIA": "India",
+      "USA": "USA"
     }
   }
 }

@@ -277,7 +277,7 @@
     <div [class]="field.layout?.fieldsWrapperClass ?? 'row g-3'">
       @for (childField of field.fields; track childField.key) {
       @if (isVisibleInsideNestedGroup(childField)) {
-      <div [class]="getFieldWrapperClass()">
+      <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
         <app-field-renderer [field]="childField" [form]="getNestedGroup()">
         </app-field-renderer>
       </div>

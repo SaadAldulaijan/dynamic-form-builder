@@ -9,7 +9,9 @@
     "SELECT": "اختر",
     "SELECTED": "المحدد",
     "SELECTED_FILE": "الملف المحدد",
-    "ADD": "إضافة"
+    "ADD": "إضافة",
+    "EDIT": "تعديل",
+    "CANCEL": "إلغاء"
   },
   "DYNAMIC_FORM": {
     "TITLE": "نموذج طلب ديناميكي",
@@ -51,11 +53,46 @@
     "TITLE": "طلب تخصيص جديد",
     "SECTIONS": {
       "FIELD_AND_SECTOR": "المجال والقطاع",
-      "GENERAL_PROJECT_INFO": "معلومات عامة عن المشروع"
+      "GENERAL_PROJECT_INFO": "معلومات عامة عن المشروع",
+      "PROJECT_OWNER_INFORMATION": "معلومات صاحب المشروع"
     },
     "FIELDS": {
       "FIELD": "المجال",
-      "SECTOR": "القطاع"
+      "SECTOR": "القطاع",
+      "MAXIMUM_ELECTRICITY_DEMAND": "أقصى طلب للكهرباء",
+      "REQUEST_REPRESENTATIVE": "ممثل الطلب",
+      "REPRESENTATIVE_NAME": "اسم الممثل",
+      "REPRESENTATIVE_PHONE_COUNTRY_CODE": "رمز الدولة",
+      "REPRESENTATIVE_PHONE": "رقم الهاتف",
+      "REPRESENTATIVE_EMAIL": "عنوان البريد الإلكتروني",
+      "PROJECT_NAME": "اسم المشروع",
+      "PROJECT_OPERATING_DATE": "تاريخ بدء التشغيل",
+      "PROJECT_DESCRIPTION": "وصف المشروع",
+      "PROJECT_STATUS": "حالة المشروع",
+      "PROJECT_MANAGER": "مدير المشروع",
+      "PROJECT_MANAGER_NAME": "اسم مدير المشروع",
+      "PROJECT_MANAGER_PHONE_COUNTRY_CODE": "رمز دولة مدير المشروع",
+      "PROJECT_MANAGER_PHONE": "رقم هاتف مدير المشروع",
+      "PROJECT_MANAGER_EMAIL": "بريد مدير المشروع الإلكتروني",
+      "ARE_THERE_ANY_PROJECT_PARTNERS": "هل هناك شركاء في المشروع؟",
+      "MAJOR_SHAREHOLDERS_NO": "عدد المساهمين الرئيسيين",
+      "FOREIGN_SHAREHOLDERS_NO": "عدد المساهمين الأجانب",
+      "PROJECT_OWNERS": "مالكو المشروع",
+      "OWNER_NAME": "اسم المالك",
+      "OWNER_LEGAL_STATUS": "الحالة القانونية",
+      "OWNER_PERCENTAGE": "نسبة الملكية",
+      "OWNER_ENTITY_UNIFIED_NUMBER": "الرقم الموحد للكيان",
+      "OWNER_NATIONALITY": "الجنسية"
+    },
+    "SUFFIX": {
+      "KW": "كيلو واط",
+      "MW": "ميجا واط"
+    },
+    "PLACEHOLDER": {
+      "MAXIMUM_ELECTRICITY_DEMAND": "أدخل أقصى طلب للكهرباء",
+      "PROJECT_NAME": "أدخل اسم المشروع",
+      "PROJECT_OPERATING_DATE": "اختر تاريخ بدء التشغيل",
+      "PROJECT_DESCRIPTION": "أدخل وصف المشروع"
     },
     "OPTIONS": {
       "INDUSTRIAL": "صناعي",
@@ -80,7 +117,27 @@
       "FARMERS": "المزارع",
       "MARINE_SERVICES": "الخدمات البحرية",
       "FLIGHT": "الطيران",
-      "OTHER": "أخرى"
+      "OTHER": "أخرى",
+      "EXISTING_FACILITY": "منشأة قائمة",
+      "UNDER_CONSTRUCTION": "تحت الإنشاء",
+      "YES": "نعم",
+      "NO": "لا",
+      "COMMERCIAL_ENTITY": "كيان تجاري",
+      "MILITARY_ENTITY": "كيان عسكري",
+      "CIVIL_ENTITY": "كيان مدني",
+      "FOREIGN_ENTITY": "كيان أجنبي",
+      "CHINA": "الصين",
+      "INDIA": "الهند",
+      "USA": "الولايات المتحدة الأمريكية"
+    }
+  },
+  "TAKHSEES_FORM": {
+    "FIELDS": {
+      "OWNER_NAME": "اسم المالك",
+      "OWNER_LEGAL_STATUS": "الحالة القانونية",
+      "OWNER_PERCENTAGE": "نسبة الملكية",
+      "OWNER_ENTITY_UNIFIED_NUMBER": "الرقم الموحد للكيان",
+      "OWNER_NATIONALITY": "الجنسية"
     }
   }
 }
