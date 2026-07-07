@@ -29,7 +29,21 @@ export class DynamicFormIntegrationService {
       crNumber: payload.crNumber,
       commercialName: 'Test Company for Trading',
       status: 'Active',
-      city: 'Riyadh',
+      address: {
+        city: 'Riyadh',
+        street: 'King Fahd Road',
+        buildingNumber: '123',
+        postalCode: '12345',
+        location: {
+          longitude: 46.6753,
+          latitude: 24.7136
+        },
+      },
+      owners: [
+        { name: 'ahmed', nationalId: '1234567890', ownershipPercentage: 10, ownershipType: 'CEO' },
+        { name: 'saad', nationalId: '1000000012', ownershipPercentage: 50, ownershipType: 'Shareholder' },
+        { name: 'ali', nationalId: '1000000013', ownershipPercentage: 40, ownershipType: 'Chairman of the Board of Directors' },
+      ],
       activities: [
         'Energy Services',
         'Technical Consulting'

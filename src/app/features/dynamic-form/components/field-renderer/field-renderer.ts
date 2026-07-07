@@ -22,6 +22,7 @@ import { signal } from '@angular/core';
 export class FieldRenderer {
   @Input({ required: true }) field!: FieldSchema;
   @Input({ required: true }) form!: FormGroup | any;
+  @Input() allFields: FieldSchema[] = [];
 
   private modalService = inject(NgbModal);
   private dynamicFormBuilderService = inject(DynamicFormBuilderService);
@@ -73,7 +74,7 @@ export class FieldRenderer {
     if (action.type !== 'apiLookup') {
       return;
     }
-    
+
     const sourceControl = this.form.get(this.field.key);
     sourceControl?.markAsTouched();
     sourceControl?.updateValueAndValidity({
@@ -83,7 +84,7 @@ export class FieldRenderer {
     if (sourceControl?.invalid) {
       return;
     }
-    
+
     const payload = this.buildActionPayload(action);
 
     this.setLookupLoading(action.key, true);
@@ -94,21 +95,26 @@ export class FieldRenderer {
       observeOn(asyncScheduler)
     ).subscribe({
       next: response => {
-        const targetControl = this.form.get(action.targetField);
 
-        if (targetControl) {
-          targetControl.setValue(response, {
-            emitEvent: false,
-          });
-          targetControl.markAsTouched();
-          targetControl.updateValueAndValidity({
-            emitEvent: false,
-          });
-        }
+        this.handleLookupResponse(action, response);
 
-        this.setLookupResult(action.targetField, response);
         this.setLookupLoading(action.key, false);
         this.cdr.markForCheck();
+        // const targetControl = this.form.get(action.targetField);
+
+        // if (targetControl) {
+        //   targetControl.setValue(response, {
+        //     emitEvent: false,
+        //   });
+        //   targetControl.markAsTouched();
+        //   targetControl.updateValueAndValidity({
+        //     emitEvent: false,
+        //   });
+        // }
+
+        // this.setLookupResult(action.targetField!, response);
+        // this.setLookupLoading(action.key, false);
+        // this.cdr.markForCheck();
       },
       error: error => {
         this.setLookupError(action.key, error?.message ?? 'Lookup failed');
@@ -116,30 +122,175 @@ export class FieldRenderer {
         this.cdr.markForCheck();
       }
     });
+  }
 
-    // this.integrationService.execute(action.endpointKey, payload).subscribe({
-    //   next: response => {
-    //     const targetControl = this.form.get(action.targetField);
+  handleArrayMappings(action: FieldActionSchema, response: any): void {
+    const arrayMapping = action.responseHandling?.arrayMapping;
 
-    //     if (targetControl) {
-    //       targetControl.setValue(response, {
-    //         emitEvent: true,
-    //       });
-    //       targetControl.markAsTouched();
-    //       targetControl.updateValueAndValidity({
-    //         emitEvent: true,
-    //       });
-    //     }
+    if (!arrayMapping) {
+      return;
+    }
 
-    //     this.setLookupResult(action.targetField, response);
-    //     this.setLookupLoading(action.key, false);
+    for (const mapping of Object.values(arrayMapping)) {
+      const sourceValue = this.getValueByPath(response, mapping.sourcePath);
 
-    //   },
-    //   error: error => {
-    //     this.setLookupError(action.key, error?.message ?? 'Lookup failed');
-    //     this.setLookupLoading(action.key, false);
-    //   }
-    // });
+      if (!Array.isArray(sourceValue)) {
+        continue;
+      }
+
+      const targetControl = this.form.get(mapping.targetField) as FormArray | null;
+
+      if (!targetControl) {
+        continue;
+      }
+
+      const targetField = this.findFieldByKey(mapping.targetField);
+
+      if (!targetField || targetField.type !== 'array') {
+        continue;
+      }
+
+      targetControl.clear();
+
+      for (const item of sourceValue) {
+        const itemGroup = this.dynamicFormBuilderService.buildGroup(
+          targetField.itemSchema.fields
+        );
+
+        this.ruleEngine.setupRules(
+          targetField.itemSchema.fields,
+          itemGroup
+        );
+
+        itemGroup.patchValue(item, {
+          emitEvent: false
+        });
+
+        if (action.responseHandling?.disableMappedFields || targetField.readonly) {
+          itemGroup.disable({
+            emitEvent: false
+          });
+        }
+
+        targetControl.push(itemGroup);
+      }
+
+      targetControl.markAsTouched();
+      targetControl.updateValueAndValidity({
+        emitEvent: false
+      });
+    }
+  }
+
+  // findFieldByKey(fieldKey: string): FieldSchema | null {
+  //   return this.findFieldByKeyRecursive([this.field], fieldKey);
+  // }
+
+  findFieldByKey(fieldKey: string): FieldSchema | null {
+    return this.findFieldByKeyRecursive(this.allFields, fieldKey);
+  }
+
+  findFieldByKeyRecursive(fields: FieldSchema[], fieldKey: string): FieldSchema | null {
+    for (const field of fields) {
+      if (field.key === fieldKey) {
+        return field;
+      }
+
+      if (field.type === 'group') {
+        const found = this.findFieldByKeyRecursive(field.fields, fieldKey);
+
+        if (found) {
+          return found;
+        }
+      }
+
+      if (field.type === 'array') {
+        const found = this.findFieldByKeyRecursive(
+          field.itemSchema.fields,
+          fieldKey
+        );
+
+        if (found) {
+          return found;
+        }
+      }
+    }
+
+    return null;
+  }
+
+
+  handleLookupResponse(action: FieldActionSchema, response: any): void {
+    // backward-compatible old mode
+    if (action.targetField) {
+      const targetControl = this.form.get(action.targetField);
+
+      if (targetControl) {
+        targetControl.setValue(response, {
+          emitEvent: false
+        });
+
+        this.setLookupResult(action.targetField, response);
+      }
+    }
+
+    const responseHandling = action.responseHandling;
+
+    if (!responseHandling) {
+      return;
+    }
+
+    if (responseHandling.jsonViewerField) {
+      const jsonViewerControl = this.form.get(responseHandling.jsonViewerField);
+
+      if (jsonViewerControl) {
+        jsonViewerControl.setValue(response, {
+          emitEvent: false
+        });
+
+        this.setLookupResult(responseHandling.jsonViewerField, response);
+      }
+    }
+
+    if (responseHandling.mapping) {
+      for (const [formFieldKey, responsePath] of Object.entries(responseHandling.mapping)) {
+        const control = this.form.get(formFieldKey);
+
+        if (!control) {
+          continue;
+        }
+
+        const value = this.getValueByPath(response, responsePath);
+
+        control.setValue(value, {
+          emitEvent: false
+        });
+
+        control.markAsTouched();
+        control.updateValueAndValidity({
+          emitEvent: false
+        });
+
+        if (responseHandling.disableMappedFields) {
+          control.disable({
+            emitEvent: false
+          });
+        }
+      }
+    }
+
+    this.handleArrayMappings(action, response);
+  }
+
+
+  getValueByPath(source: any, path: string): any {
+    if (!source || !path) {
+      return null;
+    }
+
+    return path.split('.').reduce((current, key) => {
+      return current?.[key];
+    }, source);
   }
 
   buildActionPayload(action: FieldActionSchema): any {
