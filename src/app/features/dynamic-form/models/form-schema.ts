@@ -10,6 +10,8 @@ import { ArrayFieldSchema } from './fields/array-field.schema';
 import { GroupFieldSchema } from './fields/group-field.schema';
 import { FormLayoutSchema, SectionLayoutSchema } from './layout/form-layout';
 import { TextareaFieldSchema } from './fields/textarea-field.schema';
+import { JsonViewerFieldSchema } from './fields/json-viewer-field.schema';
+
 
 export interface FormSchema {
   key: string;
@@ -42,7 +44,8 @@ export type FieldSchema =
   | DateFieldSchema
   | MultiselectFieldSchema
   | ArrayFieldSchema
-  | GroupFieldSchema;
+  | GroupFieldSchema
+  | JsonViewerFieldSchema;
 
 
 // export interface FieldSchema {

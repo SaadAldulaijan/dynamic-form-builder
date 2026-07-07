@@ -73,7 +73,7 @@
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -97,7 +97,7 @@
     <label class="form-check-label">
       {{ getFieldLabel() }}
       @if(isRequired()) {
-        <span class="text-danger">*</span>
+      <span class="text-danger">*</span>
       }
     </label>
   </div>
@@ -106,7 +106,7 @@
   @case ('file') {
   <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -131,7 +131,7 @@
   @case ('date') {
   <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -143,7 +143,7 @@
   <label [class]="getLabelClass('form-label d-block')">
     {{ getFieldLabel() }}
     @if(isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
@@ -171,7 +171,44 @@
   }
 
   @case ('array') {
-  @if (field.arrayDisplayMode === 'modal-list') {
+  @if (field.arrayDisplayMode === 'readonly-list') {
+  <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
+    <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
+      {{ getFieldLabel() }}
+    </legend>
+
+    @if (arrayControl.length > 0) {
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            @for (childField of field.itemSchema.fields; track childField.key) {
+            <th>{{ text(childField.label, childField.labelKey) }}</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (item of arrayControl.controls; track $index) {
+          <tr>
+            @for (childField of field.itemSchema.fields; track childField.key) {
+            <td>
+              {{ item.get(childField.key)?.value }}
+            </td>
+            }
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else {
+    <div class="text-muted small">
+      No data retrieved yet.
+    </div>
+    }
+  </fieldset>
+  }
+  @else if (field.arrayDisplayMode === 'modal-list') {
   <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
     <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
       {{ getFieldLabel() }}
@@ -226,7 +263,7 @@
             @for (childField of field.itemSchema.fields; track childField.key) {
             @if (isVisibleInsideGroup(childField, currentArrayItemForm)) {
             <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
-              <app-field-renderer [field]="childField" [form]="currentArrayItemForm">
+              <app-field-renderer [field]="childField" [form]="currentArrayItemForm" [allFields]="allFields">
               </app-field-renderer>
             </div>
             }
@@ -299,13 +336,51 @@
       @for (childField of field.fields; track childField.key) {
       @if (isVisibleInsideNestedGroup(childField)) {
       <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
-        <app-field-renderer [field]="childField" [form]="getNestedGroup()">
+        <app-field-renderer [field]="childField" [form]="getNestedGroup()" [allFields]="allFields">
         </app-field-renderer>
       </div>
       }
       }
     </div>
   </fieldset>
+  }
+
+  @case ('jsonViewer') {
+  <label [class]="getLabelClass()">
+    {{ getFieldLabel() }}
+  </label>
+
+  @if (getJsonViewerValue()) {
+  <pre class="bg-light border rounded p-3 mb-0">{{ getJsonViewerValue()  | json }}</pre>
+  } @else {
+  <div class="text-muted small">No data retrieved yet.</div>
+  }
+  }
+  }
+
+
+
+
+  @if (field.actions?.length) {
+  <div class="mt-2 d-flex gap-2">
+    @for (action of field.actions; track action.key) {
+    <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isActionLoading(action)"
+      (click)="executeAction(action)">
+      @if (isActionLoading(action)) {
+      <span class="spinner-border spinner-border-sm me-1"></span>
+      }
+
+      {{ getActionLabel(action) }}
+    </button>
+    }
+  </div>
+
+  @for (action of field.actions; track action.key) {
+  @if (getActionError(action)) {
+  <div class="text-danger small mt-1">
+    {{ getActionError(action) }}
+  </div>
+  }
   }
   }
 

@@ -42,7 +42,7 @@
         @for (field of section.fields; track field.key) {
         @if (isVisible(field)) {
         <div [class]="field.layout?.wrapperClass ?? 'col-12'">
-          <app-field-renderer [field]="field" [form]="form">
+          <app-field-renderer [field]="field" [form]="form" [allFields]="getAllFields()">
           </app-field-renderer>
         </div>
         }

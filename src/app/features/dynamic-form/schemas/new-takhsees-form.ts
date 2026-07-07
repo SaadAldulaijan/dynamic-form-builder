@@ -280,6 +280,42 @@ export const newTakhseesFormSchema: FormSchema = {
             wrapperClass: 'col-md-6',
           },
         },
+        {
+          key: 'crNumber',
+          label: 'CR Number',
+          type: 'text',
+          layout: {
+            wrapperClass: 'col-md-6'
+          },
+          validations: {
+            required: true,
+            exactLength: 10
+          },
+          messages: {
+            required: 'CR Number is required',
+            exactLength: 'CR Number must be 10 digits'
+          },
+          actions: [
+            {
+              key: 'retrieveCrInfo',
+              type: 'apiLookup',
+              label: 'Retrieve CR Info',
+              endpointKey: 'retrieveCrInfo',
+              requestMapping: {
+                crNumber: 'crNumber'
+              },
+              targetField: 'crInfo'
+            }
+          ]
+        },
+        {
+          key: 'crInfo',
+          label: 'CR Information',
+          type: 'jsonViewer',
+          layout: {
+            wrapperClass: 'col-12'
+          }
+        }
       ],
     },
     {
@@ -579,12 +615,12 @@ export const newTakhseesFormSchema: FormSchema = {
                 visibleWhen: {
                   field: 'legalStatus',
                   operator: 'equals',
-                  value:  'foreignEntity'
+                  value: 'foreignEntity'
                 },
                 requiredWhen: {
                   field: 'legalStatus',
                   operator: 'equals',
-                  value:  'foreignEntity'
+                  value: 'foreignEntity'
                 },
                 clearValueWhenHidden: true,
               }

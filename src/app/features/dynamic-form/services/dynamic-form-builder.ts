@@ -72,7 +72,7 @@ export class DynamicFormBuilderService {
   }
 
   private hasRequiredValidation(field: FieldSchema): boolean {
-    return field.type !== 'array' && field.type !== 'group' && field.validations?.required === true;
+    return field.type !== 'array' && field.type !== 'group' && field.type !== 'jsonViewer' && field.validations?.required === true;
   }
 
   buildValidators(field: FieldSchema, forceRequired = false): ValidatorFn[] {
@@ -199,6 +199,7 @@ export class DynamicFormBuilderService {
       case 'checkbox':
       case 'array':
       case 'group':
+      case 'jsonViewer':
         break;
     }
 

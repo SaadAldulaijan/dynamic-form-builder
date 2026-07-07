@@ -8,6 +8,6 @@ export type FieldType =
   | 'array'
   | 'file'
   | 'date'
-  // | 'dateRange'
   | 'multiselect'
-  | 'group';
+  | 'group'
+  | 'jsonViewer';
