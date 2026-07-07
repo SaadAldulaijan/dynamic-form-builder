@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Inject, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { asyncScheduler, observeOn } from 'rxjs';
 import { FieldSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
@@ -88,22 +89,33 @@ export class FieldRenderer {
     this.setLookupLoading(action.key, true);
     this.setLookupError(action.key, null);
 
-    this.integrationService.execute(action.endpointKey, payload).subscribe(response => {
-      // const targetControl = this.form.get(action.targetField) as FormControl;
+    this.integrationService.execute(action.endpointKey, payload).pipe(
+      // Ensure response side effects run in a later async turn.
+      observeOn(asyncScheduler)
+    ).subscribe({
+      next: response => {
+        const targetControl = this.form.get(action.targetField);
 
-      // if (targetControl) {
-      //   targetControl.setValue(response, {
-      //     emitEvent: false,
-      //   });
-      //   targetControl.markAsTouched();
-      //   targetControl.updateValueAndValidity({
-      //     emitEvent: false,
-      //   });
-      // }
+        if (targetControl) {
+          targetControl.setValue(response, {
+            emitEvent: false,
+          });
+          targetControl.markAsTouched();
+          targetControl.updateValueAndValidity({
+            emitEvent: false,
+          });
+        }
 
-      this.setLookupResult(action.targetField, response);
-      this.setLookupLoading(action.key, false);
-    })
+        this.setLookupResult(action.targetField, response);
+        this.setLookupLoading(action.key, false);
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        this.setLookupError(action.key, error?.message ?? 'Lookup failed');
+        this.setLookupLoading(action.key, false);
+        this.cdr.markForCheck();
+      }
+    });
 
     // this.integrationService.execute(action.endpointKey, payload).subscribe({
     //   next: response => {
