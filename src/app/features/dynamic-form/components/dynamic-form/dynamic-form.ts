@@ -30,8 +30,8 @@ import { testFormSchema } from '../../schemas/trying-schema';
 export class DynamicForm implements OnInit {
 
   // schema = sampleFormSchema;
-  // schema = newTakhseesFormSchema;
-  schema = testFormSchema;
+  schema = newTakhseesFormSchema;
+  // schema = testFormSchema;
   form!: FormGroup;
   activeSectionIndex = 0;
 

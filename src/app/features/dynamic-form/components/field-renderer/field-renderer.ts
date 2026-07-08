@@ -11,11 +11,12 @@ import { DynamicFormIntegrationService } from '../../services/dynamic-form-integ
 import { FieldActionSchema } from '../../models/actions/field-action';
 import { ChangeDetectorRef } from '@angular/core';
 import { signal } from '@angular/core';
+import { TextControl } from './controls/text-control/text-control';
 
 
 @Component({
   selector: 'app-field-renderer',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe, TextControl],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
 })

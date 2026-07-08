@@ -1,13 +1,15 @@
 <div [formGroup]="form">
   @switch (field.type) {
   @case ('text') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+  <!-- <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
     <span class="text-danger">*</span>
     }
   </label>
   <input type="text" [formControlName]="field.key" [readonly]="field.readonly"
-    [class]="getControlClass('form-control')" />
+    [class]="getControlClass('form-control')" /> -->
+
+    <app-text-control [field]="field" [form]="form"></app-text-control>
   }
 
   @case ('textarea') {
