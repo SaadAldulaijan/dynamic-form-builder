@@ -12,11 +12,21 @@ import { FieldActionSchema } from '../../models/actions/field-action';
 import { ChangeDetectorRef } from '@angular/core';
 import { signal } from '@angular/core';
 import { TextControl } from './controls/text-control/text-control';
+import { TextareaControl } from './controls/textarea-control/textarea-control';
+import { NumberControl } from './controls/number-control/number-control';
 
 
 @Component({
   selector: 'app-field-renderer',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe, TextControl],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    FormsModule, 
+    TranslatePipe, 
+    TextControl, 
+    TextareaControl,
+    NumberControl
+  ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
 })

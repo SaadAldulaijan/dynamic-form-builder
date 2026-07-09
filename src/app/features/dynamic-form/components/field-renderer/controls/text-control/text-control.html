@@ -1,18 +1,19 @@
-<div [formGroup]="form">
-  <label class="form-label">
-    {{ getFieldLabel() }}
+<div [formGroup]="form()">
+  <label [class]="labelClass()">
+    {{ fieldLabel() }}
 
     @if (isRequired()) {
       <span class="text-danger">*</span>
     }
   </label>
 
-<input type="text" [formControlName]="field.key" [readonly]="field.readonly"
-    [class]="getControlClass('form-control')" />
+<input type="text" [formControlName]="field().key" [readonly]="field().readonly"
+    [class]="controlClass()" [placeholder]="placeholder()" />
 
-  @if (getErrorMessage()) {
-    <div class="text-danger small mt-1">
-      {{ getErrorMessage() }}
-    </div>
+ 
+  @if (showError()) {
+  <div [class]="errorClass()">
+    {{ errorMessage() }}
+  </div>
   }
 </div>

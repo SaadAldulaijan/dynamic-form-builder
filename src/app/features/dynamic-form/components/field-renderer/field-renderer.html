@@ -13,7 +13,7 @@
   }
 
   @case ('textarea') {
-  <label [class]="field.layout?.labelClass ?? 'form-label'">
+  <!-- <label [class]="field.layout?.labelClass ?? 'form-label'">
     {{ getFieldLabel() }}
     @if(isRequired()) {
     <span class="text-danger">*</span>
@@ -22,11 +22,13 @@
 
   <textarea [formControlName]="field.key" [readonly]="field.readonly" [rows]="field.rows ?? 3"
     [class]="field.layout?.controlClass ?? 'form-control'">
-  </textarea>
+  </textarea> -->
+
+  <app-textarea-control [field]="field" [form]="form"></app-textarea-control>
   }
 
   @case ('number') {
-  <label [class]="getLabelClass()">{{ getFieldLabel() }}
+  <!-- <label [class]="getLabelClass()">{{ getFieldLabel() }}
     @if(isRequired()) {
     <span class="text-danger">*</span>
     }
@@ -47,7 +49,8 @@
       {{ field.display!.suffixKey | translate }}
     </span>
     }
-  </div>
+  </div> -->
+  <app-number-control [field]="field" [form]="form"></app-number-control>
   }
 
   @case ('dropdown') {
@@ -386,9 +389,9 @@
   }
   }
 
-  @if (form.get(field.key)?.touched && form.get(field.key)?.invalid) {
+  <!-- @if (form.get(field.key)?.touched && form.get(field.key)?.invalid) {
   <div [class]="field.layout?.errorClass ?? 'text-danger small mt-1'">
     {{ getErrorMessage() }}
   </div>
-  }
+  } -->
 </div>

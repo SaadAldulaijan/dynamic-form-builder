@@ -34,6 +34,21 @@ export const sampleFormSchema: FormSchema = {
           }
         },
         {
+          key: 'description',
+          labelKey: 'DYNAMIC_FORM.FIELDS.DESCRIPTION',
+          type: 'textarea',
+          layout: {
+            wrapperClass: 'col-12'
+          },
+          validations: {
+            required: true,
+            maxLength: 200
+          },
+          messageKeys: {
+            required: 'DYNAMIC_FORM.VALIDATION.DESCRIPTION_REQUIRED'
+          }
+        },
+        {
           key: 'age',
           labelKey: 'DYNAMIC_FORM.FIELDS.AGE',
           type: 'number',

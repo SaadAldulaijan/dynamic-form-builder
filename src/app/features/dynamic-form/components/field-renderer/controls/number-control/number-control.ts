@@ -2,21 +2,22 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TextFieldSchema } from '../../../../models/fields/text-field.schema';
 import { TranslateService } from '@ngx-translate/core';
 import { merge, of } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
+import { NumberFieldSchema } from '../../../../models/fields/number-field.schema';
+
 @Component({
-  selector: 'app-text-control',
+  selector: 'app-number-control',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './text-control.html',
-  styleUrl: './text-control.scss',
+  templateUrl: './number-control.html',
+  styleUrl: './number-control.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextControl {
+export class NumberControl {
 
-  readonly field = input.required<TextFieldSchema>();
+  readonly field = input.required<NumberFieldSchema>();
   readonly form = input.required<FormGroup>();
 
   private translate = inject(TranslateService);
@@ -27,10 +28,7 @@ export class TextControl {
   );
 
   readonly control = computed(() => {
-    const currentForm = this.form();
-    const currentField = this.field();
-
-    return currentForm.get(currentField.key);
+    return this.form().get(this.field().key);
   });
 
   private readonly controlState = toSignal(
@@ -57,22 +55,28 @@ export class TextControl {
     this.langChange();
     const placeholderKey = this.field().display?.placeholderKey;
 
-    if (!placeholderKey) {
-      return '';
-    }
+    return placeholderKey ? this.translate.instant(placeholderKey) : '';
+  });
 
-    return this.translate.instant(placeholderKey);
+  readonly prefix = computed(() => {
+    this.langChange();
+    const prefixKey = this.field().display?.prefixKey;
+
+    return prefixKey ? this.translate.instant(prefixKey) : null;
+  });
+
+  readonly suffix = computed(() => {
+    this.langChange();
+    const suffixKey = this.field().display?.suffixKey;
+
+    return suffixKey ? this.translate.instant(suffixKey) : null;
   });
 
   readonly isRequired = computed(() => {
     this.controlState();
     const control = this.control();
 
-    if (!control) {
-      return false;
-    }
-
-    return control.hasValidator(Validators.required);
+    return !!control?.hasValidator(Validators.required);
   });
 
   readonly labelClass = computed(() => {
@@ -94,9 +98,26 @@ export class TextControl {
     return !!(control?.touched && control.invalid);
   });
 
+  readonly displayValue = computed(() => {
+    this.controlState();
+
+    const value = this.control()?.value;
+
+    if (value === null || value === undefined || value === '') {
+      return '';
+    }
+
+    if (!this.field().display?.useThousandsSeparator) {
+      return String(value);
+    }
+
+    return this.formatNumberWithCommas(value);
+  });
+
   readonly errorMessage = computed(() => {
     this.langChange();
     this.controlState();
+
     const control = this.control();
 
     if (!control?.errors) {
@@ -113,6 +134,61 @@ export class TextControl {
 
     return currentField.messages?.[firstError] ?? `${this.fieldLabel()} is invalid`;
   });
+
+  onNumberInput(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const control = this.control();
+
+    if (!control) {
+      return;
+    }
+
+    let rawValue = inputElement.value.replace(/,/g, '');
+    const allowDecimal = this.field().validations?.allowDecimal === true;
+
+    rawValue = allowDecimal
+      ? rawValue.replace(/[^\d.-]/g, '')
+      : rawValue.replace(/[^\d-]/g, '');
+
+    if (rawValue === '') {
+      control.setValue(null);
+    } else {
+      const numericValue = Number(rawValue);
+      control.setValue(Number.isNaN(numericValue) ? rawValue : numericValue);
+    }
+
+    control.markAsTouched();
+    control.updateValueAndValidity();
+  }
+
+  formatNumberInput(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const control = this.control();
+
+    if (!control) {
+      return;
+    }
+
+    const value = control.value;
+
+    if (value === null || value === undefined || value === '') {
+      inputElement.value = '';
+      return;
+    }
+
+    if (this.field().display?.useThousandsSeparator) {
+      inputElement.value = this.formatNumberWithCommas(value);
+    }
+  }
+
+  formatNumberWithCommas(value: unknown): string {
+    const valueAsString = String(value);
+    const [integerPart, decimalPart] = valueAsString.split('.');
+
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    return decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+  }
 
   text(label?: string, labelKey?: string): string {
     return labelKey ? this.translate.instant(labelKey) : (label ?? '');

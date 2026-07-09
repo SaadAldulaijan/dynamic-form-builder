@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TextFieldSchema } from '../../../../models/fields/text-field.schema';
+import { TextareaFieldSchema } from '../../../../models/fields/textarea-field.schema';
 import { TranslateService } from '@ngx-translate/core';
-import { merge, of } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { merge, of, startWith, switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-text-control',
+  selector: 'app-textarea-control',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './text-control.html',
-  styleUrl: './text-control.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './textarea-control.html',
+  styleUrl: './textarea-control.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TextControl {
+export class TextareaControl {
+  //#region Shared Stuff
 
-  readonly field = input.required<TextFieldSchema>();
+  readonly field = input.required<TextareaFieldSchema>();
   readonly form = input.required<FormGroup>();
 
   private translate = inject(TranslateService);
@@ -64,6 +64,7 @@ export class TextControl {
     return this.translate.instant(placeholderKey);
   });
 
+
   readonly isRequired = computed(() => {
     this.controlState();
     const control = this.control();
@@ -86,6 +87,7 @@ export class TextControl {
   readonly errorClass = computed(() => {
     return this.field().layout?.errorClass ?? 'text-danger small mt-1';
   });
+
 
   readonly showError = computed(() => {
     this.controlState();
@@ -117,4 +119,10 @@ export class TextControl {
   text(label?: string, labelKey?: string): string {
     return labelKey ? this.translate.instant(labelKey) : (label ?? '');
   }
+  //#endregion
+
+  readonly rows = computed(() => {
+    return this.field().rows ?? 3;
+  });
+
 }
