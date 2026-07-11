@@ -14,6 +14,7 @@ import { signal } from '@angular/core';
 import { TextControl } from './controls/text-control/text-control';
 import { TextareaControl } from './controls/textarea-control/textarea-control';
 import { NumberControl } from './controls/number-control/number-control';
+import { DropdownControl } from './controls/dropdown-control/dropdown-control';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { NumberControl } from './controls/number-control/number-control';
     TranslatePipe,
     TextControl,
     TextareaControl,
-    NumberControl
+    NumberControl,
+    DropdownControl,
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'

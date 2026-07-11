@@ -61,7 +61,8 @@
     }
 
     @case ('dropdown') {
-      <label [class]="getLabelClass()"
+      <app-dropdown-control [field]="field" [form]="form"></app-dropdown-control>
+      <!-- <label [class]="getLabelClass()"
         >{{ getFieldLabel() }}
         @if (isRequired()) {
           <span class="text-danger">*</span>
@@ -78,7 +79,7 @@
             {{ getOptionLabel(option) }}
           </option>
         }
-      </select>
+      </select> -->
     }
 
     @case ('radio') {
