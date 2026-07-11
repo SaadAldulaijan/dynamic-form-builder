@@ -11,6 +11,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takhseesFormSchema } from '../../schemas/takhsees-form';
 import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
 import { testFormSchema } from '../../schemas/trying-schema';
+import { refactorForm } from '../../schemas/refactor-form';
 
 
 
@@ -29,7 +30,8 @@ import { testFormSchema } from '../../schemas/trying-schema';
 })
 export class DynamicForm implements OnInit {
 
-  schema = sampleFormSchema;
+  // schema = sampleFormSchema;
+  schema = refactorForm;
   // schema = newTakhseesFormSchema;
   // schema = testFormSchema;
   form!: FormGroup;

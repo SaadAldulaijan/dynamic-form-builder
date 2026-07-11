@@ -67,9 +67,7 @@ export class DynamicFormRuleEngineService {
               ? Number(result.toFixed(precision))
               : result;
 
-        targetControl.setValue(finalValue, {
-          emitEvent: false
-        });
+        targetControl.setValue(finalValue);
 
         targetControl.updateValueAndValidity({
           emitEvent: false

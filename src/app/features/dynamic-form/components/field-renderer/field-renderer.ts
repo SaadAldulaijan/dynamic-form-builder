@@ -19,14 +19,14 @@ import { NumberControl } from './controls/number-control/number-control';
 @Component({
   selector: 'app-field-renderer',
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    FormsModule, 
-    TranslatePipe, 
-    TextControl, 
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslatePipe,
+    TextControl,
     TextareaControl,
     NumberControl
-  ],
+],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
 })
