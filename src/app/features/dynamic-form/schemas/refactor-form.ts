@@ -8,6 +8,27 @@ export const refactorForm: FormSchema = {
       key: 'section1',
       title: 'Section 1',
       fields: [
+         {
+          key: 'services',
+          label: 'Requested Services',
+          type: 'multiselect',
+          options: [
+            { label: 'Data Sharing', value: 'dataSharing' },
+            { label: 'Dashboard Access', value: 'dashboardAccess' },
+            { label: 'API Integration', value: 'apiIntegration' },
+            { label: 'Raw Data Export', value: 'rawDataExport' },
+          ],
+          validations: {
+            required: true,
+            minSelected: 1,
+            maxSelected: 3,
+          },
+          messages: {
+            required: 'Please select at least one service',
+            minSelected: 'Please select at least one service',
+            maxSelected: 'You can select maximum 3 services only',
+          },
+        },
         {
           key: 'discountType',
           labelKey: 'DYNAMIC_FORM.FIELDS.DISCOUNT_TYPE',

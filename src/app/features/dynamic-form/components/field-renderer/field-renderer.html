@@ -178,7 +178,8 @@
     }
 
     @case ('multiselect') {
-      <label [class]="getLabelClass('form-label d-block')">
+      <app-multiselect-control [field]="field" [form]="form"></app-multiselect-control>
+      <!-- <label [class]="getLabelClass('form-label d-block')">
         {{ getFieldLabel() }}
         @if (isRequired()) {
           <span class="text-danger">*</span>
@@ -210,7 +211,7 @@
         @if (field.validations?.maxSelected) {
           / {{ field.validations?.maxSelected }}
         }
-      </small>
+      </small> -->
     }
 
     @case ('array') {
