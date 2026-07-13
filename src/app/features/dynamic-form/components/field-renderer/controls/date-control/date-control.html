@@ -1,0 +1,24 @@
+<div [formGroup]="form()">
+	<label [class]="labelClass()">
+		{{ fieldLabel() }}
+
+		@if (isRequired()) {
+			<span class="text-danger">*</span>
+		}
+	</label>
+
+	<input
+		type="date"
+		[formControlName]="field().key"
+		[readonly]="field().readonly"
+		[attr.min]="minDate()"
+		[attr.max]="maxDate()"
+		[class]="controlClass()"
+	/>
+
+	@if (showError()) {
+		<div [class]="errorClass()">
+			{{ errorMessage() }}
+		</div>
+	}
+</div>

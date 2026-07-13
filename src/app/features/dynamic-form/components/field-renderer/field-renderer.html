@@ -160,7 +160,9 @@
     }
 
     @case ('date') {
-      <label [class]="getLabelClass()"
+
+      <app-date-control [field]="field" [form]="form"></app-date-control>
+      <!-- <label [class]="getLabelClass()"
         >{{ getFieldLabel() }}
         @if (isRequired()) {
           <span class="text-danger">*</span>
@@ -174,7 +176,7 @@
         [attr.min]="getDateMin()"
         [attr.max]="getDateMax()"
         [class]="getControlClass('form-control')"
-      />
+      /> -->
     }
 
     @case ('multiselect') {
