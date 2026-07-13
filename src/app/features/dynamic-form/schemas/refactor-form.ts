@@ -128,59 +128,67 @@ export const refactorForm: FormSchema = {
           },
         },
         {
-          key: 'region',
-          labelKey: 'DYNAMIC_FORM.FIELDS.REGION',
-          type: 'dropdown',
+          key: 'address',
+          label: 'Address',
+          type: 'group',
           layout: {
-            wrapperClass: 'col-md-6',
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            fieldsWrapperClass: 'row g-3',
           },
-          options: [
-            { label: 'Riyadh', value: '1' },
-            { label: 'Makkah', value: '2' },
+          fields: [
+            {
+              key: 'region',
+              labelKey: 'DYNAMIC_FORM.FIELDS.REGION',
+              type: 'dropdown',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              options: [
+                { label: 'Riyadh', value: '1' },
+                { label: 'Makkah', value: '2' },
+              ],
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.REGION_REQUIRED',
+              },
+            },
+            {
+              key: 'city',
+              labelKey: 'DYNAMIC_FORM.FIELDS.CITY',
+              type: 'dropdown',
+              dependsOn: 'region',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              options: [
+                { label: 'Riyadh', value: '3', parentValue: '1' },
+                { label: 'Al Majmaah', value: '24', parentValue: '1' },
+                { label: 'Makkah', value: '10', parentValue: '2' },
+                { label: 'Jeddah', value: '11', parentValue: '2' },
+              ],
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED',
+              },
+            },
+            {
+              key: 'district',
+              labelKey: 'DYNAMIC_FORM.FIELDS.DISTRICT',
+              type: 'text',
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.DISTRICT_REQUIRED',
+              },
+            },
           ],
-          validations: {
-            required: true,
-          },
-          messageKeys: {
-            required: 'DYNAMIC_FORM.VALIDATION.REGION_REQUIRED',
-          },
-        },
-        {
-          key: 'city',
-          labelKey: 'DYNAMIC_FORM.FIELDS.CITY',
-          type: 'dropdown',
-          dependsOn: 'region',
-          layout: {
-            wrapperClass: 'col-md-6',
-          },
-          options: [
-            { label: 'Riyadh', value: '3', parentValue: '1' },
-            { label: 'Al Majmaah', value: '24', parentValue: '1' },
-            { label: 'Makkah', value: '10', parentValue: '2' },
-            { label: 'Jeddah', value: '11', parentValue: '2' },
-          ],
-          validations: {
-            required: true,
-          },
-          messageKeys: {
-            required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED',
-          },
-        },
-        {
-          key: 'district',
-          labelKey: 'DYNAMIC_FORM.FIELDS.DISTRICT',
-          type: 'text',
-          visibleWhen: {
-            field: 'region',
-            operator: 'equals',
-            value: '1',
-          },
-          requiredWhen: {
-            field: 'region',
-            operator: 'equals',
-            value: '1',
-          },
-          clearValueWhenHidden: true,
         },
         {
           key: 'startDate',

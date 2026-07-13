@@ -21,6 +21,7 @@ import { MultiselectControl } from './controls/multiselect-control/multiselect-c
 import { DateControl } from "./controls/date-control/date-control";
 import { FileControl } from "./controls/file-control/file-control";
 import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-control';
+import { GroupControl } from './controls/group-control/group-control';
 
 
 @Component({
@@ -39,7 +40,8 @@ import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-co
     MultiselectControl,
     DateControl,
     FileControl,
-    JsonViewerControl
+    JsonViewerControl,
+    GroupControl
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'

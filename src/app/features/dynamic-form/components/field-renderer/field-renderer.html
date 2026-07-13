@@ -397,7 +397,8 @@
     }
 
     @case ('group') {
-      <fieldset
+      <app-group-control [field]="field" [form]="form" [allFields]="allFields"></app-group-control>
+      <!-- <fieldset
         [formGroupName]="field.key"
         [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'"
       >
@@ -419,7 +420,7 @@
             }
           }
         </div>
-      </fieldset>
+      </fieldset> -->
     }
 
     @case ('jsonViewer') {
