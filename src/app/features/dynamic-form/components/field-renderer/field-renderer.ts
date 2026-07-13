@@ -16,6 +16,7 @@ import { TextareaControl } from './controls/textarea-control/textarea-control';
 import { NumberControl } from './controls/number-control/number-control';
 import { DropdownControl } from './controls/dropdown-control/dropdown-control';
 import { RadioControl } from './controls/radio-control/radio-control';
+import { CheckboxControl } from './controls/checkbox-control/checkbox-control';
 
 
 @Component({
@@ -30,6 +31,7 @@ import { RadioControl } from './controls/radio-control/radio-control';
     NumberControl,
     DropdownControl,
     RadioControl,
+    CheckboxControl
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'

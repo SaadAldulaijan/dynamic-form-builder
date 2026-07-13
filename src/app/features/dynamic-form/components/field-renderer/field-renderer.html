@@ -111,7 +111,7 @@
     }
 
     @case ('checkbox') {
-      <div class="form-check">
+      <!-- <div class="form-check">
         <input class="form-check-input" type="checkbox" [formControlName]="field.key" />
 
         <label class="form-check-label">
@@ -120,7 +120,8 @@
             <span class="text-danger">*</span>
           }
         </label>
-      </div>
+      </div> -->
+      <app-checkbox-control [field]="field" [form]="form"></app-checkbox-control>
     }
 
     @case ('file') {

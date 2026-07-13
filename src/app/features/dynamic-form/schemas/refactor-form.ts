@@ -9,6 +9,26 @@ export const refactorForm: FormSchema = {
       title: 'Section 1',
       fields: [
         {
+          key: 'discountType',
+          labelKey: 'DYNAMIC_FORM.FIELDS.DISCOUNT_TYPE',
+          type: 'checkbox',
+          disabledWhen: {
+            field: 'discount',
+            operator: 'equals',
+            value: true,
+          },
+        },
+        {
+          key: 'discount',
+          labelKey: 'DYNAMIC_FORM.FIELDS.DISCOUNT',
+          type: 'checkbox',
+          disabledWhen: {
+            field: 'discountType',
+            operator: 'equals',
+            value: true,
+          },
+        },
+        {
           key: 'quantity',
           label: 'Quantity',
           type: 'number',
