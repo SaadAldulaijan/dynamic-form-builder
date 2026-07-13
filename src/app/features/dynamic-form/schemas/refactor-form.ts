@@ -47,6 +47,31 @@ export const refactorForm: FormSchema = {
             suffixKey: 'SAR',
           },
         },
+        {
+          key: 'pregnancyStatus',
+          labelKey: 'DYNAMIC_FORM.FIELDS.PREGNANCY_STATUS',
+          type: 'radio',
+          options: [
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.YES', value: 'true' },
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.NO', value: 'false' },
+          ],
+          visibleWhen: {
+            field: 'total',
+            operator: 'equals',
+            value: 1000,
+          },
+          requiredWhen: {
+            field: 'total',
+            operator: 'equals',
+            value: 1000,
+          },
+          // disabledWhen: {
+          //   field: 'total',
+          //   operator: 'equals',
+          //   value: 1000,
+          // },
+          clearValueWhenHidden: true,
+        },
       ],
     },
     {
@@ -100,6 +125,22 @@ export const refactorForm: FormSchema = {
             required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED',
           },
         },
+        {
+          key: 'district',
+          labelKey: 'DYNAMIC_FORM.FIELDS.DISTRICT',
+          type:'text',
+          visibleWhen: {
+            field: 'region',
+            operator: 'equals',
+            value: '1',
+          },
+          requiredWhen: {
+            field: 'region',
+            operator: 'equals',
+            value: '1',
+          },
+          clearValueWhenHidden: true,
+        }
       ],
     },
   ],

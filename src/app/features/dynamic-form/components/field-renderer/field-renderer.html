@@ -83,7 +83,7 @@
     }
 
     @case ('radio') {
-      <label [class]="getLabelClass('form-label d-block')">
+      <!-- <label [class]="getLabelClass('form-label d-block')">
         {{ getFieldLabel() }}
         @if (isRequired()) {
           <span class="text-danger">*</span>
@@ -105,7 +105,9 @@
             {{ getOptionLabel(option) }}
           </label>
         </div>
-      }
+      } -->
+
+      <app-radio-control [field]="field" [form]="form"></app-radio-control>
     }
 
     @case ('checkbox') {
