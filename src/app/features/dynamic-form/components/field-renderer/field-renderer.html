@@ -423,7 +423,8 @@
     }
 
     @case ('jsonViewer') {
-      <label [class]="getLabelClass()">
+      <app-json-viewer-control [field]="field" [form]="form"></app-json-viewer-control>
+      <!-- <label [class]="getLabelClass()">
         {{ getFieldLabel() }}
       </label>
 
@@ -431,7 +432,7 @@
         <pre class="bg-light border rounded p-3 mb-0">{{ getJsonViewerValue() | json }}</pre>
       } @else {
         <div class="text-muted small">No data retrieved yet.</div>
-      }
+      } -->
     }
   }
 

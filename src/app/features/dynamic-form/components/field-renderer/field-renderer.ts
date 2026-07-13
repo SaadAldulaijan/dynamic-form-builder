@@ -20,6 +20,7 @@ import { CheckboxControl } from './controls/checkbox-control/checkbox-control';
 import { MultiselectControl } from './controls/multiselect-control/multiselect-control';
 import { DateControl } from "./controls/date-control/date-control";
 import { FileControl } from "./controls/file-control/file-control";
+import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-control';
 
 
 @Component({
@@ -37,7 +38,8 @@ import { FileControl } from "./controls/file-control/file-control";
     CheckboxControl,
     MultiselectControl,
     DateControl,
-    FileControl
+    FileControl,
+    JsonViewerControl
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
