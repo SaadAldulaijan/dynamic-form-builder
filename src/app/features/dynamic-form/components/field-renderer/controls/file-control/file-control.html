@@ -1,0 +1,31 @@
+<div [formGroup]="form()">
+    <label [class]="labelClass()">
+        {{ fieldLabel() }}
+        @if (isRequired()) {
+        <span class="text-danger">*</span>
+        }
+    </label>
+
+    <input #fileInput type="file" [disabled]="isDisabled()" (change)="onFileSelected($event)"
+        [class]="controlClass()" />
+
+    @if (selectedFile()) {
+    <div class="mt-2 d-flex align-items-center gap-2">
+        <span>
+            {{ 'COMMON.SELECTED_FILE' | translate }}:
+            <strong>{{ selectedFile()!.name }}</strong>
+        </span>
+
+        <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeFile(fileInput)"
+            [disabled]="isDisabled()">
+            {{ 'COMMON.REMOVE' | translate }}
+        </button>
+    </div>
+    }
+
+    @if (showError()) {
+    <div [class]="errorClass()">
+        {{ errorMessage() }}
+    </div>
+    }
+</div>

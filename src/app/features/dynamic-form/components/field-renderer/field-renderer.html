@@ -125,7 +125,8 @@
     }
 
     @case ('file') {
-      <label [class]="getLabelClass()"
+      <app-file-control [field]="field" [form]="form"></app-file-control>
+       <!-- <label [class]="getLabelClass()"
         >{{ getFieldLabel() }}
         @if (isRequired()) {
           <span class="text-danger">*</span>
@@ -156,7 +157,7 @@
             {{ 'COMMON.REMOVE' | translate }}
           </button>
         </div>
-      }
+      }  -->
     }
 
     @case ('date') {

@@ -223,6 +223,21 @@ export const refactorForm: FormSchema = {
             maxDate: 'Contract date cannot be after 2026-12-31',
           },
         },
+        {
+          key: 'supportingAttachment',
+          label: 'Supporting Attachment',
+          type: 'file',
+          validations: {
+            required: true,
+            maxFileSizeMb: 5,
+            allowedExtensions: ['pdf', 'docx'],
+          },
+          messages: {
+            required: 'Attachment is required',
+            maxFileSize: 'File size must not exceed 5 MB',
+            allowedExtensions: 'Only PDF and DOCX files are allowed',
+          },
+        },
       ],
     },
   ],

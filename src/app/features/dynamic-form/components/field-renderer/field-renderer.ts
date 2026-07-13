@@ -19,6 +19,7 @@ import { RadioControl } from './controls/radio-control/radio-control';
 import { CheckboxControl } from './controls/checkbox-control/checkbox-control';
 import { MultiselectControl } from './controls/multiselect-control/multiselect-control';
 import { DateControl } from "./controls/date-control/date-control";
+import { FileControl } from "./controls/file-control/file-control";
 
 
 @Component({
@@ -35,7 +36,8 @@ import { DateControl } from "./controls/date-control/date-control";
     RadioControl,
     CheckboxControl,
     MultiselectControl,
-    DateControl
+    DateControl,
+    FileControl
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
