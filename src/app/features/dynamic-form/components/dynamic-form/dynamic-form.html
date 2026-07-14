@@ -1,8 +1,6 @@
-
-
 <div [class]="schema.layout?.containerClass ?? 'container py-4'">
+  @if (formReady()) {
   <h2>{{ getFormTitle() }}</h2>
-
 
   <form [formGroup]="form" (ngSubmit)="submit()">
 
@@ -70,4 +68,5 @@
   </form>
 
   <pre class="mt-4 bg-light p-3 border rounded">{{ form.getRawValue() | json }}</pre>
+  }
 </div>

@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { sampleFormSchema } from '../../schemas/sample-form';
-import { FieldSchema } from '../../models/form-schema';
+import { FieldSchema, FormSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
@@ -12,6 +12,7 @@ import { takhseesFormSchema } from '../../schemas/takhsees-form';
 import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
 import { testFormSchema } from '../../schemas/trying-schema';
 import { arrayForm, formGroupForm } from '../../schemas/refactor-form';
+import { DynamicFormService } from '../../services/dynamic-form';
 
 
 
@@ -32,27 +33,36 @@ export class DynamicForm implements OnInit {
 
   // schema = sampleFormSchema;
   // schema = arrayForm;
+  schema: FormSchema = {} as FormSchema;
   // schema = formGroupForm;
   // schema = newTakhseesFormSchema;
-  schema = testFormSchema;
+  // schema = testFormSchema;
   form!: FormGroup;
+  formReady = signal(false);
   activeSectionIndex = 0;
+
 
 
   private formBuilderService = inject(DynamicFormBuilderService);
   private ruleEngine = inject(DynamicFormRuleEngineService);
   private draftService = inject(DynamicFormDraftService);
   private translate = inject(TranslateService);
+  private dynamicFormService = inject(DynamicFormService);
 
-  ngOnInit(): void {
-    this.form = this.formBuilderService.buildForm(this.schema);
+  ngOnInit() {
+    this.formReady.set(false);
 
-    this.ruleEngine.setupRules(this.getAllFields(), this.form);
-
-    this.loadDraft();
+    this.dynamicFormService.getSchema('arrayForm')
+      .subscribe(res => {
+        this.schema = res;
+        this.form = this.formBuilderService.buildForm(this.schema);
+        this.ruleEngine.setupRules(this.getAllFields(), this.form);
+        this.loadDraft();
+        this.formReady.set(true);
+      });
   }
 
-  
+
 
   text(value?: string, key?: string): string {
     return key ? this.translate.instant(key) : value ?? '';
