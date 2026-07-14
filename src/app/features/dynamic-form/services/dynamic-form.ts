@@ -12,10 +12,10 @@ export class DynamicFormService {
 
 
     getSchema(schemaName: string): Observable<FormSchema> {
-    const schemaFileName = this.toSchemaFileName(schemaName);
+    // const schemaFileName = this.toSchemaFileName(schemaName);
 
     return this.http.get<FormSchema>(
-      `/schemas/${schemaFileName}.json`
+      `/schemas/${schemaName}.json`
     );
   }
 

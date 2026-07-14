@@ -1,0 +1,102 @@
+{
+	"key": "takhseesForm",
+	"titleKey": "TAKHSEES_FORM.TITLE",
+	"sections": [
+		{
+			"key": "takhseesSection",
+			"titleKey": "TAKHSEES_FORM.SECTIONS.ENTITY_PRIMARY_INFO",
+			"layout": {
+				"containerClass": "card card-body mb-3",
+				"titleClass": "h5 mb-2",
+				"descriptionClass": "text-muted mb-3",
+				"fieldsWrapperClass": "row g-3"
+			},
+			"fields": [
+				{
+					"key": "entityType",
+					"labelKey": "TAKHSEES_FORM.FIELDS.ENTITY_TYPE",
+					"type": "dropdown",
+					"options": [
+						{
+							"value": "private",
+							"labelKey": "TAKHSEES_FORM.OPTIONS.PRIVATE"
+						},
+						{
+							"value": "government",
+							"labelKey": "TAKHSEES_FORM.OPTIONS.GOVERNMENT"
+						}
+					]
+				},
+				{
+					"key": "description",
+					"labelKey": "TAKHSEES_FORM.FIELDS.DESCRIPTION",
+					"type": "textarea",
+					"rows": 3,
+					"layout": {
+						"wrapperClass": "col-12"
+					},
+					"validations": {
+						"required": true,
+						"maxLength": 500
+					},
+					"messages": {
+						"required": "Description is required",
+						"maxLength": "Description cannot exceed 500 characters"
+					}
+				},
+				{
+					"key": "owners",
+					"labelKey": "TAKHSEES_FORM.FIELDS.OWNERS",
+					"type": "array",
+					"arrayDisplayMode": "modal-list",
+					"layout": {
+						"wrapperClass": "col-12",
+						"containerClass": "border rounded p-3",
+						"titleClass": "float-none w-auto px-2 h6",
+						"actionsClass": "mb-3",
+						"itemClass": "border rounded p-3 mb-3 bg-light",
+						"fieldsWrapperClass": "row g-3"
+					},
+					"itemSchema": {
+						"fields": [
+							{
+								"key": "name",
+								"labelKey": "TAKHSEES_FORM.FIELDS.OWNER_NAME",
+								"type": "text"
+							},
+							{
+								"key": "nationality",
+								"labelKey": "TAKHSEES_FORM.FIELDS.OWNER_NATIONALITY",
+								"type": "dropdown",
+								"options": [
+									{
+										"value": "egyptian",
+										"labelKey": "TAKHSEES_FORM.OPTIONS.EGYPTIAN"
+									},
+									{
+										"value": "saudi",
+										"labelKey": "TAKHSEES_FORM.OPTIONS.SAUDI"
+									},
+									{
+										"value": "uae",
+										"labelKey": "TAKHSEES_FORM.OPTIONS.UAE"
+									}
+								]
+							},
+							{
+								"key": "percentage",
+								"labelKey": "TAKHSEES_FORM.FIELDS.OWNER_PERCENTAGE",
+								"type": "number",
+								"validations": {
+									"required": true,
+									"min": 0,
+									"max": 100
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Observable, delay, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, of, throwError } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class DynamicFormIntegrationService {
+  private readonly http = inject(HttpClient);
 
   execute(endpointKey: string, payload: any): Observable<any> {
     switch (endpointKey) {
@@ -25,30 +27,12 @@ export class DynamicFormIntegrationService {
       return throwError(() => new Error('CR number is required'));
     }
 
-    return of({
-      crNumber: payload.crNumber,
-      commercialName: 'Test Company for Trading',
-      status: 'Active',
-      address: {
-        city: 'Riyadh',
-        street: 'King Fahd Road',
-        buildingNumber: '123',
-        postalCode: '12345',
-        location: {
-          longitude: 46.6753,
-          latitude: 24.7136
-        },
-      },
-      owners: [
-        { name: 'ahmed', nationalId: '1234567890', ownershipPercentage: 10, ownershipType: 'CEO' },
-        { name: 'saad', nationalId: '1000000012', ownershipPercentage: 50, ownershipType: 'Shareholder' },
-        { name: 'ali', nationalId: '1000000013', ownershipPercentage: 40, ownershipType: 'Chairman of the Board of Directors' },
-      ],
-      activities: [
-        'Energy Services',
-        'Technical Consulting'
-      ]
-    }).pipe(delay(700));
+    return this.http.get<any>('/data/cr.json').pipe(
+      map((cr) => ({
+        ...cr,
+        crNumber: payload.crNumber,
+      }))
+    );
   }
 
   private retrievePersonInfo(payload: any): Observable<any> {
@@ -56,12 +40,14 @@ export class DynamicFormIntegrationService {
       return throwError(() => new Error('National ID is required'));
     }
 
-    return of({
+    const person = {
       nationalId: payload.nationalId,
       fullName: 'Test Person',
       nationality: 'Saudi',
       status: 'Active'
-    }).pipe(delay(700));
+    };
+
+    return of(person);
   }
 
 }

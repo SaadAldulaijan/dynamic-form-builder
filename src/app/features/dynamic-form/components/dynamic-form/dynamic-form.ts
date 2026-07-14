@@ -1,17 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { sampleFormSchema } from '../../schemas/sample-form';
 import { FieldSchema, FormSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { takhseesFormSchema } from '../../schemas/takhsees-form';
-import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
-import { testFormSchema } from '../../schemas/trying-schema';
-import { arrayForm, formGroupForm } from '../../schemas/refactor-form';
 import { DynamicFormService } from '../../services/dynamic-form';
 
 
@@ -31,12 +26,14 @@ import { DynamicFormService } from '../../services/dynamic-form';
 })
 export class DynamicForm implements OnInit {
 
-  // schema = sampleFormSchema;
-  // schema = arrayForm;
+
+  // formName: string = 'takhsees-form';
+  // formName: string = 'sample-form';
+  formName: string = 'integration-form';
+  // formName: string = 'new-takhsees-form';
+  // formName: string = 'form-group-form';
+  // formName: string = 'array-form';
   schema: FormSchema = {} as FormSchema;
-  // schema = formGroupForm;
-  // schema = newTakhseesFormSchema;
-  // schema = testFormSchema;
   form!: FormGroup;
   formReady = signal(false);
   activeSectionIndex = 0;
@@ -52,7 +49,7 @@ export class DynamicForm implements OnInit {
   ngOnInit() {
     this.formReady.set(false);
 
-    this.dynamicFormService.getSchema('arrayForm')
+    this.dynamicFormService.getSchema(this.formName)
       .subscribe(res => {
         this.schema = res;
         this.form = this.formBuilderService.buildForm(this.schema);
