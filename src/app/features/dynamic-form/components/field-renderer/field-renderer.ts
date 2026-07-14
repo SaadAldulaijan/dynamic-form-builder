@@ -11,11 +11,40 @@ import { DynamicFormIntegrationService } from '../../services/dynamic-form-integ
 import { FieldActionSchema } from '../../models/actions/field-action';
 import { ChangeDetectorRef } from '@angular/core';
 import { signal } from '@angular/core';
+import { TextControl } from './controls/text-control/text-control';
+import { TextareaControl } from './controls/textarea-control/textarea-control';
+import { NumberControl } from './controls/number-control/number-control';
+import { DropdownControl } from './controls/dropdown-control/dropdown-control';
+import { RadioControl } from './controls/radio-control/radio-control';
+import { CheckboxControl } from './controls/checkbox-control/checkbox-control';
+import { MultiselectControl } from './controls/multiselect-control/multiselect-control';
+import { DateControl } from "./controls/date-control/date-control";
+import { FileControl } from "./controls/file-control/file-control";
+import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-control';
+import { GroupControl } from './controls/group-control/group-control';
+import { ArrayControl } from './controls/array-control/array-control';
 
 
 @Component({
   selector: 'app-field-renderer',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslatePipe,
+    TextControl,
+    TextareaControl,
+    NumberControl,
+    DropdownControl,
+    RadioControl,
+    CheckboxControl,
+    MultiselectControl,
+    DateControl,
+    FileControl,
+    JsonViewerControl,
+    GroupControl,
+    ArrayControl
+],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
 })

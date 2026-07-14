@@ -1,0 +1,27 @@
+<div [formGroup]="form()">
+	<label [class]="labelClass()">
+		{{ fieldLabel() }}
+
+		@if (isRequired()) {
+			<span class="text-danger">*</span>
+		}
+	</label>
+
+	<select [formControlName]="field().key" [class]="controlClass()">
+		<option [ngValue]="null">
+			{{ 'COMMON.SELECT' | translate }}
+		</option>
+
+		@for (option of options(); track option.value) {
+			<option [ngValue]="option.value">
+				{{ optionLabel(option) }}
+			</option>
+		}
+	</select>
+
+	@if (showError()) {
+		<div [class]="errorClass()">
+			{{ errorMessage() }}
+		</div>
+	}
+</div>

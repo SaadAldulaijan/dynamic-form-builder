@@ -1,6 +1,4 @@
-
-import { FormSchema } from "../models/form-schema";
-
+import { FormSchema } from '../models/form-schema';
 
 // ==================== SAMPLE DATA ====================
 export const sampleFormSchema: FormSchema = {
@@ -15,7 +13,7 @@ export const sampleFormSchema: FormSchema = {
         containerClass: 'card card-body mb-3',
         titleClass: 'h5 mb-2',
         descriptionClass: 'text-muted mb-3',
-        fieldsWrapperClass: 'row g-3'
+        fieldsWrapperClass: 'row g-3',
       },
       fields: [
         {
@@ -23,28 +21,43 @@ export const sampleFormSchema: FormSchema = {
           labelKey: 'DYNAMIC_FORM.FIELDS.NAME',
           type: 'text',
           layout: {
-            wrapperClass: 'col-md-6'
+            wrapperClass: 'col-md-6',
           },
           validations: {
             required: true,
-            maxLength: 50
+            maxLength: 50,
           },
           messageKeys: {
-            required: 'DYNAMIC_FORM.VALIDATION.NAME_REQUIRED'
-          }
+            required: 'DYNAMIC_FORM.VALIDATION.NAME_REQUIRED',
+          },
+        },
+        {
+          key: 'description',
+          labelKey: 'DYNAMIC_FORM.FIELDS.DESCRIPTION',
+          type: 'textarea',
+          layout: {
+            wrapperClass: 'col-12',
+          },
+          validations: {
+            required: true,
+            maxLength: 200,
+          },
+          messageKeys: {
+            required: 'DYNAMIC_FORM.VALIDATION.DESCRIPTION_REQUIRED',
+          },
         },
         {
           key: 'age',
           labelKey: 'DYNAMIC_FORM.FIELDS.AGE',
           type: 'number',
           layout: {
-            wrapperClass: 'col-md-6'
+            wrapperClass: 'col-md-6',
           },
           validations: {
             required: true,
             min: 18,
-            max: 60
-          }
+            max: 60,
+          },
         },
         {
           key: 'gender',
@@ -52,11 +65,11 @@ export const sampleFormSchema: FormSchema = {
           type: 'dropdown',
           options: [
             { labelKey: 'DYNAMIC_FORM.OPTIONS.MALE', value: 'male' },
-            { labelKey: 'DYNAMIC_FORM.OPTIONS.FEMALE', value: 'female' }
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.FEMALE', value: 'female' },
           ],
           validations: {
-            required: true
-          }
+            required: true,
+          },
         },
         {
           key: 'quantity',
@@ -64,8 +77,8 @@ export const sampleFormSchema: FormSchema = {
           type: 'number',
           validations: {
             required: true,
-            min: 1
-          }
+            min: 1,
+          },
         },
         {
           key: 'unitPrice',
@@ -73,7 +86,12 @@ export const sampleFormSchema: FormSchema = {
           type: 'number',
           validations: {
             required: true,
-            min: 0
+            min: 0,
+            allowDecimal: true,
+            decimalPrecision: 4,
+          },
+          display: {
+            useThousandsSeparator: true
           }
         },
         {
@@ -84,8 +102,8 @@ export const sampleFormSchema: FormSchema = {
           calculatedFrom: {
             fields: ['quantity', 'unitPrice'],
             expression: 'quantity * unitPrice',
-            precision: 2
-          }
+            precision: 2,
+          },
         },
         {
           key: 'pregnancyStatus',
@@ -93,17 +111,17 @@ export const sampleFormSchema: FormSchema = {
           type: 'radio',
           options: [
             { labelKey: 'DYNAMIC_FORM.OPTIONS.YES', value: 'true' },
-            { labelKey: 'DYNAMIC_FORM.OPTIONS.NO', value: 'false' }
+            { labelKey: 'DYNAMIC_FORM.OPTIONS.NO', value: 'false' },
           ],
           visibleWhen: {
             field: 'gender',
             operator: 'equals',
-            value: 'female'
+            value: 'female',
           },
           requiredWhen: {
             field: 'gender',
             operator: 'equals',
-            value: 'female'
+            value: 'female',
           },
           clearValueWhenHidden: true,
         },
@@ -115,7 +133,7 @@ export const sampleFormSchema: FormSchema = {
             wrapperClass: 'col-12',
             containerClass: 'border rounded p-3',
             titleClass: 'float-none w-auto px-2 h6',
-            fieldsWrapperClass: 'row g-3'
+            fieldsWrapperClass: 'row g-3',
           },
           fields: [
             {
@@ -123,18 +141,18 @@ export const sampleFormSchema: FormSchema = {
               labelKey: 'DYNAMIC_FORM.FIELDS.REGION',
               type: 'dropdown',
               layout: {
-                wrapperClass: 'col-md-6'
+                wrapperClass: 'col-md-6',
               },
               options: [
                 { label: 'Riyadh', value: '1' },
-                { label: 'Makkah', value: '2' }
+                { label: 'Makkah', value: '2' },
               ],
               validations: {
-                required: true
+                required: true,
               },
               messageKeys: {
-                required: 'DYNAMIC_FORM.VALIDATION.REGION_REQUIRED'
-              }
+                required: 'DYNAMIC_FORM.VALIDATION.REGION_REQUIRED',
+              },
             },
             {
               key: 'city',
@@ -142,39 +160,39 @@ export const sampleFormSchema: FormSchema = {
               type: 'dropdown',
               dependsOn: 'region',
               layout: {
-                wrapperClass: 'col-md-6'
+                wrapperClass: 'col-md-6',
               },
               options: [
                 { label: 'Riyadh', value: '3', parentValue: '1' },
                 { label: 'Al Majmaah', value: '24', parentValue: '1' },
                 { label: 'Makkah', value: '10', parentValue: '2' },
-                { label: 'Jeddah', value: '11', parentValue: '2' }
+                { label: 'Jeddah', value: '11', parentValue: '2' },
               ],
               validations: {
-                required: true
+                required: true,
               },
               messageKeys: {
-                required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED'
-              }
+                required: 'DYNAMIC_FORM.VALIDATION.CITY_REQUIRED',
+              },
             },
             {
               key: 'district',
               labelKey: 'DYNAMIC_FORM.FIELDS.DISTRICT',
               type: 'text',
               validations: {
-                required: true
+                required: true,
               },
               messageKeys: {
-                required: 'DYNAMIC_FORM.VALIDATION.DISTRICT_REQUIRED'
-              }
-            }
-          ]
+                required: 'DYNAMIC_FORM.VALIDATION.DISTRICT_REQUIRED',
+              },
+            },
+          ],
         },
         {
           key: 'requestDate',
           label: 'Request Date',
           type: 'date',
-          defaultValue: 'today'
+          defaultValue: 'today',
         },
         {
           key: 'supportingAttachment',
@@ -183,15 +201,15 @@ export const sampleFormSchema: FormSchema = {
           validations: {
             required: false,
             maxFileSizeMb: 5,
-            allowedExtensions: ['pdf', 'docx']
+            allowedExtensions: ['pdf', 'docx'],
           },
           messages: {
             required: 'Attachment is required',
             maxFileSize: 'File size must not exceed 5 MB',
-            allowedExtensions: 'Only PDF and DOCX files are allowed'
-          }
-        }
-      ]
+            allowedExtensions: 'Only PDF and DOCX files are allowed',
+          },
+        },
+      ],
     },
     {
       key: 'requestInfo',
@@ -205,18 +223,18 @@ export const sampleFormSchema: FormSchema = {
             { label: 'Data Sharing', value: 'dataSharing' },
             { label: 'Dashboard Access', value: 'dashboardAccess' },
             { label: 'API Integration', value: 'apiIntegration' },
-            { label: 'Raw Data Export', value: 'rawDataExport' }
+            { label: 'Raw Data Export', value: 'rawDataExport' },
           ],
           validations: {
             required: true,
             minSelected: 1,
-            maxSelected: 3
+            maxSelected: 3,
           },
           messages: {
             required: 'Please select at least one service',
             minSelected: 'Please select at least one service',
-            maxSelected: 'You can select maximum 3 services only'
-          }
+            maxSelected: 'You can select maximum 3 services only',
+          },
         },
         {
           key: 'hasPreviousRequest',
@@ -224,14 +242,14 @@ export const sampleFormSchema: FormSchema = {
           type: 'radio',
           options: [
             { label: 'Yes', value: 'true' },
-            { label: 'No', value: 'false' }
+            { label: 'No', value: 'false' },
           ],
           validations: {
-            required: true
+            required: true,
           },
           messages: {
-            required: 'Please select yes or no'
-          }
+            required: 'Please select yes or no',
+          },
         },
         {
           key: 'previousRequestReason',
@@ -240,16 +258,16 @@ export const sampleFormSchema: FormSchema = {
           requiredWhen: {
             field: 'hasPreviousRequest',
             operator: 'equals',
-            value: 'true'
+            value: 'true',
           },
           disabledWhen: {
             field: 'hasPreviousRequest',
             operator: 'equals',
-            value: 'false'
+            value: 'false',
           },
           messages: {
-            required: 'Previous request reason is required when you select Yes'
-          }
+            required: 'Previous request reason is required when you select Yes',
+          },
         },
         {
           key: 'startDate',
@@ -257,12 +275,12 @@ export const sampleFormSchema: FormSchema = {
           type: 'date',
           validations: {
             required: true,
-            minDateToday: true
+            minDateToday: true,
           },
           messages: {
             required: 'Start date is required',
-            minDateToday: 'Start date cannot be in the past'
-          }
+            minDateToday: 'Start date cannot be in the past',
+          },
         },
         {
           key: 'endDate',
@@ -270,12 +288,12 @@ export const sampleFormSchema: FormSchema = {
           type: 'date',
           validations: {
             required: true,
-            dateGreaterThanOrEqualField: 'startDate'
+            dateGreaterThanOrEqualField: 'startDate',
           },
           messages: {
             required: 'End date is required',
-            dateGreaterThanOrEqualField: 'End date must be after or equal to start date'
-          }
+            dateGreaterThanOrEqualField: 'End date must be after or equal to start date',
+          },
         },
         {
           key: 'contractDate',
@@ -284,15 +302,15 @@ export const sampleFormSchema: FormSchema = {
           validations: {
             required: true,
             minDate: '2026-01-01',
-            maxDate: '2026-12-31'
+            maxDate: '2026-12-31',
           },
           messages: {
             required: 'Contract date is required',
             minDate: 'Contract date cannot be before 2026-01-01',
-            maxDate: 'Contract date cannot be after 2026-12-31'
-          }
-        }
-      ]
+            maxDate: 'Contract date cannot be after 2026-12-31',
+          },
+        },
+      ],
     },
     {
       key: 'projectsInfo',
@@ -310,7 +328,7 @@ export const sampleFormSchema: FormSchema = {
             titleClass: 'float-none w-auto px-2 h6',
             actionsClass: 'mb-3',
             itemClass: 'border rounded p-3 mb-3 bg-light',
-            fieldsWrapperClass: 'row g-3'
+            fieldsWrapperClass: 'row g-3',
           },
           itemSchema: {
             fields: [
@@ -319,11 +337,11 @@ export const sampleFormSchema: FormSchema = {
                 labelKey: 'DYNAMIC_FORM.FIELDS.PROJECT_NAME',
                 type: 'text',
                 layout: {
-                  wrapperClass: 'col-md-6'
+                  wrapperClass: 'col-md-6',
                 },
                 validations: {
-                  required: true
-                }
+                  required: true,
+                },
               },
               {
                 key: 'stakeholders',
@@ -336,8 +354,8 @@ export const sampleFormSchema: FormSchema = {
                       labelKey: 'DYNAMIC_FORM.FIELDS.STAKEHOLDER_NAME',
                       type: 'text',
                       validations: {
-                        required: true
-                      }
+                        required: true,
+                      },
                     },
                     {
                       key: 'email',
@@ -349,8 +367,8 @@ export const sampleFormSchema: FormSchema = {
                       },
                       messages: {
                         required: 'Email is required',
-                        email: 'Please enter a valid email address'
-                      }
+                        email: 'Please enter a valid email address',
+                      },
                     },
                     {
                       key: 'phoneNumber',
@@ -363,16 +381,16 @@ export const sampleFormSchema: FormSchema = {
                       },
                       messages: {
                         startsWith: 'Phone number must start with 05',
-                        exactLength: 'Phone number must be exactly 10 digits'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
+                        exactLength: 'Phone number must be exactly 10 digits',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
         },
-      ]
-    }
+      ],
+    },
   ],
 };

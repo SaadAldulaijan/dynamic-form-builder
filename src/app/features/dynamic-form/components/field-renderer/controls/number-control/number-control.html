@@ -1,0 +1,39 @@
+<div [formGroup]="form()">
+	<label [class]="labelClass()">
+		{{ fieldLabel() }}
+
+		@if (isRequired()) {
+			<span class="text-danger">*</span>
+		}
+	</label>
+
+	<div class="input-group">
+		@if (prefix()) {
+			<span class="input-group-text">
+				{{ prefix() }}
+			</span>
+		}
+
+		<input
+			type="text"
+			[value]="displayValue()"
+			[readonly]="field().readonly"
+			[placeholder]="placeholder()"
+			[class]="controlClass()"
+			(input)="onNumberInput($event)"
+			(blur)="formatNumberInput($event)"
+		/>
+
+		@if (suffix()) {
+			<span class="input-group-text">
+				{{ suffix() }}
+			</span>
+		}
+	</div>
+
+	@if (showError()) {
+		<div [class]="errorClass()">
+			{{ errorMessage() }}
+		</div>
+	}
+</div>

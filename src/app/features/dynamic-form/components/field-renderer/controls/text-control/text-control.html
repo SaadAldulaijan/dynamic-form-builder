@@ -1,0 +1,19 @@
+<div [formGroup]="form()">
+  <label [class]="labelClass()">
+    {{ fieldLabel() }}
+
+    @if (isRequired()) {
+      <span class="text-danger">*</span>
+    }
+  </label>
+
+<input type="text" [formControlName]="field().key" [readonly]="field().readonly"
+    [class]="controlClass()" [placeholder]="placeholder()" />
+
+ 
+  @if (showError()) {
+  <div [class]="errorClass()">
+    {{ errorMessage() }}
+  </div>
+  }
+</div>
