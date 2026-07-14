@@ -218,7 +218,9 @@
     }
 
     @case ('array') {
-      @if (field.arrayDisplayMode === 'readonly-list') {
+
+      <app-array-control [field]="field" [form]="form" [allFields]="allFields"></app-array-control>
+      <!-- @if (field.arrayDisplayMode === 'readonly-list') {
         <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
           <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
             {{ getFieldLabel() }}
@@ -391,9 +393,8 @@
             }
           </div>
         </fieldset>
-      }
+      } -->
 
-      <!-- -->
     }
 
     @case ('group') {

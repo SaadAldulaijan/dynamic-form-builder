@@ -1,0 +1,146 @@
+<div [formGroup]="form()">
+    @if (field().arrayDisplayMode === 'readonly-list') {
+    <fieldset [class]="field().layout?.containerClass ?? 'border rounded p-3 mb-3'">
+        <legend [class]="field().layout?.titleClass ?? 'float-none w-auto px-2 h6'">
+            {{ getFieldLabel() }}
+        </legend>
+
+        @if (arrayControl.length > 0) {
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        @for (childField of field().itemSchema.fields; track childField.key) {
+                        <th>{{ text(childField.label, childField.labelKey) }}</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (item of arrayControl.controls; track $index) {
+                    <tr>
+                        @for (childField of field().itemSchema.fields; track childField.key) {
+                        <td>
+                            {{ item.get(childField.key)?.value }}
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        } @else {
+        <div class="text-muted small">No data retrieved yet.</div>
+        }
+    </fieldset>
+    } @else if (field().arrayDisplayMode === 'modal-list') {
+    <fieldset [class]="field().layout?.containerClass ?? 'border rounded p-3 mb-3'">
+        <legend [class]="field().layout?.titleClass ?? 'float-none w-auto px-2 h6'">
+            {{ getFieldLabel() }}
+        </legend>
+
+        <button type="button" class="btn btn-sm btn-outline-primary mb-3" (click)="openArrayItemModal(arrayItemModal)">
+            {{ 'COMMON.ADD' | translate }} {{ getFieldLabel() }}
+        </button>
+
+        @if (arrayControl.length > 0) {
+        <ul class="list-group">
+            @for (item of arrayControl.controls; track $index) {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ getArrayItemTitle($index) }}</span>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                        (click)="openArrayItemModal(arrayItemModal, $index)">
+                        {{ 'COMMON.EDIT' | translate }}
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeArrayItem($index)">
+                        {{ 'COMMON.REMOVE' | translate }}
+                    </button>
+                </div>
+            </li>
+            }
+        </ul>
+        }
+
+        @if (arrayControl.length === 0) {
+        <div class="text-muted small">No items added yet.</div>
+        }
+
+        <ng-template #arrayItemModal let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{ editingArrayIndex === null ? ('COMMON.ADD' | translate) : ('COMMON.EDIT' | translate) }}
+                    {{ getFieldLabel() }}
+                </h4>
+
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+            </div>
+
+            <div class="modal-body">
+                @if (currentArrayItemForm) {
+                <form [formGroup]="currentArrayItemForm">
+                    <div [class]="field().layout?.fieldsWrapperClass ?? 'row g-3'">
+                        @for (childField of field().itemSchema.fields; track childField.key) {
+                        @if (isVisibleInsideGroup(childField, currentArrayItemForm)) {
+                        <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
+                            <app-field-renderer [field]="childField" [form]="currentArrayItemForm"
+                                [allFields]="allFields()">
+                            </app-field-renderer>
+                        </div>
+                        }
+                        }
+                    </div>
+                </form>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">
+                    Cancel
+                </button>
+
+                <button type="button" class="btn btn-primary" (click)="saveArrayItem(modal)">
+                    Save
+                </button>
+            </div>
+        </ng-template>
+    </fieldset>
+    } @else {
+    <fieldset [class]="field().layout?.containerClass ?? 'border rounded p-3 mb-3'">
+        <legend [class]="field().layout?.titleClass ?? 'float-none w-auto px-2 h6'">
+            {{ getFieldLabel() }}
+        </legend>
+
+        <div [class]="field().layout?.actionsClass ?? 'mb-3'">
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addArrayItem()">
+                {{ 'COMMON.ADD' | translate }} {{ getFieldLabel() }}
+            </button>
+        </div>
+
+        <div [formArrayName]="field().key">
+            @for (item of arrayControl.controls; track $index) {
+            <div [class]="field().layout?.itemClass ?? 'border rounded p-3 mb-3 bg-light'">
+                <div [formGroupName]="$index" [class]="field().layout?.fieldsWrapperClass ?? 'row g-3'">
+                    @for (childField of field().itemSchema.fields; track childField.key) {
+                    @if (isVisibleInsideGroup(childField, item)) {
+                    <div [class]="getFieldWrapperClass()">
+                        <app-field-renderer [field]="childField" [form]="item">
+                        </app-field-renderer>
+                    </div>
+                    }
+                    }
+
+                    <div class="col-12">
+                        <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeArrayItem($index)">
+                            {{ 'COMMON.REMOVE' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </fieldset>
+    }
+</div>

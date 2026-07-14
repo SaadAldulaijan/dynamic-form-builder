@@ -22,6 +22,7 @@ import { DateControl } from "./controls/date-control/date-control";
 import { FileControl } from "./controls/file-control/file-control";
 import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-control';
 import { GroupControl } from './controls/group-control/group-control';
+import { ArrayControl } from './controls/array-control/array-control';
 
 
 @Component({
@@ -41,7 +42,8 @@ import { GroupControl } from './controls/group-control/group-control';
     DateControl,
     FileControl,
     JsonViewerControl,
-    GroupControl
+    GroupControl,
+    ArrayControl
 ],
   templateUrl: './field-renderer.html',
   styleUrl: './field-renderer.scss'
