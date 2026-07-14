@@ -1,9 +1,15 @@
+<!-- <app-dynamic-form></app-dynamic-form> -->
 
 
-<app-dynamic-form></app-dynamic-form>
+<ul>
 
+    @for (schema of schemas(); track $index) {
+    <li>
+        <a [routerLink]="['/form', schema.key]">{{ schema.name }}</a>
+    </li>
+    }
 
-
+</ul>
 
 
 <div>

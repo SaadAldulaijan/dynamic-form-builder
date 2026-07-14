@@ -8,6 +8,7 @@ import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-e
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DynamicFormService } from '../../services/dynamic-form';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -27,9 +28,10 @@ import { DynamicFormService } from '../../services/dynamic-form';
 export class DynamicForm implements OnInit {
 
 
+  formName: string = '';
   // formName: string = 'takhsees-form';
   // formName: string = 'sample-form';
-  formName: string = 'integration-form';
+  // formName: string = 'integration-form';
   // formName: string = 'new-takhsees-form';
   // formName: string = 'form-group-form';
   // formName: string = 'array-form';
@@ -45,8 +47,13 @@ export class DynamicForm implements OnInit {
   private draftService = inject(DynamicFormDraftService);
   private translate = inject(TranslateService);
   private dynamicFormService = inject(DynamicFormService);
+  private route = inject(ActivatedRoute);
+
 
   ngOnInit() {
+
+    this.formName = this.route.snapshot.params['key'];
+    
     this.formReady.set(false);
 
     this.dynamicFormService.getSchema(this.formName)

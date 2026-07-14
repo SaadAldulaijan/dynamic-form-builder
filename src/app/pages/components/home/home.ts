@@ -1,20 +1,26 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { DynamicForm } from '../../../features/dynamic-form/components/dynamic-form/dynamic-form';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { SchemaService } from '../../services/schema';
+import { Schema } from '../../models/schema';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-home',
-  imports: [DynamicForm],
+  imports: [RouterLink],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Home  implements OnInit {
+export class Home implements OnInit {
 
+  private schemaService = inject(SchemaService);
 
-  schemas = ['newTakhseesForm', 'takhseesForm', 'arrayForm', 'formGroupForm', 'testForm'];
+  // schemas: Schema[] = [];
+  schemas = signal<Schema[]>([]);
 
   ngOnInit(): void {
-    
+    this.schemaService.getSchemaList().subscribe((schemas) => {
+      this.schemas.set(schemas);
+    });
   }
 
 }
