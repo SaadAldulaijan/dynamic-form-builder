@@ -1,17 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { sampleFormSchema } from '../../schemas/sample-form';
-import { FieldSchema } from '../../models/form-schema';
+import { FieldSchema, FormSchema } from '../../models/form-schema';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder';
 import { FieldRenderer } from '../field-renderer/field-renderer';
 import { DynamicFormRuleEngineService } from '../../services/dynamic-form-rule-engine';
 import { DynamicFormDraftService } from '../../services/dynamic-form-draft';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { takhseesFormSchema } from '../../schemas/takhsees-form';
-import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
-import { testFormSchema } from '../../schemas/trying-schema';
-import { refactorForm } from '../../schemas/refactor-form';
+import { DynamicFormService } from '../../services/dynamic-form';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -26,34 +23,50 @@ import { refactorForm } from '../../schemas/refactor-form';
     TranslatePipe
   ],
   templateUrl: './dynamic-form.html',
-  styleUrl: './dynamic-form.scss',
+  styleUrls: ['./dynamic-form.scss'],
 })
 export class DynamicForm implements OnInit {
 
-  // schema = sampleFormSchema;
-  schema = refactorForm;
-  // schema = newTakhseesFormSchema;
-  // schema = testFormSchema;
+
+  formName: string = '';
+  // formName: string = 'takhsees-form';
+  // formName: string = 'sample-form';
+  // formName: string = 'integration-form';
+  // formName: string = 'new-takhsees-form';
+  // formName: string = 'form-group-form';
+  // formName: string = 'array-form';
+  schema: FormSchema = {} as FormSchema;
   form!: FormGroup;
+  formReady = signal(false);
   activeSectionIndex = 0;
+
 
 
   private formBuilderService = inject(DynamicFormBuilderService);
   private ruleEngine = inject(DynamicFormRuleEngineService);
   private draftService = inject(DynamicFormDraftService);
   private translate = inject(TranslateService);
+  private dynamicFormService = inject(DynamicFormService);
+  private route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    this.form = this.formBuilderService.buildForm(this.schema);
 
-    this.ruleEngine.setupRules(this.getAllFields(), this.form);
+  ngOnInit() {
 
-    this.loadDraft();
+    this.formName = this.route.snapshot.params['key'];
+    
+    this.formReady.set(false);
+
+    this.dynamicFormService.getSchema(this.formName)
+      .subscribe(res => {
+        this.schema = res;
+        this.form = this.formBuilderService.buildForm(this.schema);
+        this.ruleEngine.setupRules(this.getAllFields(), this.form);
+        this.loadDraft();
+        this.formReady.set(true);
+      });
   }
 
-  changeLanguage(lang: 'en' | 'ar'): void {
-    this.translate.use(lang);
-  }
+
 
   text(value?: string, key?: string): string {
     return key ? this.translate.instant(key) : value ?? '';
@@ -189,8 +202,9 @@ export class DynamicForm implements OnInit {
       const control = this.form.get(field.key);
 
       if (control) {
-        control.markAsTouched();
-        control.updateValueAndValidity({ emitEvent: false });
+        // Mark nested controls (group/array children) so their UI errors become visible.
+        control.markAllAsTouched();
+        control.updateValueAndValidity({ emitEvent: true });
       }
     }
   }

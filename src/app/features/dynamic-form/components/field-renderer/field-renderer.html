@@ -1,473 +1,64 @@
 <div [formGroup]="form">
   @switch (field.type) {
-    @case ('text') {
-      <!-- <label [class]="getLabelClass()">{{ getFieldLabel() }}
-    @if(isRequired()) {
-    <span class="text-danger">*</span>
-    }
-  </label>
-  <input type="text" [formControlName]="field.key" [readonly]="field.readonly"
-    [class]="getControlClass('form-control')" /> -->
-
-      <app-text-control [field]="field" [form]="form"></app-text-control>
-    }
-
-    @case ('textarea') {
-      <!-- <label [class]="field.layout?.labelClass ?? 'form-label'">
-    {{ getFieldLabel() }}
-    @if(isRequired()) {
-    <span class="text-danger">*</span>
-    }
-  </label>
-
-  <textarea [formControlName]="field.key" [readonly]="field.readonly" [rows]="field.rows ?? 3"
-    [class]="field.layout?.controlClass ?? 'form-control'">
-  </textarea> -->
-
-      <app-textarea-control [field]="field" [form]="form"></app-textarea-control>
-    }
-
-    @case ('number') {
-      <app-number-control [field]="field" [form]="form"></app-number-control>
-      <!-- <label [class]="getLabelClass()"
-        >{{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-      <div class="input-group">
-        @if (field.display?.prefixKey) {
-          <span class="input-group-text">
-            {{ field.display!.prefixKey | translate }}
-          </span>
-        }
-
-        <input
-          type="text"
-          [value]="getNumberDisplayValue()"
-          [readonly]="field.readonly"
-          [placeholder]="field.display?.placeholderKey ?? '' | translate"
-          [class]="getControlClass('form-control')"
-          (input)="onNumberInput($event)"
-          (blur)="formatNumberInput($event)"
-        />
-
-        @if (field.display?.suffixKey) {
-          <span class="input-group-text">
-            {{ field.display!.suffixKey | translate }}
-          </span>
-        }
-      </div> -->
-    }
-
-    @case ('dropdown') {
-      <app-dropdown-control [field]="field" [form]="form"></app-dropdown-control>
-      <!-- <label [class]="getLabelClass()"
-        >{{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-
-      <select [formControlName]="field.key" [class]="getControlClass('form-select')">
-        <option [ngValue]="null">
-          {{ 'COMMON.SELECT' | translate }}
-        </option>
-
-        @for (option of getOptions(); track option.value) {
-          <option [ngValue]="option.value">
-            {{ getOptionLabel(option) }}
-          </option>
-        }
-      </select> -->
-    }
-
-    @case ('radio') {
-      <!-- <label [class]="getLabelClass('form-label d-block')">
-        {{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-
-      @for (option of field.options; track option.value) {
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            [name]="getRadioName()"
-            [checked]="form.get(field.key)?.value === option.value"
-            [disabled]="form.get(field.key)?.disabled"
-            (change)="setRadioValue(option.value)"
-          />
-
-          <label class="form-check-label">
-            {{ getOptionLabel(option) }}
-          </label>
-        </div>
-      } -->
-
-      <app-radio-control [field]="field" [form]="form"></app-radio-control>
-    }
-
-    @case ('checkbox') {
-      <!-- <div class="form-check">
-        <input class="form-check-input" type="checkbox" [formControlName]="field.key" />
-
-        <label class="form-check-label">
-          {{ getFieldLabel() }}
-          @if (isRequired()) {
-            <span class="text-danger">*</span>
-          }
-        </label>
-      </div> -->
-      <app-checkbox-control [field]="field" [form]="form"></app-checkbox-control>
-    }
-
-    @case ('file') {
-      <app-file-control [field]="field" [form]="form"></app-file-control>
-       <!-- <label [class]="getLabelClass()"
-        >{{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-
-      <input
-        #fileInput
-        type="file"
-        [disabled]="form.get(field.key)?.disabled"
-        (change)="onFileSelected($event)"
-        [class]="getControlClass('form-control')"
-      />
-
-      @if (form.get(field.key)?.value) {
-        <div class="mt-2 d-flex align-items-center gap-2">
-          <span>
-            {{ 'COMMON.SELECTED_FILE' | translate }}:
-            <strong>{{ form.get(field.key)?.value?.name }}</strong>
-          </span>
-
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-danger"
-            (click)="removeFile(fileInput)"
-            [disabled]="form.get(field.key)?.disabled"
-          >
-            {{ 'COMMON.REMOVE' | translate }}
-          </button>
-        </div>
-      }  -->
-    }
-
-    @case ('date') {
-
-      <app-date-control [field]="field" [form]="form"></app-date-control>
-      <!-- <label [class]="getLabelClass()"
-        >{{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-
-      <input
-        type="date"
-        [formControlName]="field.key"
-        [readonly]="field.readonly"
-        [attr.min]="getDateMin()"
-        [attr.max]="getDateMax()"
-        [class]="getControlClass('form-control')"
-      /> -->
-    }
-
-    @case ('multiselect') {
-      <app-multiselect-control [field]="field" [form]="form"></app-multiselect-control>
-      <!-- <label [class]="getLabelClass('form-label d-block')">
-        {{ getFieldLabel() }}
-        @if (isRequired()) {
-          <span class="text-danger">*</span>
-        }
-      </label>
-
-      <div>
-        @for (option of field.options; track option.value) {
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              [checked]="isMultiSelected(option.value)"
-              [disabled]="isMultiselectOptionDisabled(option.value)"
-              (change)="toggleMultiSelect(option.value, $event)"
-            />
-
-            <label class="form-check-label">
-              {{ getOptionLabel(option) }}
-            </label>
-          </div>
-        }
-      </div>
-
-      <small class="text-muted">
-        {{ 'COMMON.SELECTED' | translate }}:
-        {{ getMultiselectValue().length }}
-
-        @if (field.validations?.maxSelected) {
-          / {{ field.validations?.maxSelected }}
-        }
-      </small> -->
-    }
-
-    @case ('array') {
-
-      <app-array-control [field]="field" [form]="form" [allFields]="allFields"></app-array-control>
-      <!-- @if (field.arrayDisplayMode === 'readonly-list') {
-        <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
-          <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
-            {{ getFieldLabel() }}
-          </legend>
-
-          @if (arrayControl.length > 0) {
-            <div class="table-responsive">
-              <table class="table table-sm table-bordered align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    @for (childField of field.itemSchema.fields; track childField.key) {
-                      <th>{{ text(childField.label, childField.labelKey) }}</th>
-                    }
-                  </tr>
-                </thead>
-
-                <tbody>
-                  @for (item of arrayControl.controls; track $index) {
-                    <tr>
-                      @for (childField of field.itemSchema.fields; track childField.key) {
-                        <td>
-                          {{ item.get(childField.key)?.value }}
-                        </td>
-                      }
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          } @else {
-            <div class="text-muted small">No data retrieved yet.</div>
-          }
-        </fieldset>
-      } @else if (field.arrayDisplayMode === 'modal-list') {
-        <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
-          <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
-            {{ getFieldLabel() }}
-          </legend>
-
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-primary mb-3"
-            (click)="openArrayItemModal(arrayItemModal)"
-          >
-            {{ 'COMMON.ADD' | translate }} {{ getFieldLabel() }}
-          </button>
-
-          @if (arrayControl.length > 0) {
-            <ul class="list-group">
-              @for (item of arrayControl.controls; track $index) {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <span>{{ getArrayItemTitle($index) }}</span>
-
-                  <div class="d-flex gap-2">
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-secondary"
-                      (click)="openArrayItemModal(arrayItemModal, $index)"
-                    >
-                      {{ 'COMMON.EDIT' | translate }}
-                    </button>
-
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-danger"
-                      (click)="removeArrayItem($index)"
-                    >
-                      {{ 'COMMON.REMOVE' | translate }}
-                    </button>
-                  </div>
-                </li>
-              }
-            </ul>
-          }
-
-          @if (arrayControl.length === 0) {
-            <div class="text-muted small">No items added yet.</div>
-          }
-
-          <ng-template #arrayItemModal let-modal>
-            <div class="modal-header">
-              <h4 class="modal-title">
-                {{
-                  editingArrayIndex === null
-                    ? ('COMMON.ADD' | translate)
-                    : ('COMMON.EDIT' | translate)
-                }}
-                {{ getFieldLabel() }}
-              </h4>
-
-              <button
-                type="button"
-                class="btn-close"
-                aria-label="Close"
-                (click)="modal.dismiss()"
-              ></button>
-            </div>
-
-            <div class="modal-body">
-              @if (currentArrayItemForm) {
-                <form [formGroup]="currentArrayItemForm">
-                  <div [class]="field.layout?.fieldsWrapperClass ?? 'row g-3'">
-                    @for (childField of field.itemSchema.fields; track childField.key) {
-                      @if (isVisibleInsideGroup(childField, currentArrayItemForm)) {
-                        <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
-                          <app-field-renderer
-                            [field]="childField"
-                            [form]="currentArrayItemForm"
-                            [allFields]="allFields"
-                          >
-                          </app-field-renderer>
-                        </div>
-                      }
-                    }
-                  </div>
-                </form>
-              }
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">
-                Cancel
-              </button>
-
-              <button type="button" class="btn btn-primary" (click)="saveArrayItem(modal)">
-                Save
-              </button>
-            </div>
-          </ng-template>
-        </fieldset>
-      } @else {
-        <fieldset [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'">
-          <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
-            {{ getFieldLabel() }}
-          </legend>
-
-          <div [class]="field.layout?.actionsClass ?? 'mb-3'">
-            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addArrayItem()">
-              {{ 'COMMON.ADD' | translate }} {{ getFieldLabel() }}
-            </button>
-          </div>
-
-          <div [formArrayName]="field.key">
-            @for (item of arrayControl.controls; track $index) {
-              <div [class]="field.layout?.itemClass ?? 'border rounded p-3 mb-3 bg-light'">
-                <div
-                  [formGroupName]="$index"
-                  [class]="field.layout?.fieldsWrapperClass ?? 'row g-3'"
-                >
-                  @for (childField of field.itemSchema.fields; track childField.key) {
-                    @if (isVisibleInsideGroup(childField, item)) {
-                      <div [class]="getFieldWrapperClass()">
-                        <app-field-renderer [field]="childField" [form]="item">
-                        </app-field-renderer>
-                      </div>
-                    }
-                  }
-
-                  <div class="col-12">
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-danger"
-                      (click)="removeArrayItem($index)"
-                    >
-                      {{ 'COMMON.REMOVE' | translate }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        </fieldset>
-      } -->
-
-    }
-
-    @case ('group') {
-      <app-group-control [field]="field" [form]="form" [allFields]="allFields"></app-group-control>
-      <!-- <fieldset
-        [formGroupName]="field.key"
-        [class]="field.layout?.containerClass ?? 'border rounded p-3 mb-3'"
-      >
-        <legend [class]="field.layout?.titleClass ?? 'float-none w-auto px-2 h6'">
-          {{ getFieldLabel() }}
-        </legend>
-
-        <div [class]="field.layout?.fieldsWrapperClass ?? 'row g-3'">
-          @for (childField of field.fields; track childField.key) {
-            @if (isVisibleInsideNestedGroup(childField)) {
-              <div [class]="childField.layout?.wrapperClass ?? 'col-12'">
-                <app-field-renderer
-                  [field]="childField"
-                  [form]="getNestedGroup()"
-                  [allFields]="allFields"
-                >
-                </app-field-renderer>
-              </div>
-            }
-          }
-        </div>
-      </fieldset> -->
-    }
-
-    @case ('jsonViewer') {
-      <app-json-viewer-control [field]="field" [form]="form"></app-json-viewer-control>
-      <!-- <label [class]="getLabelClass()">
-        {{ getFieldLabel() }}
-      </label>
-
-      @if (getJsonViewerValue()) {
-        <pre class="bg-light border rounded p-3 mb-0">{{ getJsonViewerValue() | json }}</pre>
-      } @else {
-        <div class="text-muted small">No data retrieved yet.</div>
-      } -->
-    }
+  @case ('text') {
+  <app-text-control [field]="field" [form]="form"></app-text-control>
+  }
+  @case ('textarea') {
+  <app-textarea-control [field]="field" [form]="form"></app-textarea-control>
+  }
+  @case ('number') {
+  <app-number-control [field]="field" [form]="form"></app-number-control>
+  }
+  @case ('dropdown') {
+  <app-dropdown-control [field]="field" [form]="form"></app-dropdown-control>
+  }
+  @case ('radio') {
+  <app-radio-control [field]="field" [form]="form"></app-radio-control>
+  }
+  @case ('checkbox') {
+  <app-checkbox-control [field]="field" [form]="form"></app-checkbox-control>
+  }
+  @case ('file') {
+  <app-file-control [field]="field" [form]="form"></app-file-control>
+  }
+  @case ('date') {
+  <app-date-control [field]="field" [form]="form"></app-date-control>
+  }
+  @case ('multiselect') {
+  <app-multiselect-control [field]="field" [form]="form"></app-multiselect-control>
+  }
+  @case ('array') {
+  <app-array-control [field]="field" [form]="form" [allFields]="allFields"></app-array-control>
+  }
+  @case ('group') {
+  <app-group-control [field]="field" [form]="form" [allFields]="allFields"></app-group-control>
+  }
+  @case ('jsonViewer') {
+  <app-json-viewer-control [field]="field" [form]="form"></app-json-viewer-control>
+  }
   }
 
   @if (field.actions?.length) {
-    <div class="mt-2 d-flex gap-2">
-      @for (action of field.actions; track action.key) {
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-primary"
-          [disabled]="isActionLoading(action)"
-          (click)="executeAction(action)"
-        >
-          @if (isActionLoading(action)) {
-            <span class="spinner-border spinner-border-sm me-1"></span>
-          }
-
-          {{ getActionLabel(action) }}
-        </button>
-      }
-    </div>
-
+  <div class="mt-2 d-flex gap-2">
     @for (action of field.actions; track action.key) {
-      @if (getActionError(action)) {
-        <div class="text-danger small mt-1">
-          {{ getActionError(action) }}
-        </div>
+    <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isActionLoading(action)"
+      (click)="executeAction(action)">
+      @if (isActionLoading(action)) {
+      <span class="spinner-border spinner-border-sm me-1"></span>
       }
+
+      {{ getActionLabel(action) }}
+    </button>
     }
+  </div>
+
+  @for (action of field.actions; track action.key) {
+  @if (getActionError(action)) {
+  <div class="text-danger small mt-1">
+    {{ getActionError(action) }}
+  </div>
+  }
+  }
   }
 
-  <!-- @if (form.get(field.key)?.touched && form.get(field.key)?.invalid) {
-    <div [class]="field.layout?.errorClass ?? 'text-danger small mt-1'">
-      {{ getErrorMessage() }}
-    </div>
-  } -->
 </div>

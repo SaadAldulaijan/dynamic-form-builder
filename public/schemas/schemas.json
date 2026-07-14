@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "key": "takhsees-form",
+        "name": "Takhsees Form",
+        "description": "Form schema for Takhsees form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 2,
+        "key": "integration-form",
+        "name": "Integration Form",
+        "description": "Form schema for Integration form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 3,
+        "key": "form-group-form",
+        "name": "Form Group Form",
+        "description": "Form schema for Form Group form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 4,
+        "key": "array-form",
+        "name": "Array Form",
+        "description": "Form schema for Array form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 5,
+        "key": "sample-form",
+        "name": "Sample Form",
+        "description": "Form schema for Sample form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 6,
+        "key": "new-takhsees-form",
+        "name": "New Takhsees Form",
+        "description": "Form schema for New Takhsees form",
+        "status": "active",
+        "currentVersion": 1
+    }
+]
