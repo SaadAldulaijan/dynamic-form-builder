@@ -1,131 +1,83 @@
 import { FormSchema } from '../models/form-schema';
 
-export const refactorForm: FormSchema = {
-  key: 'refactorForm',
-  title: 'Refactor Form',
+
+
+export const formGroupForm: FormSchema = {
+  key: 'formGroupForm',
+  title: 'Form Group Form',
   sections: [
     {
-      key: 'section1',
-      title: 'Section 1',
+      key: 'generalInfoSection',
+      title: 'General Info',
       fields: [
         {
-          key: 'services',
-          label: 'Requested Services',
-          type: 'multiselect',
-          options: [
-            { label: 'Data Sharing', value: 'dataSharing' },
-            { label: 'Dashboard Access', value: 'dashboardAccess' },
-            { label: 'API Integration', value: 'apiIntegration' },
-            { label: 'Raw Data Export', value: 'rawDataExport' },
-          ],
-          validations: {
-            required: true,
-            minSelected: 1,
-            maxSelected: 3,
+          key: 'personalInfo',
+          label: 'Personal Info',
+          type: 'group',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            fieldsWrapperClass: 'row g-3',
           },
-          messages: {
-            required: 'Please select at least one service',
-            minSelected: 'Please select at least one service',
-            maxSelected: 'You can select maximum 3 services only',
-          },
-        },
-        {
-          key: 'discountType',
-          labelKey: 'DYNAMIC_FORM.FIELDS.DISCOUNT_TYPE',
-          type: 'checkbox',
-          disabledWhen: {
-            field: 'discount',
-            operator: 'equals',
-            value: true,
-          },
-        },
-        {
-          key: 'discount',
-          labelKey: 'DYNAMIC_FORM.FIELDS.DISCOUNT',
-          type: 'checkbox',
-          disabledWhen: {
-            field: 'discountType',
-            operator: 'equals',
-            value: true,
-          },
-        },
-        {
-          key: 'quantity',
-          label: 'Quantity',
-          type: 'number',
-          validations: {
-            required: true,
-            min: 1,
-          },
-        },
-        {
-          key: 'unitPrice',
-          label: 'Unit Price',
-          type: 'number',
-          validations: {
-            required: true,
-            min: 0,
-            allowDecimal: true,
-            decimalPrecision: 4,
-          },
-          display: {
-            useThousandsSeparator: true,
-            suffixKey: 'SAR',
-          },
-        },
-        {
-          key: 'total',
-          label: 'Total',
-          type: 'number',
-          readonly: true,
-          calculatedFrom: {
-            fields: ['quantity', 'unitPrice'],
-            expression: 'quantity * unitPrice',
-            precision: 2,
-          },
-          display: {
-            useThousandsSeparator: true,
-            suffixKey: 'SAR',
-          },
-        },
-        {
-          key: 'pregnancyStatus',
-          labelKey: 'DYNAMIC_FORM.FIELDS.PREGNANCY_STATUS',
-          type: 'radio',
-          options: [
-            { labelKey: 'DYNAMIC_FORM.OPTIONS.YES', value: 'true' },
-            { labelKey: 'DYNAMIC_FORM.OPTIONS.NO', value: 'false' },
-          ],
-          visibleWhen: {
-            field: 'total',
-            operator: 'equals',
-            value: 1000,
-          },
-          requiredWhen: {
-            field: 'total',
-            operator: 'equals',
-            value: 1000,
-          },
-          // disabledWhen: {
-          //   field: 'total',
-          //   operator: 'equals',
-          //   value: 1000,
-          // },
-          clearValueWhenHidden: true,
-        },
-      ],
-    },
-    {
-      key: 'section2',
-      title: 'Section 2',
-      fields: [
-        {
-          key: 'name',
-          type: 'text',
-          label: 'Name',
-          validations: {
-            required: true,
-          },
+          fields: [
+            {
+              key: 'firstName',
+              labelKey: 'DYNAMIC_FORM.FIELDS.FIRST_NAME',
+              type: 'text',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.FIRST_NAME_REQUIRED',
+              },
+            },
+            {
+              key: 'lastName',
+              labelKey: 'DYNAMIC_FORM.FIELDS.LAST_NAME',
+              type: 'text',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.LAST_NAME_REQUIRED',
+              },
+            },
+            {
+              key: 'dateOfBirth',
+              labelKey: 'DYNAMIC_FORM.FIELDS.DATE_OF_BIRTH',
+              type: 'date',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.DATE_OF_BIRTH_REQUIRED',
+              },
+            },
+            {
+              key: 'joinDate',
+              labelKey: 'DYNAMIC_FORM.FIELDS.JOIN_DATE',
+              type: 'date',
+              layout: {
+                wrapperClass: 'col-md-6',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.JOIN_DATE_REQUIRED',
+              },
+            },
+          ]
         },
         {
           key: 'address',
@@ -189,68 +141,69 @@ export const refactorForm: FormSchema = {
               },
             },
           ],
-        },
-        {
-          key: 'startDate',
-          label: 'Start Date',
-          type: 'date',
-          validations: {
-            required: true,
-            minDateToday: true,
-          },
-          messages: {
-            required: 'Start date is required',
-            minDateToday: 'Start date cannot be in the past',
-          },
-        },
-        {
-          key: 'endDate',
-          label: 'End Date',
-          type: 'date',
-          validations: {
-            required: true,
-            dateGreaterThanOrEqualField: 'startDate',
-          },
-          messages: {
-            required: 'End date is required',
-            dateGreaterThanOrEqualField: 'End date must be after or equal to start date',
-          },
-        },
-        {
-          key: 'contractDate',
-          label: 'Contract Date',
-          type: 'date',
-          validations: {
-            required: true,
-            minDate: '2026-01-01',
-            maxDate: '2026-12-31',
-          },
-          messages: {
-            required: 'Contract date is required',
-            minDate: 'Contract date cannot be before 2026-01-01',
-            maxDate: 'Contract date cannot be after 2026-12-31',
-          },
-        },
-        {
-          key: 'supportingAttachment',
-          label: 'Supporting Attachment',
-          type: 'file',
-          validations: {
-            required: false,
-            maxFileSizeMb: 5,
-            allowedExtensions: ['pdf', 'docx'],
-          },
-          messages: {
-            required: 'Attachment is required',
-            maxFileSize: 'File size must not exceed 5 MB',
-            allowedExtensions: 'Only PDF and DOCX files are allowed',
-          },
-        },
-      ],
+        }
+      ]
     },
     {
-      key: 'section3',
-      title: 'Section 3',
+      key: 'requestSection',
+      title: 'Request Address',
+      fields: [
+        {
+          key: 'requestBasicInfo',
+          label: 'Request Basic Info',
+          type: 'group',
+          layout: {
+            wrapperClass: 'col-12',
+            containerClass: 'border rounded p-3',
+            titleClass: 'float-none w-auto px-2 h6',
+            fieldsWrapperClass: 'row g-3',
+          },
+          fields: [
+            {
+              key: 'requestNumber',
+              labelKey: 'DYNAMIC_FORM.FIELDS.REQUEST_NUMBER',
+              type: 'text',
+              layout: {
+                wrapperClass: 'col-md-12',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.REQUEST_NUMBER_REQUIRED',
+              },
+            },
+            {
+              key: 'description',
+              labelKey: 'DYNAMIC_FORM.FIELDS.DESCRIPTION',
+              type: 'textarea',
+              layout: {
+                wrapperClass: 'col-md-12',
+              },
+              validations: {
+                required: true,
+              },
+              messageKeys: {
+                required: 'DYNAMIC_FORM.VALIDATION.DESCRIPTION_REQUIRED',
+              },
+            },
+          ]
+        },
+      ]
+    }
+  ]
+}
+
+
+
+export const arrayForm: FormSchema = {
+  key: 'arrayForm',
+  title: 'Array Form',
+  sections: [
+
+    {
+      key: 'arraySection',
+      title: 'Array Section',
       fields: [
         {
           key: 'projectOwners',

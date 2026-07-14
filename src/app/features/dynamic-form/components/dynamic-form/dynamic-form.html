@@ -1,14 +1,4 @@
-<div class="d-flex justify-content-end">
-  <div class="mb-3">
-    <button type="button" class="btn btn-outline-primary btn-sm me-2" (click)="changeLanguage('en')">
-      English
-    </button>
 
-    <button type="button" class="btn btn-outline-primary btn-sm" (click)="changeLanguage('ar')">
-      العربية
-    </button>
-  </div>
-</div>
 
 <div [class]="schema.layout?.containerClass ?? 'container py-4'">
   <h2>{{ getFormTitle() }}</h2>

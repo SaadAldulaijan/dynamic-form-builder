@@ -11,7 +11,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takhseesFormSchema } from '../../schemas/takhsees-form';
 import { newTakhseesFormSchema } from '../../schemas/new-takhsees-form';
 import { testFormSchema } from '../../schemas/trying-schema';
-import { refactorForm } from '../../schemas/refactor-form';
+import { arrayForm, formGroupForm } from '../../schemas/refactor-form';
 
 
 
@@ -26,14 +26,15 @@ import { refactorForm } from '../../schemas/refactor-form';
     TranslatePipe
   ],
   templateUrl: './dynamic-form.html',
-  styleUrl: './dynamic-form.scss',
+  styleUrls: ['./dynamic-form.scss'],
 })
 export class DynamicForm implements OnInit {
 
   // schema = sampleFormSchema;
-  schema = refactorForm;
+  // schema = arrayForm;
+  // schema = formGroupForm;
   // schema = newTakhseesFormSchema;
-  // schema = testFormSchema;
+  schema = testFormSchema;
   form!: FormGroup;
   activeSectionIndex = 0;
 
@@ -51,9 +52,7 @@ export class DynamicForm implements OnInit {
     this.loadDraft();
   }
 
-  changeLanguage(lang: 'en' | 'ar'): void {
-    this.translate.use(lang);
-  }
+  
 
   text(value?: string, key?: string): string {
     return key ? this.translate.instant(key) : value ?? '';
@@ -189,8 +188,9 @@ export class DynamicForm implements OnInit {
       const control = this.form.get(field.key);
 
       if (control) {
-        control.markAsTouched();
-        control.updateValueAndValidity({ emitEvent: false });
+        // Mark nested controls (group/array children) so their UI errors become visible.
+        control.markAllAsTouched();
+        control.updateValueAndValidity({ emitEvent: true });
       }
     }
   }
