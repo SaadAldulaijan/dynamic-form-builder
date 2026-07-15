@@ -13,14 +13,28 @@ import { TextareaFieldSchema } from './fields/textarea-field.schema';
 import { JsonViewerFieldSchema } from './fields/json-viewer-field.schema';
 
 
-export interface FormSchema {
-  key: string;
-  title?: string;
-  titleKey?: string;
-  layout?: FormLayoutSchema;
-  fields?: FieldSchema[];
-  sections?: FormSectionSchema[];
+interface BaseFormSchema {
+    key: string;
+    version: number;
+    title?: string;
+    titleKey?: string;
+    layout?: FormLayoutSchema;
 }
+
+export interface FlatFormSchema extends BaseFormSchema {
+    fields: FieldSchema[];
+    sections?: never;
+}
+
+export interface SectionedFormSchema extends BaseFormSchema {
+    sections: FormSectionSchema[];
+    fields?: never;
+}
+
+export type FormSchema =
+    | FlatFormSchema
+    | SectionedFormSchema;
+
 
 export interface FormSectionSchema {
   key: string;

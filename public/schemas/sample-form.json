@@ -1,6 +1,7 @@
 {
 	"key": "sample-request-form",
 	"titleKey": "DYNAMIC_FORM.TITLE",
+    "version": 1,
 	"sections": [
 		{
 			"key": "personalInfo",
@@ -238,12 +239,17 @@
 						"allowedExtensions": [
 							"pdf",
 							"docx"
+						],
+						"allowedMimeTypes": [
+							"application/pdf",
+							"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 						]
 					},
 					"messages": {
 						"required": "Attachment is required",
 						"maxFileSize": "File size must not exceed 5 MB",
-						"allowedExtensions": "Only PDF and DOCX files are allowed"
+						"allowedExtensions": "Only PDF and DOCX files are allowed",
+						"allowedMimeTypes": "Only PDF and DOCX files are allowed"
 					}
 				}
 			]

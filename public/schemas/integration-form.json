@@ -1,6 +1,7 @@
 {
 	"key": "integrationForm",
 	"titleKey": "NEW_TAKHSEES_FORM.TITLE",
+    "version": 1,
 	"sections": [
 		{
 			"key": "fieldAndSector",

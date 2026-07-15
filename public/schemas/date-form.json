@@ -1,0 +1,39 @@
+{
+    "key": "dateForm",
+    "title": "Date Form",
+    "version": 1,
+    "fields": [
+        {
+            "key": "requestDate",
+            "label": "Request Date",
+            "type": "date",
+            "defaultValue": "today"
+        },
+        {
+            "key": "startDate",
+            "label": "Start Date",
+            "type": "date",
+            "validations": {
+                "required": true,
+                "minDateToday": true
+            },
+            "messages": {
+                "required": "Start date is required",
+                "minDateToday": "Start date cannot be in the past"
+            }
+        },
+        {
+            "key": "endDate",
+            "label": "End Date",
+            "type": "date",
+            "validations": {
+                "required": true,
+                "dateGreaterThanOrEqualField": "startDate"
+            },
+            "messages": {
+                "required": "End date is required",
+                "dateGreaterThanOrEqualField": "End date must be after or equal to start date"
+            }
+        }
+    ]
+}

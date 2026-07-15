@@ -7,7 +7,7 @@
     }
   </label>
 
-<input type="text" [formControlName]="field().key" [readonly]="field().readonly"
+<input type="text" [formControlName]="field().key" [readonly]="field().state?.readonly"
     [class]="controlClass()" [placeholder]="placeholder()" />
 
  

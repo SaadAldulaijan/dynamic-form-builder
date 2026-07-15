@@ -174,7 +174,7 @@ export class FieldRenderer {
           emitEvent: false
         });
 
-        if (action.responseHandling?.disableMappedFields || targetField.readonly) {
+        if (action.responseHandling?.disableMappedFields || targetField.state?.readonly) {
           itemGroup.disable({
             emitEvent: false
           });

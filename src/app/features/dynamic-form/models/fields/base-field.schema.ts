@@ -1,25 +1,29 @@
-import { FieldCondition } from "../field-conditions";
-import { FieldType } from "../field-types";
+import { FieldConditionExpression } from "../field-conditions";
+// import { FieldType } from "../field-types";
 import { FieldLayoutSchema } from "../layout/form-layout";
-import { FieldDisplaySchema } from '../display/field-display';
+import { BaseFieldDisplaySchema } from '../display/field-display';
 import { FieldActionSchema } from "../actions/field-action";
 
 export interface BaseFieldSchema {
   key: string;
   label?: string;
   labelKey?: string;
-  type: FieldType;
+  // type: FieldType;
   
   defaultValue?: unknown;
-  readonly?: boolean;
-  display?: FieldDisplaySchema;
+  // readonly?: boolean;
+  state?: {
+    readonly?: boolean;
+    disabled?: boolean;
+  },
+  display?: BaseFieldDisplaySchema;
 
   messages?: Record<string, string>;
   messageKeys?: Record<string, string>;
 
-  visibleWhen?: FieldCondition;
-  requiredWhen?: FieldCondition;
-  disabledWhen?: FieldCondition;
+  visibleWhen?: FieldConditionExpression;
+  requiredWhen?: FieldConditionExpression;
+  disabledWhen?: FieldConditionExpression;
   
   clearValueWhenHidden?: boolean;
 

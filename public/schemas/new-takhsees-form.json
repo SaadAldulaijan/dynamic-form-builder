@@ -1,6 +1,7 @@
 {
 	"key": "newTakhseesForm",
 	"titleKey": "NEW_TAKHSEES_FORM.TITLE",
+	"version": 1,
 	"sections": [
 		{
 			"key": "fieldAndSector",
@@ -496,19 +497,33 @@
 									"pattern": "^[0-9]*$"
 								},
 								"visibleWhen": {
-									"field": "legalStatus",
-									"operator": "in",
-									"value": [
-										"militaryEntity",
-										"civilEntity"
+									"logic": "or",
+									"conditions": [
+										{
+											"field": "legalStatus",
+											"operator": "equals",
+											"value": "militaryEntity"
+										},
+										{
+											"field": "legalStatus",
+											"operator": "equals",
+											"value": "civilEntity"
+										}
 									]
 								},
 								"requiredWhen": {
-									"field": "legalStatus",
-									"operator": "in",
-									"value": [
-										"militaryEntity",
-										"civilEntity"
+									"logic": "or",
+									"conditions": [
+										{
+											"field": "legalStatus",
+											"operator": "equals",
+											"value": "militaryEntity"
+										},
+										{
+											"field": "legalStatus",
+											"operator": "equals",
+											"value": "civilEntity"
+										}
 									]
 								},
 								"clearValueWhenHidden": true
@@ -650,4 +665,3 @@
 		}
 	]
 }
-

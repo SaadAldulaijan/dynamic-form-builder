@@ -17,7 +17,7 @@
 		<input
 			type="text"
 			[value]="displayValue()"
-			[readonly]="field().readonly"
+			[readonly]="field().state?.readonly"
 			[placeholder]="placeholder()"
 			[class]="controlClass()"
 			(input)="onNumberInput($event)"
