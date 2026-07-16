@@ -5,6 +5,12 @@ import { RequiredValidation } from '../validations/required-validation';
 export interface DropdownFieldSchema extends BaseFieldSchema {
   type: 'dropdown';
   options: FieldOption[];
-  dependsOn?: string;
+  dependency?: DropdownDependencySchema;
   validations?: RequiredValidation;
+}
+
+
+export interface DropdownDependencySchema {
+    field: string;
+    clearOnChange?: boolean;
 }

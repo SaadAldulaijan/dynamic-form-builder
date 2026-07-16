@@ -7,7 +7,31 @@
             "key": "requestDate",
             "label": "Request Date",
             "type": "date",
-            "defaultValue": "today"
+            "validations": {
+                "required": true,
+                "minDateToday": true,
+                "maxDateToday": true
+            },
+            "messages": {
+                "required": "Request date is required",
+                "minDateToday": "Request date cannot be in the past",
+                "maxDateToday": "Request date cannot be in the future"
+            }
+        },
+        {
+            "key": "approvalDate",
+            "label": "Approval Date",
+            "type": "date",
+            "validations": {
+                "required": true,
+                "minDate": "2023-10-01",
+                "maxDate": "2023-12-31"
+            },
+            "messages": {
+                "required": "Approval date is required",
+                "minDate": "Approval date cannot be before October 1, 2023",
+                "maxDate": "Approval date cannot be after December 31, 2023"
+            }
         },
         {
             "key": "startDate",
@@ -15,11 +39,17 @@
             "type": "date",
             "validations": {
                 "required": true,
-                "minDateToday": true
+                "comparisons": [
+                    {
+                        "field": "requestDate",
+                        "operator": "greaterThan"
+                    }
+                ]
             },
             "messages": {
                 "required": "Start date is required",
-                "minDateToday": "Start date cannot be in the past"
+                "minDateToday": "Start date cannot be in the past",
+                "dateGreaterThanField": "Start date must be after request date"
             }
         },
         {
@@ -28,11 +58,16 @@
             "type": "date",
             "validations": {
                 "required": true,
-                "dateGreaterThanOrEqualField": "startDate"
+                "comparisons": [
+                    {
+                        "field": "startDate",
+                        "operator": "greaterThan"
+                    }
+                ]
             },
             "messages": {
                 "required": "End date is required",
-                "dateGreaterThanOrEqualField": "End date must be after or equal to start date"
+                "dateGreaterThanField": "End date must be after start date"
             }
         }
     ]

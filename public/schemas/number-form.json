@@ -1,0 +1,46 @@
+{
+    "key": "number-request-form",
+    "title": "Numbers form",
+    "version": 1,
+    "fields": [
+        {
+            "key": "quantity",
+            "label": "Quantity",
+            "type": "number",
+            "validations": {
+                "required": true,
+                "min": 1
+            }
+        },
+        {
+            "key": "unitPrice",
+            "label": "Unit Price",
+            "type": "number",
+            "validations": {
+                "required": true,
+                "min": 0,
+                "allowDecimal": true,
+                "decimalPrecision": 4
+            },
+            "display": {
+                "useThousandsSeparator": true
+            }
+        },
+        {
+            "key": "total",
+            "label": "Total",
+            "type": "number",
+            "state": {
+                "disabled": true
+            },
+            "calculatedFrom": {
+                "fields": [
+                    "quantity",
+                    "unitPrice"
+                ],
+                "expression": "quantity * unitPrice",
+                "precision": 2
+            }
+        }
+    ]
+}

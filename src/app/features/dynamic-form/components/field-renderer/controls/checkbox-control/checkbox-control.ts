@@ -7,6 +7,7 @@ import { merge, of } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
 import { CheckboxFieldSchema } from '../../../../models/fields/checkbox-field.schema';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-checkbox-control',
@@ -87,7 +88,7 @@ export class CheckboxControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 

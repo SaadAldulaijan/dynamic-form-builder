@@ -1,6 +1,10 @@
+export type IsoDateString =
+    `${number}-${number}-${number}`;
+
+
 export interface DateValidation {
-  minDate?: string;
-  maxDate?: string;
+  minDate?: IsoDateString;
+  maxDate?: IsoDateString;
   minDateToday?: boolean;
   maxDateToday?: boolean;
   comparisons?: DateFieldComparison[];

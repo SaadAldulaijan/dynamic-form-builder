@@ -40,6 +40,8 @@ export class DynamicFormRuleEngineService {
   setupCalculatedFields(fields: FieldSchema[], form: FormGroup): void {
     for (const field of fields) {
 
+      if (field.type !== 'number') continue;
+      
       if (!field.calculatedFrom) continue;
 
 
@@ -196,15 +198,15 @@ export class DynamicFormRuleEngineService {
 
       case 'notEquals':
         return actualValue !== condition.value;
-      
-      
+
+
       case 'in':
-        return Array.isArray(condition.value) 
-        && condition.value.includes(actualValue);
+        return Array.isArray(condition.value)
+          && condition.value.includes(actualValue);
 
       case 'notIn':
-        return Array.isArray(condition.value) 
-        && !condition.value.includes(actualValue);
+        return Array.isArray(condition.value)
+          && !condition.value.includes(actualValue);
 
       default:
         return false;
@@ -327,9 +329,9 @@ export class DynamicFormRuleEngineService {
 
       if (field.type !== 'dropdown') continue;
 
-      if (!field.dependsOn) continue;
+      if (!field.dependency?.field) continue;
 
-      const parentControl = form.get(field.dependsOn);
+      const parentControl = form.get(field.dependency.field);
       const childControl = form.get(field.key);
 
       if (!parentControl || !childControl) continue;

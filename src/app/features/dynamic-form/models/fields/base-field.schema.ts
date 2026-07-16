@@ -8,26 +8,22 @@ export interface BaseFieldSchema {
   key: string;
   label?: string;
   labelKey?: string;
-  // type: FieldType;
-  
   defaultValue?: unknown;
-  // readonly?: boolean;
   state?: {
     readonly?: boolean;
     disabled?: boolean;
   },
   display?: BaseFieldDisplaySchema;
 
-  messages?: Record<string, string>;
-  messageKeys?: Record<string, string>;
+  messages?: ValidationMessages;
+  messageKeys?: ValidationMessages;
 
   visibleWhen?: FieldConditionExpression;
   requiredWhen?: FieldConditionExpression;
   disabledWhen?: FieldConditionExpression;
-  
-  clearValueWhenHidden?: boolean;
 
-  calculatedFrom?: CalculatedFieldSchema;
+  clearValueWhenHidden?: boolean;
+  accessibility?: FieldAccessibilitySchema;
 
   layout?: FieldLayoutSchema;
   actions?: FieldActionSchema[];
@@ -35,9 +31,33 @@ export interface BaseFieldSchema {
 }
 
 
-export interface CalculatedFieldSchema {
-  fields: string[];
-  expression: string;
-  precision?: number;
-}
+export type ValidationMessageCode =
+  | 'required'
+  | 'min'
+  | 'max'
+  | 'minLength'
+  | 'maxLength'
+  | 'pattern'
+  | 'email'
+  | 'exactLength'
+  | 'minSelected'
+  | 'maxSelected'
+  | 'minItems'
+  | 'maxItems'
+  | 'minDate'
+  | 'maxDate'
+  | 'dateComparison'
+  | 'fileSize'
+  | 'fileExtension';
 
+export type ValidationMessages = Partial<Record<ValidationMessageCode, string>>;
+
+
+
+
+export interface FieldAccessibilitySchema {
+    ariaLabel?: string;
+    ariaLabelKey?: string;
+    ariaDescription?: string;
+    ariaDescriptionKey?: string;
+}

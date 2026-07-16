@@ -8,6 +8,7 @@ import { startWith, switchMap } from 'rxjs/operators';
 
 import { FieldOption } from '../../../../models/field-options';
 import { MultiselectFieldSchema } from '../../../../models/fields/multiselect-field.schema';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-multiselect-control',
@@ -88,7 +89,7 @@ export class MultiselectControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 

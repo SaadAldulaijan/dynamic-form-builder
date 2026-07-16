@@ -5,6 +5,7 @@ import { TextareaFieldSchema } from '../../../../models/fields/textarea-field.sc
 import { TranslateService } from '@ngx-translate/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { merge, of, startWith, switchMap } from 'rxjs';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-textarea-control',
@@ -105,7 +106,7 @@ export class TextareaControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 

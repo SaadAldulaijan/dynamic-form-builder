@@ -7,6 +7,7 @@ import { merge, of } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
 import { NumberFieldSchema } from '../../../../models/fields/number-field.schema';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-number-control',
@@ -125,7 +126,7 @@ export class NumberControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 

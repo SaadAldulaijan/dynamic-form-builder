@@ -6,5 +6,14 @@ import { NumberFieldDisplaySchema } from '../display/field-display';
 export interface NumberFieldSchema extends BaseFieldSchema {
   type: 'number';
   display?: NumberFieldDisplaySchema;
+  calculatedFrom?: CalculatedFieldSchema;
   validations?: RequiredValidation & NumberValidation;
 }
+
+
+export interface CalculatedFieldSchema {
+  fields: string[];
+  expression: string;
+  precision?: number;
+}
+

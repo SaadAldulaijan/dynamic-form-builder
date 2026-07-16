@@ -1,11 +1,3 @@
-// export interface FieldDisplaySchema {
-//   useThousandsSeparator?: boolean;
-//   prefixKey?: string;
-//   suffixKey?: string;
-//   placeholderKey?: string;
-// }
-
-
 export interface BaseFieldDisplaySchema {
     placeholder?: string;
     placeholderKey?: string;
