@@ -1,0 +1,60 @@
+<header
+    class="sticky-top d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 px-3 py-2 bg-body border-bottom">
+    <div class="d-flex align-items-center gap-3 overflow-hidden">
+        <button type="button" class="btn btn-outline-secondary" aria-label="Back to forms" (click)="back.emit()">
+            Back
+        </button>
+
+        <div class="overflow-hidden">
+            <h1 class="h5 mb-0 text-truncate">
+                {{ formTitle() }}
+            </h1>
+
+            @if (isDirty()) {
+            <small class="text-warning-emphasis">
+                Unsaved changes
+            </small>
+            }
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <div class="btn-group" role="group" aria-label="Form history actions">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="!canUndo()" (click)="undo.emit()">
+                Undo
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" [disabled]="!canRedo()" (click)="redo.emit()">
+                Redo
+            </button>
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary" [disabled]="isValidating()" (click)="validate.emit()">
+            @if (isValidating()) {
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+
+            Validating
+            } @else {
+            Validate
+            }
+        </button>
+
+        <button type="button" class="btn btn-outline-primary" (click)="preview.emit()">
+            Preview
+        </button>
+
+        <button type="button" class="btn btn-outline-primary" (click)="exportJson.emit()">
+            Export JSON
+        </button>
+
+        <button type="button" class="btn btn-primary" [disabled]="isSaving() || !isDirty()" (click)="saveDraft.emit()">
+            @if (isSaving()) {
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+
+            Saving
+            } @else {
+            Save Draft
+            }
+        </button>
+    </div>
+</header>

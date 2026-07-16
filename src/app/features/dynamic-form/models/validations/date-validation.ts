@@ -8,10 +8,6 @@ export interface DateValidation {
   minDateToday?: boolean;
   maxDateToday?: boolean;
   comparisons?: DateFieldComparison[];
-  // dateGreaterThanField?: string;
-  // dateGreaterThanOrEqualField?: string;
-  // dateLessThanField?: string;
-  // dateLessThanOrEqualField?: string;
 }
 
 
