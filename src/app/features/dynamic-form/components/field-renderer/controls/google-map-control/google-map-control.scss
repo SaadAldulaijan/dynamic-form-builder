@@ -1,0 +1,13 @@
+.google-map-control {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.google-map-control--readonly {
+  opacity: 0.75;
+}
+
+.location-values {
+  color: var(--bs-secondary-color, #6c757d);
+}

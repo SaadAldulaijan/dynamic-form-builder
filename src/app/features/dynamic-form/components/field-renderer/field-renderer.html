@@ -36,6 +36,9 @@
   @case ('jsonViewer') {
   <app-json-viewer-control [field]="field" [form]="form"></app-json-viewer-control>
   }
+  @case ('googleMap') {
+    <app-google-map-control [field]="field" [form]="form"></app-google-map-control>
+  }
   }
 
   @if (field.actions?.length) {

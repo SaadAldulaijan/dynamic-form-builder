@@ -22,6 +22,7 @@ import { FileControl } from "./controls/file-control/file-control";
 import { JsonViewerControl } from './controls/json-viewer-control/json-viewer-control';
 import { GroupControl } from './controls/group-control/group-control';
 import { ArrayControl } from './controls/array-control/array-control';
+import { GoogleMapControl } from './controls/google-map-control/google-map-control';
 
 
 @Component({
@@ -41,7 +42,8 @@ import { ArrayControl } from './controls/array-control/array-control';
     FileControl,
     JsonViewerControl,
     GroupControl,
-    ArrayControl
+    ArrayControl,
+    GoogleMapControl
 ],
   templateUrl: './field-renderer.html',
   styleUrls: ['./field-renderer.scss']

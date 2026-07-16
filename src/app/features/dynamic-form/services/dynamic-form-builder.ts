@@ -200,6 +200,7 @@ export class DynamicFormBuilderService {
       case 'array':
       case 'group':
       case 'jsonViewer':
+      case 'googleMap':
         break;
     }
 

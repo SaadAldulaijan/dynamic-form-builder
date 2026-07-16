@@ -11,6 +11,7 @@ import { GroupFieldSchema } from './fields/group-field.schema';
 import { FormLayoutSchema, SectionLayoutSchema } from './layout/form-layout';
 import { TextareaFieldSchema } from './fields/textarea-field.schema';
 import { JsonViewerFieldSchema } from './fields/json-viewer-field.schema';
+import { GoogleMapFieldSchema } from './fields/google-map-field.schema';
 
 
 interface BaseFormSchema {
@@ -37,29 +38,30 @@ export type FormSchema =
 
 
 export interface FormSectionSchema {
-  key: string;
-  title?: string;
-  titleKey?: string;
-  description?: string;
-  descriptionKey?: string;
-  layout?: SectionLayoutSchema;
-  fields: FieldSchema[];
+    key: string;
+    title?: string;
+    titleKey?: string;
+    description?: string;
+    descriptionKey?: string;
+    layout?: SectionLayoutSchema;
+    fields: FieldSchema[];
 }
 
 
 export type FieldSchema =
-  | TextFieldSchema
-  | TextareaFieldSchema
-  | NumberFieldSchema
-  | DropdownFieldSchema
-  | CheckboxFieldSchema
-  | RadioFieldSchema
-  | FileFieldSchema
-  | DateFieldSchema
-  | MultiselectFieldSchema
-  | ArrayFieldSchema
-  | GroupFieldSchema
-  | JsonViewerFieldSchema;
+    | TextFieldSchema
+    | TextareaFieldSchema
+    | NumberFieldSchema
+    | DropdownFieldSchema
+    | CheckboxFieldSchema
+    | RadioFieldSchema
+    | FileFieldSchema
+    | DateFieldSchema
+    | MultiselectFieldSchema
+    | ArrayFieldSchema
+    | GroupFieldSchema
+    | JsonViewerFieldSchema
+    | GoogleMapFieldSchema;
 
 
 // export interface FieldSchema {

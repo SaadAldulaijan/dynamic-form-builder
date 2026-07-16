@@ -41,6 +41,25 @@
                 "expression": "quantity * unitPrice",
                 "precision": 2
             }
+        },
+        {
+            "key": "location",
+            "label": "Location",
+            "type": "googleMap",
+            "defaultCenter": {
+                "latitude": 24.7136,
+                "longitude": 46.6753
+            },
+            "defaultZoom": 12,
+            "mapHeight": "400px",
+            "markerDraggable": true,
+            "allowMapClick": true,
+            "validations": {
+                "required": true
+            },
+            "layout": {
+                "wrapperClass": "col-12"
+            }
         }
     ]
 }
