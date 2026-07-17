@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DesignerToolbar } from '../designer-toolbar/designer-toolbar';
 import { FieldPalette } from '../field-palette/field-palette';
 import { FormCanvas } from '../form-canvas/form-canvas';
 import { PropertiesPanel } from '../properties-panel/properties-panel';
 import { FieldType } from '../../../dynamic-form/models/field-types';
+import { FormDesignerStateService } from '../../services/form-designer-state.service';
 
 
 @Component({
@@ -20,6 +21,16 @@ export class FormDesigner {
 
   protected readonly canUndo = signal(false);
   protected readonly canRedo = signal(false);
+
+  protected readonly designerState =
+    inject(FormDesignerStateService);
+
+  protected readonly schema =
+    this.designerState.schema;
+
+  protected onFieldSelected(type: FieldType): void {
+    this.designerState.addField(type);
+  }
 
   protected onBack(): void {
     console.log('Back clicked');
@@ -48,11 +59,6 @@ export class FormDesigner {
   protected onSaveDraft(): void {
     console.log('Save draft clicked');
   }
-
-
-  protected onFieldSelected(type: FieldType): void {
-  console.log('Selected field type:', type);
-}
 
 
 }

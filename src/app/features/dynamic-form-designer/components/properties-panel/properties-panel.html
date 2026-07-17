@@ -1,1 +1,204 @@
-<p>properties-panel works!</p>
+<aside class="d-flex flex-column h-100 border-start bg-body" style="width: 320px">
+  <div class="p-3 border-bottom">
+    <h2 class="h6 mb-1">Properties</h2>
+
+    <p class="small text-body-secondary mb-0">Configure the selected item.</p>
+  </div>
+
+  <div class="flex-grow-1 overflow-auto p-3">
+    @if (selectedNode(); as node) {
+      @switch (node.type) {
+        @case ('form') {
+          <form class="d-grid gap-3" (ngSubmit)="updateForm()">
+            <div>
+              <h3 class="h6 mb-0">Form settings</h3>
+
+              <div class="small text-body-secondary">General form information</div>
+            </div>
+
+            <div>
+              <label for="formKey" class="form-label">
+                Form key
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                id="formKey"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="formKeyControl.invalid && formKeyControl.touched"
+                [formControl]="formKeyControl"
+              />
+
+              <div class="form-text">
+                Starts with a letter. Letters, numbers and underscores only.
+              </div>
+
+              @if (formKeyControl.hasError('required') && formKeyControl.touched) {
+                <div class="invalid-feedback">Form key is required.</div>
+              }
+
+              @if (formKeyControl.hasError('pattern') && formKeyControl.touched) {
+                <div class="invalid-feedback">Enter a valid form key.</div>
+              }
+            </div>
+
+            <div>
+              <label for="formTitle" class="form-label">
+                Form title
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                id="formTitle"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="formTitleControl.invalid && formTitleControl.touched"
+                [formControl]="formTitleControl"
+              />
+
+              @if (formTitleControl.hasError('required') && formTitleControl.touched) {
+                <div class="invalid-feedback">Form title is required.</div>
+              }
+            </div>
+
+            <button type="submit" class="btn btn-primary">Apply changes</button>
+          </form>
+        }
+
+        @case ('section') {
+          <form class="d-grid gap-3" (ngSubmit)="updateSection()">
+            <div>
+              <h3 class="h6 mb-0">Section settings</h3>
+
+              <div class="small text-body-secondary">Configure the selected section</div>
+            </div>
+
+            <div>
+              <label for="sectionKey" class="form-label">
+                Section key
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                id="sectionKey"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="sectionKeyControl.invalid && sectionKeyControl.touched"
+                [formControl]="sectionKeyControl"
+              />
+
+              @if (sectionKeyControl.invalid && sectionKeyControl.touched) {
+                <div class="invalid-feedback">Enter a valid section key.</div>
+              }
+            </div>
+
+            <div>
+              <label for="sectionTitle" class="form-label">
+                Section title
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                id="sectionTitle"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="sectionTitleControl.invalid && sectionTitleControl.touched"
+                [formControl]="sectionTitleControl"
+              />
+
+              @if (sectionTitleControl.invalid && sectionTitleControl.touched) {
+                <div class="invalid-feedback">Section title is required.</div>
+              }
+            </div>
+
+            <div>
+              <label for="sectionDescription" class="form-label"> Description </label>
+
+              <textarea
+                id="sectionDescription"
+                rows="3"
+                class="form-control"
+                [formControl]="sectionDescriptionControl"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Apply changes</button>
+          </form>
+        }
+
+        @case ('field') {
+          @if (selectedField(); as field) {
+            <form class="d-grid gap-3" (ngSubmit)="updateField()">
+              <div>
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                  <h3 class="h6 mb-0">Field settings</h3>
+
+                  <span class="badge text-bg-secondary">
+                    {{ field.type }}
+                  </span>
+                </div>
+
+                <div class="small text-body-secondary">Configure the selected field</div>
+              </div>
+
+              <div>
+                <label for="fieldKey" class="form-label">
+                  Field key
+                  <span class="text-danger">*</span>
+                </label>
+
+                <input
+                  id="fieldKey"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="fieldKeyControl.invalid && fieldKeyControl.touched"
+                  [formControl]="fieldKeyControl"
+                />
+
+                <div class="form-text">Must be unique across the form.</div>
+
+                @if (fieldKeyControl.hasError('required') && fieldKeyControl.touched) {
+                  <div class="invalid-feedback">Field key is required.</div>
+                }
+
+                @if (fieldKeyControl.hasError('pattern') && fieldKeyControl.touched) {
+                  <div class="invalid-feedback">Enter a valid field key.</div>
+                }
+
+                @if (fieldKeyControl.hasError('duplicate') && fieldKeyControl.touched) {
+                  <div class="invalid-feedback">This field key already exists.</div>
+                }
+              </div>
+
+              <div>
+                <label for="fieldLabel" class="form-label">
+                  Field label
+                  <span class="text-danger">*</span>
+                </label>
+
+                <input
+                  id="fieldLabel"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="fieldLabelControl.invalid && fieldLabelControl.touched"
+                  [formControl]="fieldLabelControl"
+                />
+
+                @if (fieldLabelControl.invalid && fieldLabelControl.touched) {
+                  <div class="invalid-feedback">Field label is required.</div>
+                }
+              </div>
+
+              <button type="submit" class="btn btn-primary">Apply changes</button>
+            </form>
+          }
+        }
+      }
+    } @else {
+      <div class="text-center text-body-secondary py-5">
+        Select the form, a section, or a field to edit its properties.
+      </div>
+    }
+  </div>
+</aside>

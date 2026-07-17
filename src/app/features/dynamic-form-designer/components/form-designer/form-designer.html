@@ -1,15 +1,24 @@
 <div class="d-flex flex-column vh-100 overflow-hidden">
-  <app-designer-toolbar [formTitle]="formTitle()" [isDirty]="isDirty()" [isSaving]="isSaving()"
-    [isValidating]="isValidating()" [canUndo]="canUndo()" [canRedo]="canRedo()" (back)="onBack()" (undo)="onUndo()"
-    (redo)="onRedo()" (validate)="onValidate()" (preview)="onPreview()" (exportJson)="onExportJson()"
-    (saveDraft)="onSaveDraft()" />
+  <app-designer-toolbar
+    [formTitle]="schema().title ?? schema().key"
+    [isDirty]="isDirty()"
+    [isSaving]="false"
+    [isValidating]="false"
+    [canUndo]="false"
+    [canRedo]="false"
+    (back)="onBack()"
+    (undo)="onUndo()"
+    (redo)="onRedo()"
+    (validate)="onValidate()"
+    (preview)="onPreview()"
+    (exportJson)="onExportJson()"
+    (saveDraft)="onSaveDraft()"
+  />
 
   <div class="d-flex flex-grow-1 overflow-hidden">
-    <app-field-palette
-      (fieldSelected)="onFieldSelected($event)"
-    />
+    <app-field-palette (fieldSelected)="onFieldSelected($event)" />
 
-    <app-form-canvas  class="d-block h-100 flex-grow-1 overflow-auto"/>
+    <app-form-canvas class="d-block h-100 flex-grow-1 overflow-auto" />
 
     <app-properties-panel class="d-block h-100 flex-shrink-0" />
   </div>

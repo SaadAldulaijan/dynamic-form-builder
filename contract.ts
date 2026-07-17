@@ -1,3 +1,12 @@
+/*
+
+This file is for documentation purposes only. It contains the TypeScript interfaces and types that define the structure of form schemas, field schemas, validation rules, and related configurations used in the project.
+
+Don't reference this file directly in your code. Instead, use the appropriate imports from the actual implementation files where these interfaces and types are defined.
+
+*/
+
+
 export type FieldActionType = 'apiLookup';
 
 export interface FieldActionSchema {
