@@ -161,24 +161,24 @@ export class DynamicFormBuilderService {
           validators.push(maxDateTodayValidator());
         }
 
-        if (field.validations?.dateGreaterThanField) {
-          validators.push(dateGreaterThanFieldValidator(field.validations.dateGreaterThanField));
-        }
+        for (const comparison of field.validations?.comparisons ?? []) {
+          switch (comparison.operator) {
+            case 'greaterThan':
+              validators.push(dateGreaterThanFieldValidator(comparison.field));
+              break;
 
-        if (field.validations?.dateGreaterThanOrEqualField) {
-          validators.push(
-            dateGreaterThanOrEqualFieldValidator(field.validations.dateGreaterThanOrEqualField),
-          );
-        }
+            case 'greaterThanOrEqual':
+              validators.push(dateGreaterThanOrEqualFieldValidator(comparison.field));
+              break;
 
-        if (field.validations?.dateLessThanField) {
-          validators.push(dateLessThanFieldValidator(field.validations.dateLessThanField));
-        }
+            case 'lessThan':
+              validators.push(dateLessThanFieldValidator(comparison.field));
+              break;
 
-        if (field.validations?.dateLessThanOrEqualField) {
-          validators.push(
-            dateLessThanOrEqualFieldValidator(field.validations.dateLessThanOrEqualField),
-          );
+            case 'lessThanOrEqual':
+              validators.push(dateLessThanOrEqualFieldValidator(comparison.field));
+              break;
+          }
         }
 
         break;
@@ -200,6 +200,7 @@ export class DynamicFormBuilderService {
       case 'array':
       case 'group':
       case 'jsonViewer':
+      case 'googleMap':
         break;
     }
 

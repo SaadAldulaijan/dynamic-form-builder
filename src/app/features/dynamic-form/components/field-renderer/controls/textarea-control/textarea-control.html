@@ -9,7 +9,7 @@
 
   <textarea
     [formControlName]="field().key"
-    [readonly]="field().readonly"
+    [readonly]="field().state?.readonly"
     [class]="controlClass()"
     [placeholder]="placeholder()"
     [rows]="rows()">

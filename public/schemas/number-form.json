@@ -1,0 +1,65 @@
+{
+    "key": "number-request-form",
+    "title": "Numbers form",
+    "version": 1,
+    "fields": [
+        {
+            "key": "quantity",
+            "label": "Quantity",
+            "type": "number",
+            "validations": {
+                "required": true,
+                "min": 1
+            }
+        },
+        {
+            "key": "unitPrice",
+            "label": "Unit Price",
+            "type": "number",
+            "validations": {
+                "required": true,
+                "min": 0,
+                "allowDecimal": true,
+                "decimalPrecision": 4
+            },
+            "display": {
+                "useThousandsSeparator": true
+            }
+        },
+        {
+            "key": "total",
+            "label": "Total",
+            "type": "number",
+            "state": {
+                "disabled": true
+            },
+            "calculatedFrom": {
+                "fields": [
+                    "quantity",
+                    "unitPrice"
+                ],
+                "expression": "quantity * unitPrice",
+                "precision": 2
+            }
+        },
+        {
+            "key": "location",
+            "label": "Location",
+            "type": "googleMap",
+            "defaultCenter": {
+                "latitude": 24.7136,
+                "longitude": 46.6753
+            },
+            "defaultZoom": 12,
+            "mapHeight": "400px",
+            "markerDraggable": true,
+            "allowMapClick": true,
+            "validations": {
+                "required": true
+            },
+            "layout": {
+                "wrapperClass": "col-12"
+            }
+        }
+    ]
+}

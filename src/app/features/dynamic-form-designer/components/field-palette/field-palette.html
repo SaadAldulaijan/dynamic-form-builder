@@ -1,0 +1,90 @@
+<aside
+  class="field-palette-width d-flex flex-column h-100 border-end bg-body"
+  style="width: 280px;"
+>
+  <div class="p-3 border-bottom">
+    <h2 class="h6 mb-1">
+      Fields
+    </h2>
+
+    <p class="small text-body-secondary mb-0">
+      Select a field to add it to the form.
+    </p>
+  </div>
+
+  <div class="flex-grow-1 overflow-auto p-3">
+    <section>
+      <h3 class="small fw-semibold text-uppercase text-body-secondary mb-2">
+        Basic
+      </h3>
+
+      <div class="d-grid gap-2">
+        @for (field of basicFields(); track field.type) {
+          <button
+            type="button"
+            class="btn btn-outline-secondary text-start p-3"
+            [attr.title]="field.description"
+            (click)="selectField(field.type)"
+          >
+            <div class="d-flex align-items-start gap-2">
+              @if (field.iconClass) {
+                <i
+                  [class]="field.iconClass"
+                  class="fs-5 text-primary"
+                  aria-hidden="true"
+                ></i>
+              }
+
+              <div class="overflow-hidden">
+                <div class="fw-semibold">
+                  {{ field.label }}
+                </div>
+
+                <div class="small text-body-secondary text-truncate">
+                  {{ field.description }}
+                </div>
+              </div>
+            </div>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="mt-4">
+      <h3 class="small fw-semibold text-uppercase text-body-secondary mb-2">
+        Selection
+      </h3>
+
+      <div class="d-grid gap-2">
+        @for (field of selectionFields(); track field.type) {
+          <button
+            type="button"
+            class="btn btn-outline-secondary text-start p-3"
+            [attr.title]="field.description"
+            (click)="selectField(field.type)"
+          >
+            <div class="d-flex align-items-start gap-2">
+              @if (field.iconClass) {
+                <i
+                  [class]="field.iconClass"
+                  class="fs-5 text-primary"
+                  aria-hidden="true"
+                ></i>
+              }
+
+              <div class="overflow-hidden">
+                <div class="fw-semibold">
+                  {{ field.label }}
+                </div>
+
+                <div class="small text-body-secondary text-truncate">
+                  {{ field.description }}
+                </div>
+              </div>
+            </div>
+          </button>
+        }
+      </div>
+    </section>
+  </div>
+</aside>

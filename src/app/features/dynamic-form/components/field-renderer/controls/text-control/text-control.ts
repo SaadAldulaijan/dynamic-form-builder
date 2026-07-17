@@ -6,6 +6,7 @@ import { TextFieldSchema } from '../../../../models/fields/text-field.schema';
 import { TranslateService } from '@ngx-translate/core';
 import { merge, of } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-text-control',
@@ -75,6 +76,7 @@ export class TextControl {
     return control.hasValidator(Validators.required);
   });
 
+  
   readonly labelClass = computed(() => {
     return this.field().layout?.labelClass ?? 'form-label';
   });
@@ -103,7 +105,7 @@ export class TextControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 

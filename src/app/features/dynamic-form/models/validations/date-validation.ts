@@ -1,10 +1,24 @@
+export type IsoDateString =
+    `${number}-${number}-${number}`;
+
+
 export interface DateValidation {
-  minDate?: string;
-  maxDate?: string;
+  minDate?: IsoDateString;
+  maxDate?: IsoDateString;
   minDateToday?: boolean;
   maxDateToday?: boolean;
-  dateGreaterThanField?: string;
-  dateGreaterThanOrEqualField?: string;
-  dateLessThanField?: string;
-  dateLessThanOrEqualField?: string;
+  comparisons?: DateFieldComparison[];
+}
+
+
+export type DateComparisonOperator =
+  | 'greaterThan'
+  | 'greaterThanOrEqual'
+  | 'lessThan'
+  | 'lessThanOrEqual';
+
+
+export interface DateFieldComparison {
+  field: string;
+  operator: DateComparisonOperator;
 }

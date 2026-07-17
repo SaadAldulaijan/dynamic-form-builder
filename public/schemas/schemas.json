@@ -46,5 +46,29 @@
         "description": "Form schema for New Takhsees form",
         "status": "active",
         "currentVersion": 1
+    },
+    {
+        "id": 7,
+        "key": "date-form",
+        "name": "Date Form",
+        "description": "Form schema for Date form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 8,
+        "key": "dropdown-form",
+        "name": "Dropdown Form",
+        "description": "Form schema for Dropdown form",
+        "status": "active",
+        "currentVersion": 1
+    },
+    {
+        "id": 9,
+        "key": "number-form",
+        "name": "Number Form",
+        "description": "Form schema for Number form",
+        "status": "active",
+        "currentVersion": 1
     }
 ]

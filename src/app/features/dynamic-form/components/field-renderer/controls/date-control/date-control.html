@@ -10,7 +10,7 @@
 	<input
 		type="date"
 		[formControlName]="field().key"
-		[readonly]="field().readonly"
+		[readonly]="field().state?.readonly"
 		[attr.min]="minDate()"
 		[attr.max]="maxDate()"
 		[class]="controlClass()"

@@ -1,6 +1,7 @@
 {
 	"key": "formGroupForm",
 	"title": "Form Group Form",
+    "version": 1,
 	"sections": [
 		{
 			"key": "generalInfoSection",

@@ -1,6 +1,7 @@
 {
 	"key": "takhseesForm",
 	"titleKey": "TAKHSEES_FORM.TITLE",
+    "version": 1,
 	"sections": [
 		{
 			"key": "takhseesSection",

@@ -1,0 +1,82 @@
+{
+    "key": "dropdown-request-form",
+    "title": "Dropdown Request Form",
+    "version": 1,
+    "fields": [
+        {
+            "key": "region",
+            "labelKey": "DYNAMIC_FORM.FIELDS.REGION",
+            "type": "dropdown",
+            "layout": {
+                "wrapperClass": "col-md-6"
+            },
+            "options": [
+                {
+                    "label": "Riyadh",
+                    "value": "1"
+                },
+                {
+                    "label": "Makkah",
+                    "value": "2"
+                }
+            ],
+            "validations": {
+                "required": true
+            },
+            "messageKeys": {
+                "required": "DYNAMIC_FORM.VALIDATION.REGION_REQUIRED"
+            }
+        },
+        {
+            "key": "city",
+            "labelKey": "DYNAMIC_FORM.FIELDS.CITY",
+            "type": "dropdown",
+            "dependency": {
+                "field": "region",
+                "clearOnChange": true
+            },
+            "layout": {
+                "wrapperClass": "col-md-6"
+            },
+            "options": [
+                {
+                    "label": "Riyadh",
+                    "value": "3",
+                    "parentValue": "1"
+                },
+                {
+                    "label": "Al Majmaah",
+                    "value": "24",
+                    "parentValue": "1"
+                },
+                {
+                    "label": "Makkah",
+                    "value": "10",
+                    "parentValue": "2"
+                },
+                {
+                    "label": "Jeddah",
+                    "value": "11",
+                    "parentValue": "2"
+                }
+            ],
+            "validations": {
+                "required": true
+            },
+            "messageKeys": {
+                "required": "DYNAMIC_FORM.VALIDATION.CITY_REQUIRED"
+            }
+        },
+        {
+            "key": "district",
+            "labelKey": "DYNAMIC_FORM.FIELDS.DISTRICT",
+            "type": "text",
+            "validations": {
+                "required": true
+            },
+            "messageKeys": {
+                "required": "DYNAMIC_FORM.VALIDATION.DISTRICT_REQUIRED"
+            }
+        }
+    ]
+}

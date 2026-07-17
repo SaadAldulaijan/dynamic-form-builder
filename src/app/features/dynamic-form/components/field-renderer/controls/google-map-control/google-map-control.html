@@ -1,0 +1,45 @@
+<div [formGroup]="form()">
+  <label [class]="labelClass()">
+    {{ fieldLabel() }}
+
+    @if (isRequired()) {
+      <span class="text-danger">*</span>
+    }
+  </label>
+
+  <div class="google-map-control" [class.google-map-control--readonly]="field().state?.readonly || field().state?.disabled || control()?.disabled">
+    <google-map
+      width="100%"
+      [height]="mapHeight()"
+      [center]="center()"
+      [zoom]="zoom()"
+      [options]="mapOptions()"
+      (mapClick)="onMapClick($event)"
+      (mapMouseout)="markAsTouched()"
+    >
+      @if (markerPosition(); as position) {
+        <map-marker
+          [position]="position"
+          [options]="markerOptions()"
+          (mapDragend)="onMarkerDragEnd($event)"
+        />
+      }
+    </google-map>
+  </div>
+
+  @if (value(); as selectedLocation) {
+    <div class="location-values mt-2">
+      <small>
+        Latitude: {{ selectedLocation.latitude }}
+        |
+        Longitude: {{ selectedLocation.longitude }}
+      </small>
+    </div>
+  }
+
+  @if (showError()) {
+    <div [class]="errorClass()">
+      {{ errorMessage() }}
+    </div>
+  }
+</div>

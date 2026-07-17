@@ -1,6 +1,7 @@
 {
     "key": "arrayForm",
     "title": "Array Form",
+    "version": 1,
     "sections": [
         {
             "key": "arraySection",
@@ -89,19 +90,33 @@
                                     "pattern": "^[0-9]*$"
                                 },
                                 "visibleWhen": {
-                                    "field": "legalStatus",
-                                    "operator": "in",
-                                    "value": [
-                                        "militaryEntity",
-                                        "civilEntity"
+                                    "logic": "or",
+                                    "conditions": [
+                                        {
+                                            "field": "legalStatus",
+                                            "operator": "equals",
+                                            "value": "militaryEntity"
+                                        },
+                                        {
+                                            "field": "legalStatus",
+                                            "operator": "equals",
+                                            "value": "civilEntity"
+                                        }
                                     ]
                                 },
                                 "requiredWhen": {
-                                    "field": "legalStatus",
-                                    "operator": "in",
-                                    "value": [
-                                        "militaryEntity",
-                                        "civilEntity"
+                                    "logic": "or",
+                                    "conditions": [
+                                        {
+                                            "field": "legalStatus",
+                                            "operator": "equals",
+                                            "value": "militaryEntity"
+                                        },
+                                        {
+                                            "field": "legalStatus",
+                                            "operator": "equals",
+                                            "value": "civilEntity"
+                                        }
                                     ]
                                 },
                                 "clearValueWhenHidden": true

@@ -1,9 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import { DynamicFormBuilderService } from "./dynamic-form-builder";
 import { FormGroup } from "@angular/forms";
-import { FieldSchema, FormSchema } from '../models/form-schema';
-import { FieldOption } from "../models/field-options";
-import { FieldCondition } from "../models/field-conditions";
+import { FieldSchema } from '../models/form-schema';
+import { FieldConditionExpression, FieldConditionGroup } from "../models/field-conditions";
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +40,8 @@ export class DynamicFormRuleEngineService {
   setupCalculatedFields(fields: FieldSchema[], form: FormGroup): void {
     for (const field of fields) {
 
+      if (field.type !== 'number') continue;
+      
       if (!field.calculatedFrom) continue;
 
 
@@ -160,11 +161,8 @@ export class DynamicFormRuleEngineService {
 
 
       const dependencyFields = [
-        validations.dateGreaterThanField,
-        validations.dateGreaterThanOrEqualField,
-        validations.dateLessThanField,
-        validations.dateLessThanOrEqualField
-      ].filter(Boolean) as string[];
+        ...new Set(validations.comparisons?.map(comparison => comparison.field) ?? [])
+      ];
 
       for (const dependencyField of dependencyFields) {
         const dependencyControl = form.get(dependencyField);
@@ -181,7 +179,17 @@ export class DynamicFormRuleEngineService {
     }
   }
 
-  evaluateCondition(condition: FieldCondition, form: FormGroup): boolean {
+  evaluateCondition(condition: FieldConditionExpression, form: FormGroup): boolean {
+    if (this.isConditionGroup(condition)) {
+      const results = condition.conditions.map(childCondition =>
+        this.evaluateCondition(childCondition, form)
+      );
+
+      return condition.logic === 'and'
+        ? results.every(Boolean)
+        : results.some(Boolean);
+    }
+
     const actualValue = form.get(condition.field)?.value;
 
     switch (condition.operator) {
@@ -190,18 +198,51 @@ export class DynamicFormRuleEngineService {
 
       case 'notEquals':
         return actualValue !== condition.value;
-      
-      
+
+
       case 'in':
-        return Array.isArray(condition.value) 
-        && condition.value.includes(actualValue);
+        return Array.isArray(condition.value)
+          && condition.value.includes(actualValue);
 
       case 'notIn':
-        return Array.isArray(condition.value) 
-        && !condition.value.includes(actualValue);
+        return Array.isArray(condition.value)
+          && !condition.value.includes(actualValue);
 
       default:
         return false;
+    }
+  }
+
+  private isConditionGroup(condition: FieldConditionExpression): condition is FieldConditionGroup {
+    return 'conditions' in condition;
+  }
+
+  private getConditionFieldKeys(
+    condition: FieldConditionExpression,
+    fieldKeys = new Set<string>()
+  ): Set<string> {
+    if (this.isConditionGroup(condition)) {
+      for (const childCondition of condition.conditions) {
+        this.getConditionFieldKeys(childCondition, fieldKeys);
+      }
+
+      return fieldKeys;
+    }
+
+    fieldKeys.add(condition.field);
+
+    return fieldKeys;
+  }
+
+  private subscribeToConditionChanges(
+    condition: FieldConditionExpression,
+    form: FormGroup,
+    callback: () => void
+  ): void {
+    for (const fieldKey of this.getConditionFieldKeys(condition)) {
+      form.get(fieldKey)?.valueChanges.subscribe(() => {
+        callback();
+      });
     }
   }
 
@@ -210,9 +251,8 @@ export class DynamicFormRuleEngineService {
       if (!field.requiredWhen) continue;
 
       const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.requiredWhen.field);
 
-      if (!targetControl || !sourceControl) continue;
+      if (!targetControl) continue;
 
       const applyRequiredState = () => {
         const shouldBeRequired = this.evaluateCondition(field.requiredWhen!, form);
@@ -226,9 +266,7 @@ export class DynamicFormRuleEngineService {
 
       applyRequiredState();
 
-      sourceControl.valueChanges.subscribe(() => {
-        applyRequiredState();
-      });
+      this.subscribeToConditionChanges(field.requiredWhen, form, applyRequiredState);
     }
   }
 
@@ -237,9 +275,8 @@ export class DynamicFormRuleEngineService {
       if (!field.disabledWhen) continue;
 
       const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.disabledWhen.field);
 
-      if (!targetControl || !sourceControl) continue;
+      if (!targetControl) continue;
 
       const applyDisabledState = () => {
         const shouldBeDisabled = this.evaluateCondition(field.disabledWhen!, form);
@@ -259,9 +296,7 @@ export class DynamicFormRuleEngineService {
 
       applyDisabledState();
 
-      sourceControl.valueChanges.subscribe(() => {
-        applyDisabledState();
-      });
+      this.subscribeToConditionChanges(field.disabledWhen, form, applyDisabledState);
     }
   }
 
@@ -270,9 +305,8 @@ export class DynamicFormRuleEngineService {
       if (!field.visibleWhen || !field.clearValueWhenHidden) continue;
 
       const targetControl = form.get(field.key);
-      const sourceControl = form.get(field.visibleWhen.field);
 
-      if (!targetControl || !sourceControl) continue;
+      if (!targetControl) continue;
 
       const clearIfHidden = () => {
         const isVisible = this.evaluateCondition(field.visibleWhen!, form);
@@ -286,9 +320,7 @@ export class DynamicFormRuleEngineService {
 
       clearIfHidden();
 
-      sourceControl.valueChanges.subscribe(() => {
-        clearIfHidden();
-      });
+      this.subscribeToConditionChanges(field.visibleWhen, form, clearIfHidden);
     }
   }
 
@@ -297,9 +329,9 @@ export class DynamicFormRuleEngineService {
 
       if (field.type !== 'dropdown') continue;
 
-      if (!field.dependsOn) continue;
+      if (!field.dependency?.field) continue;
 
-      const parentControl = form.get(field.dependsOn);
+      const parentControl = form.get(field.dependency.field);
       const childControl = form.get(field.key);
 
       if (!parentControl || !childControl) continue;

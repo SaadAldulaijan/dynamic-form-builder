@@ -8,6 +8,7 @@ import { startWith, switchMap } from 'rxjs/operators';
 
 import { FieldOption } from '../../../../models/field-options';
 import { DropdownFieldSchema } from '../../../../models/fields/dropdown-field.schema';
+import { ValidationMessageCode } from '../../../../models/fields/base-field.schema';
 
 @Component({
   selector: 'app-dropdown-control',
@@ -93,7 +94,7 @@ export class DropdownControl {
       return null;
     }
 
-    const firstError = Object.keys(control.errors)[0];
+    const firstError = Object.keys(control.errors)[0] as ValidationMessageCode;
     const currentField = this.field();
     const messageKey = currentField.messageKeys?.[firstError];
 
@@ -110,11 +111,11 @@ export class DropdownControl {
 
     const currentField = this.field();
 
-    if (!currentField.dependsOn) {
+    if (!currentField.dependency?.field) {
       return currentField.options ?? [];
     }
 
-    const parentValue = this.form().get(currentField.dependsOn)?.value;
+    const parentValue = this.form().get(currentField.dependency.field)?.value;
 
     if (!parentValue) {
       return [];

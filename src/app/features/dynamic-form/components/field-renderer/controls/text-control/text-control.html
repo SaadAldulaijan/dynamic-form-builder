@@ -3,14 +3,18 @@
     {{ fieldLabel() }}
 
     @if (isRequired()) {
-      <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
     }
   </label>
 
-<input type="text" [formControlName]="field().key" [readonly]="field().readonly"
-    [class]="controlClass()" [placeholder]="placeholder()" />
+  <input 
+    type="text" 
+    [formControlName]="field().key" 
+    [readonly]="field().state?.readonly"
+    [class]="controlClass()" 
+    [placeholder]="placeholder()" />
 
- 
+
   @if (showError()) {
   <div [class]="errorClass()">
     {{ errorMessage() }}
