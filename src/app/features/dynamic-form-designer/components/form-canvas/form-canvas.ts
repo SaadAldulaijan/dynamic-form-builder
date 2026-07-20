@@ -72,4 +72,47 @@ export class FormCanvas {
   protected canMoveFieldDown(fieldKey: string, sectionKey: string): boolean {
     return this.designerState.canMoveFieldDown(fieldKey, sectionKey);
   }
+
+
+  protected addSection(): void {
+    this.designerState.addSection();
+  }
+
+  protected moveSectionUp(sectionKey: string): void {
+    this.designerState.moveSectionUp(sectionKey);
+  }
+
+  protected moveSectionDown(sectionKey: string): void {
+    this.designerState.moveSectionDown(sectionKey);
+  }
+
+  protected duplicateSection(sectionKey: string): void {
+    this.designerState.duplicateSection(sectionKey);
+  }
+
+  protected deleteSection(sectionKey: string): void {
+    const confirmed = window.confirm('Are you sure you want to delete this section and all its fields?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.designerState.deleteSection(sectionKey);
+  }
+
+  protected canMoveSectionUp(sectionKey: string): boolean {
+    return this.designerState.canMoveSectionUp(sectionKey);
+  }
+
+  protected canMoveSectionDown(sectionKey: string): boolean {
+    return this.designerState.canMoveSectionDown(sectionKey);
+  }
+
+
+  protected canDeleteSection(): boolean {
+    return this.designerState.canDeleteSection();
+  }
+
+
+
 }

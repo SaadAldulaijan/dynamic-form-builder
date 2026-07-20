@@ -1,9 +1,6 @@
-import { FieldSchema, FormSchema } from "../../dynamic-form/models/form-schema";
+import { FieldSchema, FormSchema, SectionedFormSchema } from "../../dynamic-form/models/form-schema";
 
-export function generateUniqueFieldKey(
-  schema: FormSchema,
-  fieldType: FieldSchema['type'],
-): string {
+export function generateUniqueFieldKey(schema: FormSchema, fieldType: FieldSchema['type']): string {
   const existingKeys = getAllFieldKeys(schema);
 
   let index = 1;
@@ -16,6 +13,25 @@ export function generateUniqueFieldKey(
 
   return candidate;
 }
+
+export function generateUniqueSectionKey(
+  schema: SectionedFormSchema,
+): string {
+  const existingKeys = new Set(
+    schema.sections.map(section => section.key),
+  );
+
+  let index = 1;
+  let candidate = `section${index}`;
+
+  while (existingKeys.has(candidate)) {
+    index++;
+    candidate = `section${index}`;
+  }
+
+  return candidate;
+}
+
 
 function getAllFieldKeys(schema: FormSchema): Set<string> {
   const keys = new Set<string>();
@@ -33,10 +49,7 @@ function getAllFieldKeys(schema: FormSchema): Set<string> {
   return keys;
 }
 
-function collectFieldKeys(
-  fields: FieldSchema[],
-  keys: Set<string>,
-): void {
+function collectFieldKeys(fields: FieldSchema[],keys: Set<string>): void {
   for (const field of fields) {
     keys.add(field.key);
 

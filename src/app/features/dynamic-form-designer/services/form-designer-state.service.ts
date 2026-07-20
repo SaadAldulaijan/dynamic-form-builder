@@ -5,9 +5,13 @@ import type {
   SectionedFormSchema,
   FieldSchema,
 } from '../../dynamic-form/models/form-schema';
-import { generateUniqueFieldKey } from '../utils/field-key.util';
+import { generateUniqueFieldKey, generateUniqueSectionKey } from '../utils/schema-key.util';
 import type { DesignerNode } from '../models/designer-node';
 import { FieldType } from '../../dynamic-form/models/field-types';
+import { FieldGeneralProperties } from '../models/field-general-properties';
+import { FieldValidationProperties } from '../models/field-validation-properties';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -61,9 +65,9 @@ export class FormDesignerStateService {
       sections: currentSchema.sections.map((section) =>
         section.key === targetSection.key
           ? {
-              ...section,
-              fields: [...section.fields, field],
-            }
+            ...section,
+            fields: [...section.fields, field],
+          }
           : section,
       ),
     };
@@ -78,6 +82,72 @@ export class FormDesignerStateService {
 
     this.dirtyState.set(true);
   }
+
+
+  addSection(): void {
+    const currentSchema = this.schemaState();
+
+    if (!this.isSectionedSchema(currentSchema)) {
+      return;
+    }
+
+    const sectionKey =
+      generateUniqueSectionKey(currentSchema);
+
+    const newSection = {
+      key: sectionKey,
+      title: `Section ${currentSchema.sections.length + 1}`,
+      fields: [],
+    };
+
+    const updatedSchema: SectionedFormSchema = {
+      ...currentSchema,
+      sections: [
+        ...currentSchema.sections,
+        newSection,
+      ],
+    };
+
+    this.schemaState.set(updatedSchema);
+
+    this.selectedNodeState.set({
+      type: 'section',
+      sectionKey,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+
+  isSectionKeyAvailable(
+    key: string,
+    currentSectionKey?: string,
+  ): boolean {
+    const normalizedKey = key.trim();
+
+    if (!normalizedKey) {
+      return false;
+    }
+
+    const schema = this.schemaState();
+
+    if (!this.isSectionedSchema(schema)) {
+      return false;
+    }
+
+    if (
+      currentSectionKey &&
+      normalizedKey === currentSectionKey
+    ) {
+      return true;
+    }
+
+    return !schema.sections.some(
+      section => section.key === normalizedKey,
+    );
+  }
+
+
 
   updateForm(changes: Partial<Pick<SectionedFormSchema, 'key' | 'title'>>): void {
     const currentSchema = this.schemaState();
@@ -104,14 +174,18 @@ export class FormDesignerStateService {
       return;
     }
 
+    const nextSectionKey =
+      changes.key?.trim() || sectionKey;
+
     const updatedSchema: SectionedFormSchema = {
       ...currentSchema,
       sections: currentSchema.sections.map((section) =>
         section.key === sectionKey
           ? {
-              ...section,
-              ...changes,
-            }
+            ...section,
+            ...changes,
+            key: nextSectionKey,
+          }
           : section,
       ),
     };
@@ -127,6 +201,278 @@ export class FormDesignerStateService {
 
     this.dirtyState.set(true);
   }
+
+  moveSectionUp(sectionKey: string): void {
+    const currentSchema = this.schemaState();
+
+    if (!this.isSectionedSchema(currentSchema)) {
+      return;
+    }
+
+    const sectionIndex =
+      currentSchema.sections.findIndex(
+        section => section.key === sectionKey,
+      );
+
+    if (sectionIndex <= 0) {
+      return;
+    }
+
+    const sections = [...currentSchema.sections];
+
+    [
+      sections[sectionIndex - 1],
+      sections[sectionIndex],
+    ] = [
+        sections[sectionIndex],
+        sections[sectionIndex - 1],
+      ];
+
+    this.schemaState.set({
+      ...currentSchema,
+      sections,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+
+  moveSectionDown(sectionKey: string): void {
+    const currentSchema = this.schemaState();
+
+    if (!this.isSectionedSchema(currentSchema)) {
+      return;
+    }
+
+    const sectionIndex =
+      currentSchema.sections.findIndex(
+        section => section.key === sectionKey,
+      );
+
+    if (
+      sectionIndex < 0 ||
+      sectionIndex >=
+      currentSchema.sections.length - 1
+    ) {
+      return;
+    }
+
+    const sections = [...currentSchema.sections];
+
+    [
+      sections[sectionIndex],
+      sections[sectionIndex + 1],
+    ] = [
+        sections[sectionIndex + 1],
+        sections[sectionIndex],
+      ];
+
+    this.schemaState.set({
+      ...currentSchema,
+      sections,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+
+  canMoveSectionUp(
+    sectionKey: string,
+  ): boolean {
+    const schema = this.schemaState();
+
+    if (!this.isSectionedSchema(schema)) {
+      return false;
+    }
+
+    return (
+      schema.sections.findIndex(
+        section => section.key === sectionKey,
+      ) > 0
+    );
+  }
+
+  canMoveSectionDown(
+    sectionKey: string,
+  ): boolean {
+    const schema = this.schemaState();
+
+    if (!this.isSectionedSchema(schema)) {
+      return false;
+    }
+
+    const sectionIndex =
+      schema.sections.findIndex(
+        section => section.key === sectionKey,
+      );
+
+    return (
+      sectionIndex >= 0 &&
+      sectionIndex <
+      schema.sections.length - 1
+    );
+  }
+
+
+  duplicateSection(
+    sectionKey: string,
+  ): void {
+    const currentSchema = this.schemaState();
+
+    if (!this.isSectionedSchema(currentSchema)) {
+      return;
+    }
+
+    const sectionIndex =
+      currentSchema.sections.findIndex(
+        section => section.key === sectionKey,
+      );
+
+    if (sectionIndex < 0) {
+      return;
+    }
+
+    const sourceSection =
+      currentSchema.sections[sectionIndex];
+
+    const duplicatedSection =
+      structuredClone(sourceSection);
+
+    duplicatedSection.key =
+      generateUniqueSectionKey(currentSchema);
+
+    duplicatedSection.title =
+      `${sourceSection.title ?? sourceSection.key} Copy`;
+
+    const existingFieldKeys =
+      this.getAllFieldKeys(currentSchema);
+
+    duplicatedSection.fields =
+      duplicatedSection.fields.map(field =>
+        this.cloneFieldWithUniqueKeys(
+          field,
+          existingFieldKeys,
+        ),
+      );
+
+    const sections = [...currentSchema.sections];
+
+    sections.splice(
+      sectionIndex + 1,
+      0,
+      duplicatedSection,
+    );
+
+    this.schemaState.set({
+      ...currentSchema,
+      sections,
+    });
+
+    this.selectedNodeState.set({
+      type: 'section',
+      sectionKey: duplicatedSection.key,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+  private cloneFieldWithUniqueKeys(
+    field: FieldSchema,
+    existingKeys: Set<string>,
+  ): FieldSchema {
+    const clonedField =
+      structuredClone(field);
+
+    let index = 1;
+    let candidate = `${field.key}Copy`;
+
+    while (existingKeys.has(candidate)) {
+      index++;
+      candidate = `${field.key}Copy${index}`;
+    }
+
+    clonedField.key = candidate;
+    existingKeys.add(candidate);
+
+    if (clonedField.type === 'group') {
+      clonedField.fields =
+        clonedField.fields.map(child =>
+          this.cloneFieldWithUniqueKeys(
+            child,
+            existingKeys,
+          ),
+        );
+    }
+
+    if (clonedField.type === 'array') {
+      clonedField.itemSchema = {
+        ...clonedField.itemSchema,
+        fields:
+          clonedField.itemSchema.fields.map(
+            child =>
+              this.cloneFieldWithUniqueKeys(
+                child,
+                existingKeys,
+              ),
+          ),
+      };
+    }
+
+    return clonedField;
+  }
+
+  deleteSection(sectionKey: string): void {
+    const currentSchema = this.schemaState();
+
+    if (!this.isSectionedSchema(currentSchema)) {
+      return;
+    }
+
+    if (currentSchema.sections.length === 1) {
+      return;
+    }
+
+    const sectionIndex =
+      currentSchema.sections.findIndex(
+        section => section.key === sectionKey,
+      );
+
+    if (sectionIndex < 0) {
+      return;
+    }
+
+    const sections =
+      currentSchema.sections.filter(
+        section => section.key !== sectionKey,
+      );
+
+    this.schemaState.set({
+      ...currentSchema,
+      sections,
+    });
+
+    const nextSelectedSection =
+      sections[
+      Math.min(sectionIndex, sections.length - 1)
+      ];
+
+    this.selectedNodeState.set({
+      type: 'section',
+      sectionKey: nextSelectedSection.key,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+  canDeleteSection(): boolean {
+    const schema = this.schemaState();
+
+    return (
+      this.isSectionedSchema(schema) &&
+      schema.sections.length > 1
+    );
+  }
+
 
   selectForm(): void {
     this.selectedNodeState.set({
@@ -170,9 +516,9 @@ export class FormDesignerStateService {
     const updatedSchema = this.mapFields(currentSchema, (field) =>
       field.key === fieldKey
         ? ({
-            ...field,
-            ...changes,
-          } as FieldSchema)
+          ...field,
+          ...changes,
+        } as FieldSchema)
         : field,
     );
 
@@ -493,9 +839,9 @@ export class FormDesignerStateService {
       sections: currentSchema.sections.map((section) =>
         section.key === sectionKey
           ? {
-              ...section,
-              fields: section.fields.filter((field) => field.key !== fieldKey),
-            }
+            ...section,
+            fields: section.fields.filter((field) => field.key !== fieldKey),
+          }
           : section,
       ),
     };
@@ -540,5 +886,153 @@ export class FormDesignerStateService {
     }
 
     return schema.sections.find((section) => section.key === sectionKey) ?? null;
+  }
+
+
+
+  private supportsRequiredValidation(field: FieldSchema): boolean {
+    return field.type !== 'array' && field.type !== 'group' && field.type !== 'jsonViewer';
+  }
+
+  updateFieldGeneralProperties(currentFieldKey: string, properties: FieldGeneralProperties): void {
+    const currentSchema = this.schemaState();
+
+    const updatedSchema = this.mapFields(currentSchema, field => {
+      if (field.key !== currentFieldKey) {
+        return field;
+      }
+
+      const updatedField = {
+        ...field,
+        key: properties.key,
+        label: properties.label,
+        display: {
+          ...field.display,
+          placeholder:
+            properties.placeholder || undefined,
+        },
+        state: {
+          ...field.state,
+          readonly: properties.readonly || undefined,
+          disabled: properties.disabled || undefined,
+        },
+      } as FieldSchema;
+
+      Object.assign(updatedField, {
+        description: properties.description || undefined,
+      });
+
+      if (this.supportsRequiredValidation(updatedField)) {
+        Object.assign(updatedField, {
+          validations: {
+            ...('validations' in updatedField ? updatedField.validations : undefined),
+            // required: properties.required || undefined,
+          },
+        });
+      }
+
+      return updatedField;
+    },
+    );
+
+    this.schemaState.set(updatedSchema);
+
+    const currentSelection =
+      this.selectedNodeState();
+
+    this.selectedNodeState.set({
+      type: 'field',
+      fieldKey: properties.key,
+      sectionKey:
+        currentSelection?.type === 'field'
+          ? currentSelection.sectionKey
+          : undefined,
+    });
+
+    this.dirtyState.set(true);
+  }
+
+
+
+  private removeUndefinedProperties<T extends Record<string, unknown>>(value: T): Partial<T> {
+    return Object.fromEntries(
+      Object.entries(value).filter(
+        ([, propertyValue]) =>
+          propertyValue !== undefined,
+      ),
+    ) as Partial<T>;
+  }
+
+
+  updateFieldValidationProperties(fieldKey: string, properties: FieldValidationProperties): void {
+    const currentSchema = this.schemaState();
+
+    const updatedSchema = this.mapFields(currentSchema, field => {
+      if (field.key !== fieldKey) {
+        return field;
+      }
+
+      if (field.type === 'array' || field.type === 'group' || field.type === 'jsonViewer') {
+        return field;
+      }
+
+      const validations = {
+        ...field.validations,
+        required: properties.required || undefined,
+      };
+
+      if (field.type === 'text' || field.type === 'textarea') {
+        return {
+          ...field,
+          validations: this.removeUndefinedProperties({
+            ...validations,
+            minLength: properties.minLength,
+            maxLength: properties.maxLength,
+            pattern: properties.pattern,
+          })
+        } as FieldSchema;
+      }
+
+      if (field.type === 'number') {
+        return {
+          ...field,
+          validations: this.removeUndefinedProperties({
+            ...validations,
+            min: properties.min,
+            max: properties.max,
+            allowDecimal: properties.allowDecimal || undefined,
+            decimalPrecision: properties.allowDecimal ? properties.decimalPrecision : undefined,
+          })
+        } as FieldSchema;
+      }
+
+      if (field.type === 'file') {
+        return {
+          ...field,
+          validations: this.removeUndefinedProperties({
+            ...validations,
+            maxFileSizeMb: properties.maxFileSize,
+            allowedExtensions: properties.allowedExtensions,
+          })
+        } as FieldSchema;
+      }
+
+      if (field.type === 'multiselect') {
+        return {
+          ...field,
+          validations: this.removeUndefinedProperties({
+            ...validations,
+            minSelected: properties.minSelections,
+            maxSelected: properties.maxSelections,
+          })
+        } as FieldSchema;
+      }
+
+      return { ...field, validations } as FieldSchema;
+    },
+    );
+
+    this.schemaState.set(updatedSchema);
+    this.dirtyState.set(true);
   }
 }

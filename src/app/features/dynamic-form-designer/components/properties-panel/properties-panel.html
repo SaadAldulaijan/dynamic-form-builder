@@ -7,127 +7,504 @@
 
   <div class="flex-grow-1 overflow-auto p-3">
     @if (selectedNode(); as node) {
-      @switch (node.type) {
-        @case ('form') {
-          <form class="d-grid gap-3" (ngSubmit)="updateForm()">
-            <div>
-              <h3 class="h6 mb-0">Form settings</h3>
+    @switch (node.type) {
+    @case ('form') {
+    <form class="d-grid gap-3" (ngSubmit)="updateForm()">
+      <div>
+        <h3 class="h6 mb-0">Form settings</h3>
 
-              <div class="small text-body-secondary">General form information</div>
-            </div>
+        <div class="small text-body-secondary">General form information</div>
+      </div>
 
-            <div>
-              <label for="formKey" class="form-label">
-                Form key
-                <span class="text-danger">*</span>
-              </label>
+      <div>
+        <label for="formKey" class="form-label">
+          Form key
+          <span class="text-danger">*</span>
+        </label>
 
-              <input
-                id="formKey"
-                type="text"
-                class="form-control"
-                [class.is-invalid]="formKeyControl.invalid && formKeyControl.touched"
-                [formControl]="formKeyControl"
-              />
+        <input id="formKey" type="text" class="form-control"
+          [class.is-invalid]="formKeyControl.invalid && formKeyControl.touched" [formControl]="formKeyControl" />
 
-              <div class="form-text">
-                Starts with a letter. Letters, numbers and underscores only.
-              </div>
+        <div class="form-text">
+          Starts with a letter. Letters, numbers and underscores only.
+        </div>
 
-              @if (formKeyControl.hasError('required') && formKeyControl.touched) {
-                <div class="invalid-feedback">Form key is required.</div>
-              }
-
-              @if (formKeyControl.hasError('pattern') && formKeyControl.touched) {
-                <div class="invalid-feedback">Enter a valid form key.</div>
-              }
-            </div>
-
-            <div>
-              <label for="formTitle" class="form-label">
-                Form title
-                <span class="text-danger">*</span>
-              </label>
-
-              <input
-                id="formTitle"
-                type="text"
-                class="form-control"
-                [class.is-invalid]="formTitleControl.invalid && formTitleControl.touched"
-                [formControl]="formTitleControl"
-              />
-
-              @if (formTitleControl.hasError('required') && formTitleControl.touched) {
-                <div class="invalid-feedback">Form title is required.</div>
-              }
-            </div>
-
-            <button type="submit" class="btn btn-primary">Apply changes</button>
-          </form>
+        @if (formKeyControl.hasError('required') && formKeyControl.touched) {
+        <div class="invalid-feedback">Form key is required.</div>
         }
 
-        @case ('section') {
-          <form class="d-grid gap-3" (ngSubmit)="updateSection()">
-            <div>
-              <h3 class="h6 mb-0">Section settings</h3>
+        @if (formKeyControl.hasError('pattern') && formKeyControl.touched) {
+        <div class="invalid-feedback">Enter a valid form key.</div>
+        }
+      </div>
 
-              <div class="small text-body-secondary">Configure the selected section</div>
-            </div>
+      <div>
+        <label for="formTitle" class="form-label">
+          Form title
+          <span class="text-danger">*</span>
+        </label>
 
-            <div>
-              <label for="sectionKey" class="form-label">
-                Section key
-                <span class="text-danger">*</span>
-              </label>
+        <input id="formTitle" type="text" class="form-control"
+          [class.is-invalid]="formTitleControl.invalid && formTitleControl.touched" [formControl]="formTitleControl" />
 
-              <input
-                id="sectionKey"
-                type="text"
-                class="form-control"
-                [class.is-invalid]="sectionKeyControl.invalid && sectionKeyControl.touched"
-                [formControl]="sectionKeyControl"
-              />
+        @if (formTitleControl.hasError('required') && formTitleControl.touched) {
+        <div class="invalid-feedback">Form title is required.</div>
+        }
+      </div>
 
-              @if (sectionKeyControl.invalid && sectionKeyControl.touched) {
-                <div class="invalid-feedback">Enter a valid section key.</div>
-              }
-            </div>
+      <button type="submit" class="btn btn-primary">Apply changes</button>
+    </form>
+    }
 
-            <div>
-              <label for="sectionTitle" class="form-label">
-                Section title
-                <span class="text-danger">*</span>
-              </label>
+    @case ('section') {
+    <form class="d-grid gap-3" (ngSubmit)="updateSection()">
+      <div>
+        <h3 class="h6 mb-0">Section settings</h3>
 
-              <input
-                id="sectionTitle"
-                type="text"
-                class="form-control"
-                [class.is-invalid]="sectionTitleControl.invalid && sectionTitleControl.touched"
-                [formControl]="sectionTitleControl"
-              />
+        <div class="small text-body-secondary">Configure the selected section</div>
+      </div>
 
-              @if (sectionTitleControl.invalid && sectionTitleControl.touched) {
-                <div class="invalid-feedback">Section title is required.</div>
-              }
-            </div>
+      <div>
+        <label for="sectionKey" class="form-label">
+          Section key <span class="text-danger">*</span>
+        </label>
 
-            <div>
-              <label for="sectionDescription" class="form-label"> Description </label>
+        <input id="sectionKey" type="text" class="form-control"
+          [class.is-invalid]="sectionKeyControl.invalid && sectionKeyControl.touched"
+          [formControl]="sectionKeyControl" />
 
-              <textarea
-                id="sectionDescription"
-                rows="3"
-                class="form-control"
-                [formControl]="sectionDescriptionControl"
-              ></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Apply changes</button>
-          </form>
+        @if (sectionKeyControl.hasError('required') && sectionKeyControl.touched) {
+        <div class="invalid-feedback">Section key is required.</div>
         }
 
-        @case ('field') {
+        @if (sectionKeyControl.hasError('pattern') && sectionKeyControl.touched) {
+        <div class="invalid-feedback">Enter a valid section key.</div>
+        }
+
+        @if (sectionKeyControl.hasError('duplicate') && sectionKeyControl.touched) {
+        <div class="invalid-feedback">This section key already exists.</div>
+        }
+      </div>
+
+      <div>
+        <label for="sectionTitle" class="form-label">
+          Section title <span class="text-danger">*</span>
+        </label>
+
+        <input id="sectionTitle" type="text" class="form-control"
+          [class.is-invalid]="sectionTitleControl.invalid && sectionTitleControl.touched"
+          [formControl]="sectionTitleControl" />
+
+        @if (sectionTitleControl.invalid && sectionTitleControl.touched) {
+        <div class="invalid-feedback">Section title is required.</div>
+        }
+      </div>
+
+      <div>
+        <label for="sectionDescription" class="form-label"> Description </label>
+
+        <textarea id="sectionDescription" rows="3" class="form-control"
+          [formControl]="sectionDescriptionControl"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Apply changes</button>
+    </form>
+    }
+
+
+
+    @case ('field') {
+    @if (selectedField(); as field) {
+    <div class="d-flex flex-column h-100">
+      <div class="mb-3">
+        <div class="d-flex align-items-center justify-content-between gap-2">
+          <div>
+            <h3 class="h6 mb-1">
+              Field settings
+            </h3>
+
+            <div class="small text-body-secondary">
+              Configure the selected field.
+            </div>
+          </div>
+
+          <span class="badge text-bg-secondary">
+            {{ field.type }}
+          </span>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="
+              activeFieldTab() === 'general'
+            " (click)="selectFieldTab('general')">
+            General
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="
+              activeFieldTab() === 'validation'
+            " (click)="selectFieldTab('validation')">
+            Validation
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="
+              activeFieldTab() === 'display'
+            " (click)="selectFieldTab('display')">
+            Display
+          </button>
+        </li>
+      </ul>
+
+      @switch (activeFieldTab()) {
+      @case ('general') {
+      <form class="d-grid gap-3" [formGroup]="fieldGeneralForm" (ngSubmit)="updateFieldGeneral()">
+        <div>
+          <label for="fieldKey" class="form-label">
+            Field key
+            <span class="text-danger">*</span>
+          </label>
+
+          <input id="fieldKey" type="text" class="form-control" formControlName="key" [class.is-invalid]="
+                  fieldKeyControl.invalid &&
+                  fieldKeyControl.touched
+                " />
+
+          <div class="form-text">
+            Starts with a letter. Letters,
+            numbers and underscores only.
+          </div>
+
+          @if (
+          fieldKeyControl.hasError(
+          'required'
+          ) &&
+          fieldKeyControl.touched
+          ) {
+          <div class="invalid-feedback">
+            Field key is required.
+          </div>
+          }
+
+          @if (
+          fieldKeyControl.hasError(
+          'pattern'
+          ) &&
+          fieldKeyControl.touched
+          ) {
+          <div class="invalid-feedback">
+            Enter a valid field key.
+          </div>
+          }
+
+          @if (
+          fieldKeyControl.hasError(
+          'duplicate'
+          ) &&
+          fieldKeyControl.touched
+          ) {
+          <div class="invalid-feedback">
+            This field key already exists.
+          </div>
+          }
+        </div>
+
+        <div>
+          <label for="fieldLabel" class="form-label">
+            Field label
+            <span class="text-danger">*</span>
+          </label>
+
+          <input id="fieldLabel" type="text" class="form-control" formControlName="label" [class.is-invalid]="
+                  fieldLabelControl.invalid &&
+                  fieldLabelControl.touched
+                " />
+
+          @if (
+          fieldLabelControl.hasError(
+          'required'
+          ) &&
+          fieldLabelControl.touched
+          ) {
+          <div class="invalid-feedback">
+            Field label is required.
+          </div>
+          }
+        </div>
+
+        <div>
+          <label for="fieldPlaceholder" class="form-label">Placeholder</label>
+
+          <input id="fieldPlaceholder" type="text" class="form-control" formControlName="placeholder" />
+        </div>
+
+        <div>
+          <label for="fieldDescription" class="form-label">Description</label>
+
+          <textarea id="fieldDescription" rows="3" class="form-control" formControlName="description"></textarea>
+        </div>
+
+        <!-- <div class="form-check">
+          <input id="fieldRequired" type="checkbox" class="form-check-input" formControlName="required" />
+
+          <label for="fieldRequired" class="form-check-label">Required field</label>
+        </div> -->
+
+        <div class="form-check">
+          <input id="fieldReadonly" type="checkbox" class="form-check-input" formControlName="readonly" />
+
+          <label for="fieldReadonly" class="form-check-label">Readonly</label>
+        </div>
+
+        <div class="form-check">
+          <input id="fieldDisabled" type="checkbox" class="form-check-input" formControlName="disabled" />
+
+          <label for="fieldDisabled" class="form-check-label">
+            Disabled
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          Apply changes
+        </button>
+      </form>
+      }
+
+      <!-- @case ('validation') {
+      <div class="border rounded p-4 text-center text-body-secondary">
+        <div class="fw-semibold mb-1">
+          Validation settings
+        </div>
+
+        <div class="small">
+          Field-type validation controls
+          will be added in the next step.
+        </div>
+      </div>
+      } -->
+
+
+      <!-- =================================== Validations ===================================-->
+      @case ('validation') {
+      <form class="d-grid gap-3" [formGroup]="fieldValidationForm" (ngSubmit)="updateFieldValidation()">
+        <div class="form-check">
+          <input id="validationRequired" type="checkbox" class="form-check-input" formControlName="required" />
+
+          <label for="validationRequired" class="form-check-label">
+            Required field
+          </label>
+        </div>
+
+        @if (isTextField()) {
+        <div>
+          <label for="validationMinLength" class="form-label">Minimum length</label>
+
+          <input
+            id="validationMinLength"
+            type="number"
+            min="0"
+            class="form-control"
+            formControlName="minLength"
+            [class.is-invalid]="fieldValidationForm.controls.minLength.invalid && fieldValidationForm.controls.minLength.touched"
+          />
+
+          @if (fieldValidationForm.controls.minLength.hasError('min') && fieldValidationForm.controls.minLength.touched) {
+          <div class="invalid-feedback">Minimum length cannot be negative.</div>
+          }
+        </div>
+
+        <div>
+          <label for="validationMaxLength" class="form-label">Maximum length</label>
+
+          <input
+            id="validationMaxLength"
+            type="number"
+            min="0"
+            class="form-control"
+            formControlName="maxLength"
+            [class.is-invalid]="fieldValidationForm.controls.maxLength.invalid && fieldValidationForm.controls.maxLength.touched"
+          />
+
+          @if (fieldValidationForm.controls.maxLength.hasError('lessThanMinimum')) {
+          <div class="invalid-feedback">
+            Maximum length must be greater
+            than or equal to minimum length.
+          </div>
+          }
+        </div>
+
+        <div>
+          <label for="validationPattern" class="form-label">Regular expression</label>
+          <input id="validationPattern" type="text" class="form-control font-monospace" formControlName="pattern" />
+          <div class="form-text">Example: ^05[0-9]&#123;8&#125;$</div>
+        </div>
+        }
+
+        @if (isNumberField()) {
+        <div>
+          <label for="validationMinimum" class="form-label">Minimum value</label>
+
+          <input id="validationMinimum" type="number" class="form-control" formControlName="min" />
+        </div>
+
+        <div>
+          <label for="validationMaximum" class="form-label">Maximum value</label>
+
+          <input
+            id="validationMaximum"
+            type="number"
+            class="form-control"
+            formControlName="max"
+            [class.is-invalid]="fieldValidationForm.controls.max.invalid && fieldValidationForm.controls.max.touched"
+          />
+
+          @if (fieldValidationForm.controls.max.hasError('lessThanMinimum')) {
+          <div class="invalid-feedback">
+            Maximum value must be greater
+            than or equal to minimum value.
+          </div>
+          }
+        </div>
+
+        <div class="form-check">
+          <input id="validationAllowDecimal" type="checkbox" class="form-check-input" formControlName="allowDecimal" />
+
+          <label for="validationAllowDecimal" class="form-check-label">
+            Allow decimal values
+          </label>
+        </div>
+
+        @if (fieldValidationForm.controls.allowDecimal.value) {
+        <div>
+          <label for="validationDecimalPrecision" class="form-label">
+            Decimal precision
+          </label>
+
+          <input id="validationDecimalPrecision" type="number" min="0" class="form-control"
+            formControlName="decimalPrecision" [class.is-invalid]="
+              fieldValidationForm.controls
+                .decimalPrecision.invalid &&
+              fieldValidationForm.controls
+                .decimalPrecision.touched
+            " />
+
+          <div class="form-text">
+            Maximum number of digits after
+            the decimal separator.
+          </div>
+        </div>
+        }
+        }
+
+        @if (isFileField()) {
+        <div>
+          <label for="validationMaxFileSize" class="form-label">
+            Maximum file size
+          </label>
+
+          <div class="input-group">
+            <input id="validationMaxFileSize" type="number" min="1" class="form-control"
+              formControlName="maxFileSize" />
+
+            <span class="input-group-text">
+              MB
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label for="validationAllowedExtensions" class="form-label">
+            Allowed extensions
+          </label>
+
+          <input id="validationAllowedExtensions" type="text" class="form-control" formControlName="allowedExtensions"
+            placeholder="pdf, docx, jpg" />
+
+          <div class="form-text">
+            Separate extensions with commas.
+          </div>
+        </div>
+        }
+
+        @if (isMultiSelectField()) {
+        <div>
+          <label for="validationMinSelections" class="form-label">
+            Minimum selections
+          </label>
+
+          <input id="validationMinSelections" type="number" min="0" class="form-control"
+            formControlName="minSelections" />
+        </div>
+
+        <div>
+          <label for="validationMaxSelections" class="form-label">
+            Maximum selections
+          </label>
+
+          <input id="validationMaxSelections" type="number" min="0" class="form-control" formControlName="maxSelections"
+            [class.is-invalid]="
+            fieldValidationForm.controls
+              .maxSelections.invalid &&
+            fieldValidationForm.controls
+              .maxSelections.touched
+          " />
+
+          @if (
+          fieldValidationForm.controls
+          .maxSelections.hasError(
+          'lessThanMinimum'
+          )
+          ) {
+          <div class="invalid-feedback">
+            Maximum selections must be greater
+            than or equal to minimum selections.
+          </div>
+          }
+        </div>
+        }
+
+        @if (hasOnlyRequiredValidation()) {
+        <div class="alert alert-light border mb-0">
+          This field type currently supports
+          required validation only.
+        </div>
+        }
+
+        <button type="submit" class="btn btn-primary">
+          Apply validation
+        </button>
+      </form>
+      }
+      <!-- =================================== Validations ===================================-->
+
+
+
+
+
+
+
+      @case ('display') {
+      <div class="border rounded p-4 text-center text-body-secondary">
+        <div class="fw-semibold mb-1">
+          Display settings
+        </div>
+
+        <div class="small">
+          Field-type display controls
+          will be added after validation.
+        </div>
+      </div>
+      }
+      }
+    </div>
+    }
+    }
+
+    <!-- @case ('field') {
           @if (selectedField(); as field) {
             <form class="d-grid gap-3" (ngSubmit)="updateField()">
               <div>
@@ -148,26 +525,21 @@
                   <span class="text-danger">*</span>
                 </label>
 
-                <input
-                  id="fieldKey"
-                  type="text"
-                  class="form-control"
-                  [class.is-invalid]="fieldKeyControl.invalid && fieldKeyControl.touched"
-                  [formControl]="fieldKeyControl"
-                />
+                <input id="fieldKey" type="text" class="form-control"
+                  [class.is-invalid]="fieldKeyControl.invalid && fieldKeyControl.touched" [formControl]="fieldKeyControl" />
 
                 <div class="form-text">Must be unique across the form.</div>
 
                 @if (fieldKeyControl.hasError('required') && fieldKeyControl.touched) {
-                  <div class="invalid-feedback">Field key is required.</div>
+                <div class="invalid-feedback">Field key is required.</div>
                 }
 
                 @if (fieldKeyControl.hasError('pattern') && fieldKeyControl.touched) {
-                  <div class="invalid-feedback">Enter a valid field key.</div>
+                <div class="invalid-feedback">Enter a valid field key.</div>
                 }
 
                 @if (fieldKeyControl.hasError('duplicate') && fieldKeyControl.touched) {
-                  <div class="invalid-feedback">This field key already exists.</div>
+                <div class="invalid-feedback">This field key already exists.</div>
                 }
               </div>
 
@@ -177,28 +549,23 @@
                   <span class="text-danger">*</span>
                 </label>
 
-                <input
-                  id="fieldLabel"
-                  type="text"
-                  class="form-control"
+                <input id="fieldLabel" type="text" class="form-control"
                   [class.is-invalid]="fieldLabelControl.invalid && fieldLabelControl.touched"
-                  [formControl]="fieldLabelControl"
-                />
+                  [formControl]="fieldLabelControl" />
 
                 @if (fieldLabelControl.invalid && fieldLabelControl.touched) {
-                  <div class="invalid-feedback">Field label is required.</div>
+                <div class="invalid-feedback">Field label is required.</div>
                 }
               </div>
 
               <button type="submit" class="btn btn-primary">Apply changes</button>
             </form>
           }
-        }
-      }
+        } -->
+    }
     } @else {
-      <div class="text-center text-body-secondary py-5">
-        Select the form, a section, or a field to edit its properties.
-      </div>
+    <div class="text-center text-body-secondary py-5">Select the form, a section, or a field to edit its properties.
+    </div>
     }
   </div>
 </aside>
